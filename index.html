@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>منظومة الأسهم الشرعية | EGX Sharia Portal UI</title>
+    
+    <!-- PWA & Mobile Web App Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta id="metaThemeColor" name="theme-color" content="#080c14">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#080c14',
+                        darkCard: '#0e1626',
+                        emeraldAccent: '#10b981',
+                        amberAccent: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Essential UI Styles -->
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { direction: rtl; text-align: right; }
+        body {
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #080c14;
+            color: #f8fafc;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-feature-settings: 'tnum' on, 'lnum' on;
+        }
+        .glass-card {
+            background: rgba(14, 22, 38, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Light Mode Styles */
+        html:not(.dark) body {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+        }
+        html:not(.dark) .glass-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+        }
+        html:not(.dark) header, 
+        html:not(.dark) #topTickerBar, 
+        html:not(.dark) #bottomNav {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .text-slate-400 { color: #64748b !important; }
+        html:not(.dark) .text-slate-300 { color: #334155 !important; }
+        html:not(.dark) .text-slate-500 { color: #94a3b8 !important; }
+        html:not(.dark) .text-white { color: #0f172a !important; }
+        html:not(.dark) .bg-slate-900,
+        html:not(.dark) .bg-slate-950,
+        html:not(.dark) [class*="bg-slate-900"],
+        html:not(.dark) [class*="bg-slate-950"] {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+        }
+        html:not(.dark) [class*="from-slate-900"] {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .border-slate-800,
+        html:not(.dark) .border-slate-700 { border-color: #e2e8f0 !important; }
+
+        /* Privacy Blur Mode */
+        body.privacy-mode .sensitive-num {
+            filter: blur(8px);
+            user-select: none;
+            transition: filter 0.2s ease;
+        }
+
+        /* Pulsing indicator */
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+        }
+        .pulse-dot { animation: pulseDot 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="pb-24 selection:bg-emerald-500 selection:text-white">
+
+    <!-- =========================================================================
+         1. TOP STICKY BAR: TICKER, MARKET STATUS & CONTROLS
+         ========================================================================= -->
+    <header class="sticky top-0 z-40 bg-[#080c14]/95 backdrop-blur-md border-b border-slate-800/80 transition-colors">
+        <!-- Live Indices & Gold Ticker -->
+        <div id="topTickerBar" class="px-3 py-1.5 border-b border-slate-800/60 overflow-x-auto no-scrollbar text-[11px] font-mono flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4 whitespace-nowrap min-w-max">
+                <div class="flex items-center gap-1.5 text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+                    <span class="font-bold text-white">البورصة:</span>
+                    <span id="marketStatusText" class="text-emerald-400 font-sans text-xs">جلسة التداول / أسعار الإقفال</span>
+                </div>
+                <div class="text-slate-500">|</div>
+                <div class="flex items-center gap-1">
+                    <span class="text-slate-400">توقيت مصر:</span>
+                    <span id="egyptTimeClock" class="text-white font-bold font-mono">--:--:--</span>
+                </div>
+                <div class="text-slate-500">|</div>
+                <div class="flex items-center gap-1">
+                    <span class="text-slate-400">مؤشر EGX30:</span>
+                    <span class="text-white font-bold">--</span>
+                </div>
+                <div class="text-slate-500">|</div>
+                <div class="flex items-center gap-1">
+                    <span class="text-slate-400">مؤشر EGX33:</span>
+                    <span class="text-white font-bold">--</span>
+                </div>
+                <div class="text-slate-500">|</div>
+                <div class="flex items-center gap-1">
+                    <span class="text-slate-400">الذهب 24:</span>
+                    <span class="text-amber-400 font-bold">--</span>
+                </div>
+                <div class="text-slate-500">|</div>
+                <div class="flex items-center gap-1">
+                    <span class="text-slate-400">الدولار:</span>
+                    <span class="text-white font-bold">--</span>
+                </div>
+            </div>
+
+            <!-- Top Header Action Controls -->
+            <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="togglePrivacyMode()" title="إخفاء / إظهار الأرقام (وضع الخصوصية)" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white text-xs flex items-center gap-1 transition active:scale-95">
+                    <span id="privacyIcon">🔒</span>
+                    <span class="hidden sm:inline">قفل</span>
+                </button>
+                <button onclick="toggleTheme()" title="تبديل الوضع الليلي / النهاري" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white text-xs flex items-center gap-1 transition active:scale-95">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeText" class="hidden sm:inline">ليلي</span>
+                </button>
+                <button onclick="triggerSyncNotification()" title="مزامنة الواجهة" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600/30 text-xs flex items-center gap-1 transition active:scale-95">
+                    <span>🔄</span>
+                    <span class="hidden sm:inline">مزامنة</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Brand & Main Header Navigation Pills -->
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">⚡</span>
+                <div>
+                    <h1 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2 tracking-tight">
+                        <span>الأسهم الشرعية EGX</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-mono">UI Template</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Primary Switcher (Holdings vs Analytics) -->
+            <div class="flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs font-bold">
+                <button id="viewTabHoldings" onclick="switchMainView('holdings')" class="px-3 sm:px-4 py-1.5 rounded-lg bg-emerald-600 text-white shadow transition">
+                    📦 الأصول والحيازات الفعلية
+                </button>
+                <button id="viewTabAnalytics" onclick="switchMainView('analytics')" class="px-3 sm:px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition">
+                    📊 تحليل الأداء والمردود
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =========================================================================
+         2. MAIN CONTAINER
+         ========================================================================= -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 pt-4 space-y-4">
+
+        <!-- =====================================================================
+             SCREEN 1: PORTFOLIO & HOLDINGS (محفظتي)
+             ===================================================================== -->
+        <section id="screen-portfolio" class="space-y-4">
+
+            <!-- Grand Wealth Card (البطاقة الكبرى للرصيد المصفّر) -->
+            <div class="glass-card rounded-2xl p-4 sm:p-5 relative overflow-hidden bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-950 border border-slate-800/90">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                            <span>رصيد المحفظة الإجمالي</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">قالب نقي</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="sensitive-num text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">0.00</span>
+                            <span class="text-sm font-bold text-slate-400 font-mono">ج.م</span>
+                        </div>
+                    </div>
+
+                    <!-- PnL Badge -->
+                    <div class="flex items-center gap-3">
+                        <div class="px-3 py-1.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-xs font-mono flex items-center gap-1.5">
+                            <span class="text-emerald-400 font-bold">+0.00 ج.م</span>
+                            <span class="text-emerald-400 font-bold">(+0.00%)</span>
+                            <span class="text-[10px] text-slate-400 font-sans">أرباح غير محققة</span>
+                        </div>
+                        <button onclick="showToast('تم تحديث أسعار الصناديق')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-300 hover:text-white transition active:scale-95">
+                            🏛️ تحديث الصناديق
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Asset Breakdown Mini Cards (مصفّرة بالكامل) -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 mt-4 border-t border-slate-800/80 text-center">
+                    <!-- Stocks -->
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
+                        <div class="text-[11px] text-slate-400 flex items-center justify-center gap-1 mb-1">
+                            <span>📈</span>
+                            <span>الأسهم (0)</span>
+                        </div>
+                        <div class="sensitive-num font-mono font-bold text-emerald-400 text-base">0.00 ج</div>
+                        <div class="text-[10px] text-slate-500 font-mono">+0 ج (+0.00%)</div>
+                    </div>
+
+                    <!-- Funds -->
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
+                        <div class="text-[11px] text-slate-400 flex items-center justify-center gap-1 mb-1">
+                            <span>🏛️</span>
+                            <span>الصناديق (0)</span>
+                        </div>
+                        <div class="sensitive-num font-mono font-bold text-emerald-400 text-base">0.00 ج</div>
+                        <div class="text-[10px] text-slate-500 font-mono">+0 ج (+0.00%)</div>
+                    </div>
+
+                    <!-- Gold -->
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-amber-500/20">
+                        <div class="text-[11px] text-amber-400 flex items-center justify-center gap-1 mb-1">
+                            <span>🥇</span>
+                            <span>ذهب عيار 24</span>
+                        </div>
+                        <div class="sensitive-num font-mono font-bold text-amber-300 text-base">0.00 ج</div>
+                        <div class="text-[10px] text-slate-500 font-mono">+0.00 ج (+0.00%)</div>
+                    </div>
+
+                    <!-- Cash -->
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-700/60">
+                        <div class="text-[11px] text-slate-300 flex items-center justify-center gap-1 mb-1">
+                            <span>💵</span>
+                            <span>السيولة (كاش)</span>
+                        </div>
+                        <div class="sensitive-num font-mono font-bold text-white text-base">0.00 ج</div>
+                        <div class="text-[10px] text-emerald-400 font-medium">جاهز للاقتناص</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar & Filter Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/60 p-2.5 rounded-2xl border border-slate-800">
+                <div class="flex items-center gap-2">
+                    <button onclick="openModal('modalTrade')" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-950/40 transition active:scale-95">
+                        <span>➕</span>
+                        <span>شراء / بيع</span>
+                    </button>
+                    <button onclick="showToast('تمت المزامنة بنجاح')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 transition active:scale-95 flex items-center gap-1">
+                        <span>🔄</span>
+                        <span>مزامنة</span>
+                    </button>
+                    <button onclick="exportTemplateCSV()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 transition active:scale-95 flex items-center gap-1">
+                        <span>📥</span>
+                        <span>Export</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- View mode toggle -->
+                    <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button id="btnViewCards" onclick="setHoldingViewMode('cards')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-xs font-bold transition">
+                            ⊞ بطاقات
+                        </button>
+                        <button id="btnViewTable" onclick="setHoldingViewMode('table')" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-bold transition">
+                            ☰ جدول
+                        </button>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 font-mono text-xs">
+                        0 أصل
+                    </span>
+                </div>
+            </div>
+
+            <!-- Asset Weights Ribbon (شريط الأوزان الفارغ النظيف) -->
+            <div class="glass-card rounded-xl p-3 border border-slate-800">
+                <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                    <span class="flex items-center gap-1.5 font-bold text-slate-300">
+                        <span>📊</span>
+                        <span>توزيع أوزان الأسهم في المحفظة</span>
+                    </span>
+                    <span class="font-mono text-slate-500">100% السيولة الإجمالية</span>
+                </div>
+                <div class="h-3 w-full bg-slate-950 rounded-full overflow-hidden flex border border-slate-800">
+                    <div class="h-full bg-slate-800/80 w-full flex items-center justify-center text-[9px] text-slate-500 font-mono">
+                        لا توجد أصول مضافة بعد
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classification Filter Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 text-xs font-bold">
+                <button class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white border border-emerald-500 shadow-sm whitespace-nowrap">
+                    الكل (0)
+                </button>
+                <button class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap">
+                    🟢 رابحة (0)
+                </button>
+                <button class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap">
+                    🔴 خاسرة (0)
+                </button>
+                <button class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap">
+                    👑 الأعلى قيمة
+                </button>
+                <button class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap">
+                    📈 الأعلى عائداً
+                </button>
+            </div>
+
+            <!-- Holdings Presentation Area (حالة فارغة نقية وأنيقة 100%) -->
+            <div class="glass-card rounded-2xl p-8 sm:p-12 text-center border border-dashed border-slate-700/80 space-y-4">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-3xl">
+                    💼
+                </div>
+                <div class="max-w-md mx-auto space-y-2">
+                    <h2 class="text-lg sm:text-xl font-extrabold text-white">الواجهة جاهزة ونظيفة تماماً</h2>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        تم تصفير كافة الأكواد والبيانات القديمة بنجاح. يمكنك الآن إضافة أسهمك واستثماراتك من الصفر، أو استيراد كشف حساب جديد.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button onclick="openModal('modalTrade')" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-950/50 transition active:scale-95">
+                        <span>➕</span>
+                        <span>إضافة أول أصل استثماري</span>
+                    </button>
+                    <button onclick="showToast('ميزة استيراد Excel جاهزة للربط')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 flex items-center gap-2 transition active:scale-95">
+                        <span>📥</span>
+                        <span>استيراد محفظة (Excel)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             SCREEN 2: MARKET PULSE (نبض السوق والمؤشرات)
+             ===================================================================== -->
+        <section id="screen-market" class="hidden space-y-4">
+            <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span>📈</span>
+                            <span>شاشة نبض السوق المصري (EGX)</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">واجهة استعراض مؤشرات البورصة وأسعار الأسهم الشرعية</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-xl bg-slate-800 text-slate-400 text-xs font-mono">قالب عرض</span>
+                </div>
+                
+                <!-- Placeholder Market Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-slate-950/80 text-slate-400 border-b border-slate-800 font-bold">
+                            <tr>
+                                <th class="p-3">رمز السهم</th>
+                                <th class="p-3">اسم الشركة</th>
+                                <th class="p-3">القطاع</th>
+                                <th class="p-3">آخر سعر</th>
+                                <th class="p-3">التغير اليومي</th>
+                                <th class="p-3">الحالة الشرعية</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 font-mono">
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="p-3 font-bold text-white">ETEL</td>
+                                <td class="p-3 text-slate-300 font-sans">المصرية للاتصالات</td>
+                                <td class="p-3 text-slate-400 font-sans">اتصالات وتكنولوجيا</td>
+                                <td class="p-3 font-bold text-white">--</td>
+                                <td class="p-3 text-slate-400">--</td>
+                                <td class="p-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">متوافق شرعاً</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="p-3 font-bold text-white">TMGH</td>
+                                <td class="p-3 text-slate-300 font-sans">مجموعة طلعت مصطفى</td>
+                                <td class="p-3 text-slate-400 font-sans">عقارات وإنشاءات</td>
+                                <td class="p-3 font-bold text-white">--</td>
+                                <td class="p-3 text-slate-400">--</td>
+                                <td class="p-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">متوافق شرعاً</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30">
+                                <td class="p-3 font-bold text-white">EFIH</td>
+                                <td class="p-3 text-slate-300 font-sans">إي فاينانس</td>
+                                <td class="p-3 text-slate-400 font-sans">مدفوعات رقمية</td>
+                                <td class="p-3 font-bold text-white">--</td>
+                                <td class="p-3 text-slate-400">--</td>
+                                <td class="p-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">متوافق شرعاً</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             SCREEN 3: NEWS (شريط وموجز الأخبار)
+             ===================================================================== -->
+        <section id="screen-news" class="hidden space-y-4">
+            <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        <span>📰</span>
+                        <span>موجز الأخبار الاقتصادية والشرعية</span>
+                    </h2>
+                    <span class="text-xs text-slate-400">واجهة الأخبار والتحديثات</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono">البورصة المصرية</span>
+                        <h3 class="text-sm font-bold text-white">جلسة تداول البورصة ومؤشرات السوق</h3>
+                        <p class="text-xs text-slate-400">متابعة حركة السيولة المؤسسية وتداولات الأجانب والعرب في المؤشرات الرئيسية.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono">المعايير الشرعية</span>
+                        <h3 class="text-sm font-bold text-white">تحديث تصنيف الأسهم المتوافقة مع الشريعة</h3>
+                        <p class="text-xs text-slate-400">تدقيق القوائم المالية ونسب الديون والسيولة النقدية طبقاً لضوابط الهيئة الشرعية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             SCREEN 4: RESEARCH (أبحاث الأسهم والتحليل)
+             ===================================================================== -->
+        <section id="screen-research" class="hidden space-y-4">
+            <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+                <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>🔬</span>
+                    <span>أبحاث الأسهم والتقييم العادل</span>
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-xs text-slate-400 block mb-1">مكرر الربحية P/E</span>
+                        <span class="text-xl font-bold font-mono text-white">--</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-xs text-slate-400 block mb-1">القيمة الدفترية P/B</span>
+                        <span class="text-xl font-bold font-mono text-white">--</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <span class="text-xs text-slate-400 block mb-1">عائد التوزيع النقدي</span>
+                        <span class="text-xl font-bold font-mono text-white">--%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             SCREEN 5: DAILY REPORTS (التقارير اليومية)
+             ===================================================================== -->
+        <section id="screen-reports" class="hidden space-y-4">
+            <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        <span>📑</span>
+                        <span>التقرير الاستثماري اليومي</span>
+                    </h2>
+                    <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300">
+                        🖨️ طباعة
+                    </button>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                    قالب التقرير الاستثماري جاهز للعرض واستخراج الإحصاءات اليومية ومطابقة أرصدة الإقفال والافتتاح بدقة متناهية.
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             SCREEN 6: CALCULATORS & TOOLS (أدواتي وحاسبات الاستثمار)
+             ===================================================================== -->
+        <section id="screen-tools" class="hidden space-y-4">
+            <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+                <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>🧮</span>
+                    <span>الحاسبات الاستثمارية والشرعية</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Calculator 1: Fee Calculator -->
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+                        <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                            <span>💳</span>
+                            <span>حاسبة عمولات ورسوم التداول (0.7%)</span>
+                        </h3>
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">مبلغ العملية (ج.م):</label>
+                            <input type="number" id="calcTradeAmount" placeholder="10000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <button onclick="calculateTradeFees()" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+                            حساب الرسوم
+                        </button>
+                        <div id="calcTradeResult" class="text-xs font-mono text-slate-300 pt-1">
+                            الرسوم التقديرية: <span class="font-bold text-emerald-400">0.00 ج.م</span>
+                        </div>
+                    </div>
+
+                    <!-- Calculator 2: Zakat Calculator -->
+                    <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+                        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                            <span>⚖️</span>
+                            <span>حاسبة زكاة الأسهم المتوافقة</span>
+                        </h3>
+                        <div>
+                            <label class="text-[11px] text-slate-400 block mb-1">القيمة السوقية للمحفظة (ج.م):</label>
+                            <input type="number" id="calcZakatAmount" placeholder="50000" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-amber-500">
+                        </div>
+                        <button onclick="calculateZakat()" class="w-full py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition">
+                            حساب الزكاة (2.5%)
+                        </button>
+                        <div id="calcZakatResult" class="text-xs font-mono text-slate-300 pt-1">
+                            مقدار الزكاة الواجبة: <span class="font-bold text-amber-400">0.00 ج.م</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================================
+         3. BOTTOM FLOATING NAVIGATION DOCK
+         ========================================================================= -->
+    <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 bg-[#080c14]/95 backdrop-blur-xl border-t border-slate-800/80 px-2 py-1.5 transition-colors">
+        <div class="max-w-md mx-auto grid grid-cols-6 gap-1 text-center">
+            <!-- 1. Portfolio -->
+            <button onclick="switchScreen('portfolio')" class="tab-btn active p-1.5 rounded-xl text-emerald-400 flex flex-col items-center gap-1 transition" data-screen="portfolio">
+                <span class="text-lg">💼</span>
+                <span class="text-[10px] font-bold">محفظتي</span>
+            </button>
+            <!-- 2. Market -->
+            <button onclick="switchScreen('market')" class="tab-btn p-1.5 rounded-xl text-slate-400 hover:text-white flex flex-col items-center gap-1 transition" data-screen="market">
+                <span class="text-lg">📈</span>
+                <span class="text-[10px] font-bold">نبض السوق</span>
+            </button>
+            <!-- 3. News -->
+            <button onclick="switchScreen('news')" class="tab-btn p-1.5 rounded-xl text-slate-400 hover:text-white flex flex-col items-center gap-1 transition" data-screen="news">
+                <span class="text-lg">📰</span>
+                <span class="text-[10px] font-bold">الأخبار</span>
+            </button>
+            <!-- 4. Research -->
+            <button onclick="switchScreen('research')" class="tab-btn p-1.5 rounded-xl text-slate-400 hover:text-white flex flex-col items-center gap-1 transition" data-screen="research">
+                <span class="text-lg">🔬</span>
+                <span class="text-[10px] font-bold">الأبحاث</span>
+            </button>
+            <!-- 5. Reports -->
+            <button onclick="switchScreen('reports')" class="tab-btn p-1.5 rounded-xl text-slate-400 hover:text-white flex flex-col items-center gap-1 transition" data-screen="reports">
+                <span class="text-lg">📑</span>
+                <span class="text-[10px] font-bold">التقارير</span>
+            </button>
+            <!-- 6. Tools -->
+            <button onclick="switchScreen('tools')" class="tab-btn p-1.5 rounded-xl text-slate-400 hover:text-white flex flex-col items-center gap-1 transition" data-screen="tools">
+                <span class="text-lg">🛠️</span>
+                <span class="text-[10px] font-bold">أدواتي</span>
+            </button>
+        </div>
+    </nav>
+
+
+    <!-- =========================================================================
+         4. FLOATING AI BUTTON & MODALS
+         ========================================================================= -->
+    <!-- Floating AI Assistant Button -->
+    <div class="fixed bottom-20 left-4 z-30">
+        <button onclick="openModal('modalAI')" class="px-4 py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs flex items-center gap-2 shadow-xl shadow-indigo-950/60 border border-indigo-400/30 transition active:scale-95">
+            <span class="text-base">✨</span>
+            <span>مستشار Gemini AI</span>
+        </button>
+    </div>
+
+    <!-- Modal: Trade (شراء / بيع) -->
+    <div id="modalTrade" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-5 space-y-4 text-right">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-white text-base">إضافة صفقة (شراء / بيع)</h3>
+                <button onclick="closeModal('modalTrade')" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="text-slate-400 block mb-1">رمز السهم أو الأصل:</label>
+                    <input type="text" placeholder="مثال: ETEL أو TMGH" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-slate-400 block mb-1">الكمية:</label>
+                        <input type="number" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">سعر الشراء (ج.م):</label>
+                        <input type="number" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono">
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeModal('modalTrade')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">إلغاء</button>
+                <button onclick="showToast('تمت الإضافة بنجاح'); closeModal('modalTrade');" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">حفظ الأصل</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: AI Assistant -->
+    <div id="modalAI" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-indigo-700/60 rounded-2xl max-w-md w-full p-5 space-y-4 text-right">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-indigo-300 text-base flex items-center gap-2">
+                    <span>✨</span>
+                    <span>المستشار الذكي (Gemini AI)</span>
+                </h3>
+                <button onclick="closeModal('modalAI')" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                <p>مرحباً بك! أنا مستشارك الذكي لتحليل محفظتك الاستثمارية ومطابقتها مع الضوابط الشرعية المعتمدة في البورصة المصرية.</p>
+                <p class="text-slate-500 text-[11px]">يمكنك كتابة أي استفسار مالي أو شرعي حول الأسهم أو الصناديق.</p>
+            </div>
+            <div class="space-y-2">
+                <input type="text" placeholder="اكتب سؤالك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                <button onclick="showToast('جاري معالجة الاستشارة الذكية...')" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">
+                    إرسال السؤال
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastNotification" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs shadow-2xl opacity-0 pointer-events-none transition-all duration-300 font-medium">
+        إشعار
+    </div>
+
+
+    <!-- =========================================================================
+         5. CLEAN, LIGHTWEIGHT FRONTEND CONTROLLER JAVASCRIPT (ZERO OLD CODE)
+         ========================================================================= -->
+    <script>
+        // 1. Live Egypt Clock
+        function updateClock() {
+            const now = new Date();
+            // Egypt Time UTC+2
+            const egyptTimeStr = now.toLocaleTimeString('en-US', { timeZone: 'Africa/Cairo', hour12: false });
+            const clockEl = document.getElementById('egyptTimeClock');
+            if (clockEl) clockEl.innerText = egyptTimeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Theme Switcher (Dark / Light)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                if (themeIcon) themeIcon.innerText = '☀️';
+                if (themeText) themeText.innerText = 'نهاري';
+                localStorage.setItem('egx_theme', 'light');
+            } else {
+                html.classList.add('dark');
+                if (themeIcon) themeIcon.innerText = '🌙';
+                if (themeText) themeText.innerText = 'ليلي';
+                localStorage.setItem('egx_theme', 'dark');
+            }
+        }
+        // Load saved theme preference
+        if (localStorage.getItem('egx_theme') === 'light') {
+            toggleTheme();
+        }
+
+        // 3. Privacy Mode (Blur Sensitive Numbers)
+        function togglePrivacyMode() {
+            document.body.classList.toggle('privacy-mode');
+            const icon = document.getElementById('privacyIcon');
+            if (document.body.classList.contains('privacy-mode')) {
+                if (icon) icon.innerText = '👁️';
+                showToast('تم إخفاء الأرقام الحساسة (وضع الخصوصية)');
+            } else {
+                if (icon) icon.innerText = '🔒';
+                showToast('تم إظهار الأرقام الحساسة');
+            }
+        }
+
+        // 4. Screen Switching (Bottom Navigation Bar)
+        function switchScreen(screenName) {
+            const screens = ['portfolio', 'market', 'news', 'research', 'reports', 'tools'];
+            screens.forEach(s => {
+                const el = document.getElementById('screen-' + s);
+                if (el) {
+                    if (s === screenName) el.classList.remove('hidden');
+                    else el.classList.add('hidden');
+                }
+            });
+
+            // Update bottom nav active state
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-screen') === screenName) {
+                    btn.classList.add('text-emerald-400');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-emerald-400');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 5. Main View Tab Switcher (Holdings vs Analytics)
+        function switchMainView(mode) {
+            const bH = document.getElementById('viewTabHoldings');
+            const bA = document.getElementById('viewTabAnalytics');
+            if (mode === 'holdings') {
+                if (bH) { bH.classList.add('bg-emerald-600', 'text-white', 'shadow'); bH.classList.remove('text-slate-400'); }
+                if (bA) { bA.classList.remove('bg-emerald-600', 'text-white', 'shadow'); bA.classList.add('text-slate-400'); }
+                switchScreen('portfolio');
+            } else {
+                if (bA) { bA.classList.add('bg-emerald-600', 'text-white', 'shadow'); bA.classList.remove('text-slate-400'); }
+                if (bH) { bH.classList.remove('bg-emerald-600', 'text-white', 'shadow'); bH.classList.add('text-slate-400'); }
+                switchScreen('research');
+            }
+        }
+
+        // 6. View Mode (Cards vs Table)
+        function setHoldingViewMode(mode) {
+            const bCards = document.getElementById('btnViewCards');
+            const bTable = document.getElementById('btnViewTable');
+            if (mode === 'cards') {
+                bCards.classList.add('bg-emerald-600', 'text-white');
+                bCards.classList.remove('text-slate-400');
+                bTable.classList.remove('bg-emerald-600', 'text-white');
+                bTable.classList.add('text-slate-400');
+            } else {
+                bTable.classList.add('bg-emerald-600', 'text-white');
+                bTable.classList.remove('text-slate-400');
+                bCards.classList.remove('bg-emerald-600', 'text-white');
+                bCards.classList.add('text-slate-400');
+            }
+        }
+
+        // 7. Modals Helper
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('hidden');
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.add('hidden');
+        }
+
+        // 8. Toast Helper
+        function showToast(msg) {
+            const t = document.getElementById('toastNotification');
+            if (!t) return;
+            t.innerText = msg;
+            t.style.opacity = '1';
+            t.style.transform = 'translate(-50%, 10px)';
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translate(-50%, 0)';
+            }, 2500);
+        }
+        function triggerSyncNotification() {
+            showToast('تم فحص وتحديث بيانات الواجهة');
+        }
+
+        // 9. Calculators
+        function calculateTradeFees() {
+            const amt = parseFloat(document.getElementById('calcTradeAmount').value) || 0;
+            const fee = amt * 0.007; // 0.7% standard total brokerage & market fees
+            document.getElementById('calcTradeResult').innerHTML = 
+                `الرسوم التقديرية (0.7%): <span class="font-bold text-emerald-400">${fee.toFixed(2)} ج.م</span>`;
+        }
+        function calculateZakat() {
+            const amt = parseFloat(document.getElementById('calcZakatAmount').value) || 0;
+            const zakat = amt * 0.025; // 2.5% Hijri or 2.577% Gregorian
+            document.getElementById('calcZakatResult').innerHTML = 
+                `مقدار الزكاة الواجبة (2.5%): <span class="font-bold text-amber-400">${zakat.toFixed(2)} ج.م</span>`;
+        }
+
+        // 10. Export Empty Template
+        function exportTemplateCSV() {
+            const csvContent = "data:text/csv;charset=utf-8,Ticker,Company,Shares,BuyPrice\nETEL,المصرية للاتصالات,0,0.00\nTMGH,طلعت مصطفى,0,0.00\n";
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "sharia_portfolio_template.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('تم تصدير ملف قالب المحفظة الفارغ');
+        }
+
+        // 11. Register PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>

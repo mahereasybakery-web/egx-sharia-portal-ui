@@ -1,0 +1,28 @@
+{
+  "name": "منظومة الأسهم الشرعية | EGX Sharia Portal",
+  "short_name": "أسهم الشريعة",
+  "description": "واجهة وتصميم منظومة الأسهم الشرعية في البورصة المصرية",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080c14",
+  "theme_color": "#080c14",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["finance", "business", "utilities"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
