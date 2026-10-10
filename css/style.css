@@ -1,0 +1,168 @@
+/* =========================================================================
+   EGX Sharia Portal - Master Clean Stylesheet (css/style.css)
+   Pure Modular Architecture | Full RTL Support | FinTech Glassmorphism
+   ========================================================================= */
+
+/* ── 1. RTL & Global Reset ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    direction: rtl;
+    text-align: right;
+    font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    letter-spacing: -0.012em;
+    background-color: #080c14;
+    color: #f8fafc;
+    min-height: 100vh;
+}
+
+input, textarea, select, button {
+    font-family: inherit;
+    direction: rtl;
+    text-align: right;
+}
+
+.force-ltr {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+/* ── 2. Numeric & Monospace Typography ── */
+.font-mono, .tabular-nums, .num-font {
+    font-family: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+/* ── 3. FinTech Glassmorphism Components ── */
+.glass-card {
+    background: rgba(14, 22, 38, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* ── 4. Scrollbars & Utilities ── */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ── 5. Animations & Indicators ── */
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.35); opacity: 0.55; }
+}
+.pulse-dot {
+    animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes flashUp {
+    0%   { background-color: rgba(16, 185, 129, 0.4); color: #fff; }
+    100% { background-color: transparent; }
+}
+@keyframes flashDown {
+    0%   { background-color: rgba(244, 63, 94, 0.4); color: #fff; }
+    100% { background-color: transparent; }
+}
+.price-flash-up   { animation: flashUp 1.2s ease-out forwards; border-radius: 4px; }
+.price-flash-down { animation: flashDown 1.2s ease-out forwards; border-radius: 4px; }
+
+/* ── 6. Bottom Navigation Active State ── */
+.tab-btn {
+    position: relative;
+    transition: color 0.2s ease;
+}
+.tab-btn.active {
+    color: #34d399 !important;
+}
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 2.5px;
+    background: #10b981;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+/* ── 7. Privacy Mode (Sensitive Numbers Blur) ── */
+body.privacy-mode .sensitive-num {
+    filter: blur(8px);
+    user-select: none;
+    transition: filter 0.2s ease;
+}
+
+/* ── 8. Advanced Light Theme Overrides ── */
+html:not(.dark) body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) .glass-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+html:not(.dark) header,
+html:not(.dark) #topTickerBar,
+html:not(.dark) #bottomNav {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark) .text-slate-400 { color: #64748b !important; }
+html:not(.dark) .text-slate-300 { color: #334155 !important; }
+html:not(.dark) .text-slate-500 { color: #94a3b8 !important; }
+html:not(.dark) .text-white { color: #0f172a !important; }
+
+html:not(.dark) .bg-slate-900,
+html:not(.dark) .bg-slate-950,
+html:not(.dark) [class*="bg-slate-900"],
+html:not(.dark) [class*="bg-slate-950"] {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
+}
+
+html:not(.dark) [class*="from-slate-900"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .border-slate-800,
+html:not(.dark) .border-slate-700 {
+    border-color: #e2e8f0 !important;
+}
+
+/* ── 9. Print Optimization ── */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    header, nav, .no-print, button, #bottomNav, .floating-ai-btn {
+        display: none !important;
+    }
+    .glass-card {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+    }
+}

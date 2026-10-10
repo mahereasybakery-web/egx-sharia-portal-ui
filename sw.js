@@ -1,9 +1,17 @@
-// EGX Sharia Portal - Clean UI Service Worker
-const CACHE_NAME = 'egx-sharia-ui-v1.0';
+// EGX Sharia Portal - Clean Modular PWA Service Worker
+const CACHE_NAME = 'egx-sharia-portal-v2.0';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
+  './css/style.css',
+  './js/data.js',
+  './js/portfolio.js',
+  './js/performance.js',
+  './js/daily-reports.js',
+  './js/calculators.js',
+  './js/gemini-ai.js',
+  './js/app.js',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'
