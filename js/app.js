@@ -17462,6 +17462,31 @@ async function syncMubasherDirectAll() {
 
         };
 
+        window.saveGrokApiKey = function() {
+            triggerHaptic('medium');
+            const input = document.getElementById('grokApiKeyInput');
+            const key = (input ? input.value : '').trim();
+            if (key) {
+                localStorage.setItem('egx_grok_api_key', key);
+                if (typeof showToast === 'function') showToast('✓ تم حفظ مفتاح xAI Grok بنجاح!');
+            } else {
+                localStorage.removeItem('egx_grok_api_key');
+                if (typeof showToast === 'function') showToast('تم مسح مفتاح xAI Grok');
+            }
+        };
+
+        window.clearGrokApiKey = function() {
+            triggerHaptic('light');
+            localStorage.removeItem('egx_grok_api_key');
+            const input = document.getElementById('grokApiKeyInput');
+            if (input) input.value = '';
+            if (typeof showToast === 'function') showToast('تم مسح مفتاح xAI Grok');
+        };
+
+        window.openAiApiSettingsModal = function() {
+            window.openGeminiSettingsModal();
+        };
+
 
 
         window.testGeminiApiKey = async function() {
@@ -28357,6 +28382,87 @@ ${stocksUniverseContext}
             }
         }
 
+        window.openFullDisclosureModal = function(newsId) {
+            if (typeof triggerHaptic === 'function') triggerHaptic('medium');
+            const rawList = (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) ? NEWS_DATA : [];
+            const item = rawList.find(n => n.id === newsId);
+            if (!item) return;
+
+            const modal = document.getElementById('newsDisclosureModal');
+            if (!modal) return;
+
+            const titleEl = document.getElementById('newsDiscModalTitle');
+            const badgeEl = document.getElementById('newsDiscModalBadge');
+            const bodyEl = document.getElementById('newsDiscModalBody');
+
+            if (titleEl) titleEl.innerText = item.title;
+            if (badgeEl) badgeEl.innerText = `${item.stock_name} (${item.ticker}) • ${item.time_str || ''} ${item.date_str || ''}`;
+
+            let html = `
+                <div class="space-y-4 text-right" dir="rtl">
+                    <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-2">
+                            <span>الجهة المصدرة: <b class="text-white">${item.source}</b></span>
+                            <span class="font-mono text-emerald-400">${item.time_str || ''} • ${item.date_str || ''}</span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-white leading-relaxed">${item.title}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">${item.summary}</p>
+                    </div>
+
+                    ${item.financial_impact ? `
+                    <div class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/50 space-y-1">
+                        <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                            <span>💵</span>
+                            <span>الأثر المالي والتشغيلي المحاسبي (SOCPA/IFRS):</span>
+                        </span>
+                        <p class="text-xs text-slate-200 leading-relaxed">${item.financial_impact}</p>
+                    </div>` : ''}
+
+                    ${item.technical_view ? `
+                    <div class="p-3.5 rounded-xl bg-sky-950/40 border border-sky-800/50 space-y-1">
+                        <span class="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                            <span>📐</span>
+                            <span>الرؤية الفنية والدعوم:</span>
+                        </span>
+                        <p class="text-xs text-slate-200 leading-relaxed">${item.technical_view}</p>
+                    </div>` : ''}
+
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            ${item.has_direct_url && item.url ? `
+                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
+                                    <span>🌐</span>
+                                    <span>قراءة التغطية بالصحف الاقتصادية (Google News) ↗</span>
+                                </a>
+                            ` : `
+                                <span class="text-xs text-amber-300/90 font-bold px-3 py-1.5 bg-amber-950/60 rounded-xl border border-amber-800/60">
+                                    (لا يوجد رابط خارجي مباشر — إفصاح داخلي معتمد من قاعة التداول)
+                                </span>
+                            `}
+                            ${item.portal_url ? `
+                                <a href="${item.portal_url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition active:scale-95">
+                                    <span>🏛️</span>
+                                    <span>بوابة الإفصاحات الرسمية ↗</span>
+                                </a>
+                            ` : ''}
+                        </div>
+                        <button onclick="closeFullDisclosureModal(); openFloatingAiCopilot('حلل لي الأثر المالي والشرعي المتوقع بعد هذا الإفصاح: ' + '${item.title}')" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
+                            <span>🤖</span>
+                            <span>تحليل الأثر مع Gemini / Grok</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            if (bodyEl) bodyEl.innerHTML = html;
+            modal.classList.remove('hidden');
+        };
+
+        window.closeFullDisclosureModal = function() {
+            const modal = document.getElementById('newsDisclosureModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
         function formatNewsExactTime(timestamp, timeStr, dateStr) {
             if (timeStr && dateStr) return `${timeStr} • ${dateStr}`;
             if (timestamp) {
@@ -28528,17 +28634,20 @@ ${stocksUniverseContext}
 
                         <!-- Action Buttons Strip -->
                         <div class="pt-2 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <button onclick="event.stopPropagation(); openFullDisclosureModal('${n.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-950/90 border border-emerald-700 text-emerald-300 hover:bg-emerald-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="عرض ملف الإفصاح المعتمد كاملاً">
+                                    <span>📑 الإفصاح المعتمد</span>
+                                </button>
                                 ${n.has_direct_url && n.url ? `
-                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="فتح مصدر الخبر الأصلي">
-                                        <span>🔗 فتح المصدر ↗</span>
+                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="قراءة التغطية بالصحف الاقتصادية (Google News)">
+                                        <span>🌐 قراءة بالصحف ↗</span>
                                     </a>
                                 ` : `
-                                    <span class="text-[10px] text-slate-500 font-bold px-2 py-1 bg-slate-900/80 rounded-lg border border-slate-800" title="إشعار داخلي بدون رابط خارجي">
-                                        (بدون رابط مصدر مباشر)
+                                    <span class="text-[10px] text-amber-300/90 font-bold px-2 py-0.5 bg-amber-950/60 rounded-lg border border-amber-800/60" title="إفصاح داخلي بدون رابط خارجي">
+                                        (لا يوجد رابط مباشر متاح لهذا الخبر)
                                     </span>
                                 `}
-                                <button onclick="event.stopPropagation(); if(typeof showNewsTechnicalAnalysis === 'function') showNewsTechnicalAnalysis('${n.ticker}')" class="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-300 hover:bg-emerald-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95">
+                                <button onclick="event.stopPropagation(); if(typeof showNewsTechnicalAnalysis === 'function') showNewsTechnicalAnalysis('${n.ticker}')" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95">
                                     <span>📐 فني</span>
                                 </button>
                             </div>
@@ -28636,19 +28745,22 @@ ${stocksUniverseContext}
                         </div>` : ''}
 
                         <div class="pt-2 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
-                            <div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <button onclick="event.stopPropagation(); openFullDisclosureModal('${n.id}')" class="px-2.5 py-1 rounded-lg bg-amber-950/90 border border-amber-700 text-amber-300 hover:bg-amber-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="عرض ملف الإفصاح المعتمد كاملاً">
+                                    <span>📑 الإفصاح المعتمد</span>
+                                </button>
                                 ${n.has_direct_url && n.url ? `
-                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95">
-                                        <span>🔗 فتح المصدر المعتمد ↗</span>
+                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="قراءة التغطية بالصحف الاقتصادية (Google News)">
+                                        <span>🌐 قراءة بالصحف ↗</span>
                                     </a>
                                 ` : `
-                                    <span class="text-[10px] text-slate-500 font-bold px-2 py-1 bg-slate-900/80 rounded-lg border border-slate-800">
-                                        (بدون رابط مصدر مباشر)
+                                    <span class="text-[10px] text-amber-300/90 font-bold px-2 py-0.5 bg-amber-950/60 rounded-lg border border-amber-800/60">
+                                        (لا يوجد رابط مباشر متاح لهذا الخبر)
                                     </span>
                                 `}
                             </div>
                             <button onclick="event.stopPropagation(); openFloatingAiCopilot('حلل لي أداء وتوزيعات وثيقة ' + '${n.stock_name}' + ' وكيف أستثمر فيها بأمان')" class="px-3 py-1 rounded-lg bg-gradient-to-r from-amber-900/80 to-indigo-900/80 border border-amber-700/80 text-amber-200 hover:text-white font-bold text-[10px] shadow-sm flex items-center gap-1 transition active:scale-95">
-                                <span>🤖 تحليل الصندوق بـ Gemini</span>
+                                <span>🤖 تحليل الصندوق</span>
                             </button>
                         </div>
                     </div>
@@ -28726,19 +28838,22 @@ ${stocksUniverseContext}
                         </div>` : ''}
 
                         <div class="pt-2 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
-                            <div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <button onclick="event.stopPropagation(); openFullDisclosureModal('${n.id}')" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-700 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="عرض ملف البيان المعتمد كاملاً">
+                                    <span>📑 نص البيان المعتمد</span>
+                                </button>
                                 ${n.has_direct_url && n.url ? `
-                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95">
-                                        <span>🔗 فتح الرابط الرسمي للبيان ↗</span>
+                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 hover:text-white font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="فتح الرابط الرسمي للبيان">
+                                        <span>🌐 الموقع الرسمي ↗</span>
                                     </a>
                                 ` : `
-                                    <span class="text-[10px] text-slate-500 font-bold px-2 py-1 bg-slate-900/80 rounded-lg border border-slate-800">
-                                        (بدون رابط مصدر مباشر)
+                                    <span class="text-[10px] text-amber-300/90 font-bold px-2 py-0.5 bg-amber-950/60 rounded-lg border border-amber-800/60">
+                                        (لا يوجد رابط مباشر متاح لهذا البند)
                                     </span>
                                 `}
                             </div>
                             <button onclick="event.stopPropagation(); openFloatingAiCopilot('اشرح لي هذا التنبيه الرقابي بأسلوب مبسط: ' + '${n.title}')" class="px-3 py-1 rounded-lg bg-gradient-to-r from-sky-900/80 to-indigo-900/80 border border-sky-700/80 text-sky-200 hover:text-white font-bold text-[10px] shadow-sm flex items-center gap-1 transition active:scale-95">
-                                <span>🤖 استفسار حول التنبيه بـ Gemini</span>
+                                <span>🤖 استفسار حول التنبيه</span>
                             </button>
                         </div>
                     </div>

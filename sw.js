@@ -1,17 +1,17 @@
 // EGX Sharia Portal - Network-First Ultra-Fresh Service Worker
-const CACHE_NAME = 'egx-sharia-portal-v5.0';
+const CACHE_NAME = 'egx-sharia-portal-v6.0';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
-  './js/data-reports.js?v=20261011_v5',
-  './js/data-news.js?v=20261011_v5',
-  './js/data-valuation.js?v=20261011_v5',
-  './js/data-ai-prompts.js?v=20261011_v5',
-  './js/app.js?v=20261011_v5',
-  './js/gemini-ai.js?v=20261011_v5',
-  './js/universal-export.js?v=20261011_v5',
+  './js/data-reports.js?v=20261011_v6',
+  './js/data-news.js?v=20261011_v6',
+  './js/data-valuation.js?v=20261011_v6',
+  './js/data-ai-prompts.js?v=20261011_v6',
+  './js/app.js?v=20261011_v6',
+  './js/gemini-ai.js?v=20261011_v6',
+  './js/universal-export.js?v=20261011_v6',
   './market_data.json',
   './icon-192.png',
   './icon-512.png',
