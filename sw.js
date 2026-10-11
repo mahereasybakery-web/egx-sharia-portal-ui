@@ -1,18 +1,17 @@
-// EGX Sharia Portal - Network-First Ultra-Fresh Service Worker
-const CACHE_NAME = 'egx-sharia-portal-v9.0';
+// EGX Sharia Portal - Network-First Ultra-Fresh Service Worker (v10.0)
+const CACHE_NAME = 'egx-sharia-portal-v10.0';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
-  './js/data-reports.js?v=20261011_v9',
-  './js/data-news.js?v=20261011_v9',
-  './js/data-valuation.js?v=20261011_v9',
-  './js/data-ai-prompts.js?v=20261011_v9',
-  './js/app.js?v=20261011_v9',
-  './js/gemini-ai.js?v=20261011_v9',
-  './js/universal-export.js?v=20261011_v9',
-  './market_data.json',
+  './js/data-reports.js?v=20261011_v10',
+  './js/data-news.js?v=20261011_v10',
+  './js/data-valuation.js?v=20261011_v10',
+  './js/data-ai-prompts.js?v=20261011_v10',
+  './js/app.js?v=20261011_v10',
+  './js/gemini-ai.js?v=20261011_v10',
+  './js/universal-export.js?v=20261011_v10',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'
@@ -42,10 +41,46 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// NETWORK-FIRST STRATEGY: Always fetch fresh code from server first, fall back to cache only when offline
+// STRICT NETWORK-FIRST STRATEGY WITH NO-STALE-DATA ENFORCEMENT
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  const url = new URL(event.request.url);
+
+  // STRICT RULE: Market data & dynamic live sync requests must NEVER return stale cached data when offline
+  const isMarketData = url.pathname.endsWith('market_data.json') || url.searchParams.has('cb') || url.pathname.includes('/scanner');
+
+  if (isMarketData) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .then((response) => {
+          return response;
+        })
+        .catch(() => {
+          // EXPLICIT OFFLINE 503 RESPONSE - Never serve stale cached prices
+          return new Response(
+            JSON.stringify({
+              error: 'NETWORK_OFFLINE',
+              message: 'لا يوجد اتصال بالإنترنت حالياً — تعذر جلب الأسعار اللحظية. لم يتم استدعاء نسخ قديمة منعاً لتضليل الأرقام.',
+              is_offline: true,
+              timestamp: new Date().toISOString()
+            }),
+            {
+              status: 503,
+              statusText: 'Service Unavailable - Offline',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-Portal-Offline': 'true',
+                'Cache-Control': 'no-store, no-cache, must-revalidate'
+              }
+            }
+          );
+        })
+    );
+    return;
+  }
+
+  // Shell assets (HTML, CSS, JS, Images): Network-first with cache fallback
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
@@ -58,7 +93,6 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
-        // Fallback to cache when offline or network fails
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) return cachedResponse;
           if (event.request.mode === 'navigate') {

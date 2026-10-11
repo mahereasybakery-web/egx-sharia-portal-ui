@@ -21,6 +21,87 @@
         
 
         // =========================================================================
+        // NETWORK LIVENESS & STRICT OFFLINE STATE CONTROLLER (v10.0)
+        // Rule: Never serve stale/fake cached data when offline. Explicit alerts always.
+        // =========================================================================
+        window.updateNetworkLivenessUI = function(isOnline, customMsg = null) {
+            const banner = document.getElementById('offlineNoticeBanner');
+            const badge = document.getElementById('syncStatusText');
+            const vSyncText = document.getElementById('visibleSyncText');
+            const liveBadge = document.getElementById('liveUpdateBadge');
+            const pulseDot = document.querySelector('.pulse-live');
+
+            if (!isOnline) {
+                if (banner) {
+                    banner.classList.remove('hidden');
+                    banner.style.display = 'block';
+                }
+                if (badge) badge.innerHTML = `<span class="inline-block w-2 h-2 rounded-full bg-rose-500 ml-1"></span>❌ غير متصل بالإنترنت (تعذر التحديث)`;
+                if (vSyncText) vSyncText.textContent = 'منقطع';
+                if (liveBadge) {
+                    liveBadge.textContent = '❌ تعذر التحديث (غير متصل)';
+                    liveBadge.style.color = '#f87171';
+                }
+                if (pulseDot) {
+                    pulseDot.classList.remove('bg-emerald-400');
+                    pulseDot.classList.add('bg-rose-500');
+                }
+            } else {
+                if (banner) {
+                    banner.classList.add('hidden');
+                    banner.style.display = 'none';
+                }
+                if (vSyncText) vSyncText.textContent = 'حية';
+                if (liveBadge) {
+                    liveBadge.textContent = '⚡ أسعار حية';
+                    liveBadge.style.color = '';
+                }
+                if (pulseDot) {
+                    pulseDot.classList.remove('bg-rose-500');
+                    pulseDot.classList.add('bg-emerald-400');
+                }
+            }
+        };
+
+        window.checkNetworkAndSync = async function(manual = false) {
+            if (!navigator.onLine) {
+                window.updateNetworkLivenessUI(false);
+                if (manual && typeof showToast === 'function') {
+                    showToast('⚠️ لا يوجد اتصال بالإنترنت حالياً — تعذر المزامنة. يرجى التحقق من الشبكة', 'error');
+                }
+                return false;
+            }
+            if (typeof window.refreshData === 'function') {
+                return await window.refreshData();
+            }
+            return true;
+        };
+
+        window.addEventListener('online', () => {
+            console.log('[Network] Connection restored');
+            window.updateNetworkLivenessUI(true);
+            if (typeof showToast === 'function') {
+                showToast('✅ تم استعادة الاتصال بالإنترنت — جاري جلب أحدث الأسعار الحية...', 'success');
+            }
+            window.checkNetworkAndSync(false);
+        });
+
+        window.addEventListener('offline', () => {
+            console.warn('[Network] Connection lost');
+            window.updateNetworkLivenessUI(false);
+            if (typeof showToast === 'function') {
+                showToast('⚠️ انقطع الاتصال بالإنترنت — تعذر جلب التحديثات. تم إيقاف التحديث لمنع عرض بيانات قديمة', 'error');
+            }
+        });
+
+        // Initialize network state check on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!navigator.onLine) {
+                window.updateNetworkLivenessUI(false);
+            }
+        });
+
+        // =========================================================================
 
         // THEME MODE CONTROLLER (Dark / Light Mode)
 
@@ -11831,202 +11912,146 @@ const THNDR_ACTUAL_HOLDINGS = [
 
 
 
-                async function syncLiveMarketData(isAutoPoll = false) {
+        async function syncLiveMarketData(isAutoPoll = false) {
+            // Strict Offline Guard: Check network connectivity first
+            if (!navigator.onLine) {
+                console.warn('[Sync] Device is offline. Aborting live market sync to prevent stale data.');
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(false, "لا يوجد اتصال بالإنترنت");
+                }
+                if (!isAutoPoll) {
+                    showToast('⚠️ لا يوجد اتصال بالإنترنت حالياً — تعذر جلب الأسعار اللحظية. لم يتم استدعاء نسخ قديمة منعاً للتضليل', 'error');
+                }
+                const vIcon = document.getElementById('visibleRefreshIcon');
+                if (vIcon) vIcon.style.transform = '';
+                const icon = document.getElementById('refreshIcon');
+                if (icon) icon.classList.remove('rotate-180');
+                return false;
+            }
 
             const icon = document.getElementById('refreshIcon');
-
             if (icon && !isAutoPoll) icon.classList.add('rotate-180');
-
             const vIcon2 = document.getElementById('visibleRefreshIcon');
-
             if (vIcon2 && !isAutoPoll) { vIcon2.style.transform = 'rotate(360deg)'; setTimeout(()=>{ vIcon2.style.transform = ''; }, 600); }
-
             const badge = document.getElementById('syncStatusText');
-
             if (badge && !isAutoPoll) badge.innerText = "جاري الاتصال المباشر بالسوق...";
-
             const vSyncText = document.getElementById("visibleSyncText"); if (vSyncText) vSyncText.textContent = "جاري...";
 
-
-
             // Determine if Cairo trading session is currently open (Sun-Thu 10:00 - 14:35 UTC+3)
-
             const now = new Date();
-
             const cairoH = (now.getUTCHours() + 3) % 24;
-
             const cairoMin = now.getUTCMinutes();
-
             const dow = now.getUTCDay(); // 0=Sun..4=Thu
-
             const totalMin = cairoH * 60 + cairoMin;
-
             const inSession = (dow >= 0 && dow <= 4) && (totalMin >= 600 && totalMin <= 875);
-
-
 
             const cacheBuster = Date.now() + '_' + Math.floor(Math.random() * 1000000);
 
-
-
             // Parallel execution: Direct In-Browser TradingView + Cloud Market JSON (with Raw GitHub Fast Failover)
-
             const fetchCloudMarketData = async () => {
-
                 try {
-
                     const r = await fetch('./market_data.json?cb=' + cacheBuster, {
-
                         cache: 'no-store',
-
                         headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
-
                     });
-
-                    if (r.ok) return await r.json();
-
+                    if (r.ok) {
+                        const parsed = await r.json();
+                        if (parsed && !parsed.is_offline && !parsed.error) return parsed;
+                    }
                 } catch (e) {
-
                     console.warn('[Sync] Local ./market_data.json fetch failed, trying direct Raw GitHub...', e);
-
                 }
-
                 try {
-
                     const rawR = await fetch('https://raw.githubusercontent.com/mahereasybakery-web/egx-sharia-portal-ui/main/market_data.json?cb=' + cacheBuster, { cache: 'no-store' });
-
-                    if (rawR.ok) return await rawR.json();
-
+                    if (rawR.ok) {
+                        const rawParsed = await rawR.json();
+                        if (rawParsed && !rawParsed.is_offline && !rawParsed.error) return rawParsed;
+                    }
                 } catch (err) {
-
                     console.error('[Sync] Direct Raw GitHub fetch failed:', err);
-
                 }
-
                 return null;
-
             };
 
-
-
             const [tvRes, cloudRes] = await Promise.allSettled([
-
                 fetchTradingViewDirect(),
-
                 fetchCloudMarketData()
-
             ]);
 
+            const isTvSuccess = tvRes.status === 'fulfilled' && Array.isArray(tvRes.value) && tvRes.value.length > 0;
+            const cData = (cloudRes.status === 'fulfilled' && cloudRes.value && !cloudRes.value.is_offline && !cloudRes.value.error) ? cloudRes.value : null;
 
-
-            let updatedStocksCount = 0;
-
-            let updatedFundsCount = 0;
-
-
-
-            // 1. Process Direct TradingView Quotes
-
-            if (tvRes.status === 'fulfilled' && Array.isArray(tvRes.value) && tvRes.value.length > 0) {
-
-                tvRes.value.forEach(item => {
-
-                    const sym = item.s ? item.s.replace('EGX:', '') : '';
-
-                    const d = item.d;
-
-                    if (!sym || !d || d[1] === null || d[1] <= 0) return;
-
-
-
-                    const local = STOCKS_DATA.find(s => s.ticker === sym);
-
-                    if (local) {
-
-                        const prevClose = local.close;
-
-                        const newClose = Math.round(d[1] * 100) / 100;
-
-                        const hasPriceChanged = prevClose !== newClose;
-
-
-
-                        local.close = newClose;
-
-                        if (d[2] !== null) local.chg = Math.round(d[2] * 100) / 100;
-
-                        if (d[3] !== null) local.open = d[3];
-
-                        if (d[4] !== null) local.high = d[4];
-
-                        if (d[5] !== null) local.low = d[5];
-
-                        if (d[6] !== null) local.volume = d[6];
-
-                        if (d[7] !== null) local.rsi = Math.round(d[7] * 10) / 10;
-
-                        if (d[8] !== null) local.sma20 = d[8];
-
-                        if (d[9] !== null) local.sma50 = d[9];
-
-                        if (d[10] !== null) local.sma200 = d[10];
-
-                        if (d[11] !== null && d[11] > 0) local.pe = Math.round(d[11] * 10) / 10;
-
-
-
-                        // Second-by-Second In-Place DOM Flash & Text Updates (Zero Latency)
-
-                        if (hasPriceChanged) {
-
-                            const isUp = newClose > prevClose;
-
-                            document.querySelectorAll(`[data-ticker="${sym}"] .live-stock-price`).forEach(el => {
-
-                                el.textContent = `${newClose.toFixed(2)} ج`;
-
-                                el.classList.remove('text-emerald-400', 'text-rose-400', 'bg-emerald-950/60', 'bg-rose-950/60');
-
-                                el.classList.add(isUp ? 'text-emerald-400' : 'text-rose-400', isUp ? 'bg-emerald-950/60' : 'bg-rose-950/60');
-
-                                setTimeout(() => {
-
-                                    el.classList.remove('bg-emerald-950/60', 'bg-rose-950/60');
-
-                                }, 700);
-
-                            });
-
-
-
-                            // Update live change badge
-
-                            document.querySelectorAll(`[data-ticker="${sym}"] .live-stock-chg`).forEach(el => {
-
-                                const sign = local.chg >= 0 ? '+' : '';
-
-                                el.textContent = `${sign}${local.chg.toFixed(2)}%`;
-
-                                el.className = `live-stock-chg inline-block text-[10px] font-bold px-1.5 py-0.2 rounded border ${local.chg >= 0 ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800' : 'bg-rose-950/80 text-rose-300 border-rose-800'} mt-0.5`;
-
-                            });
-
-                        }
-
-                        updatedStocksCount++;
-
-                    }
-
-                });
-
+            if (!navigator.onLine || (!isTvSuccess && !cData)) {
+                console.warn('[Sync] Offline or both TradingView and Cloud fetch failed/offline. Aborting without touching data.');
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(false, "تعذر الاتصال بالخوادم");
+                }
+                if (!isAutoPoll) {
+                    showToast('⚠️ تعذر جلب التحديثات اللحظية من الخوادم — تم إيقاف التحديث تجنباً لعرض بيانات غير دقيقة', 'error');
+                }
+                if (icon) setTimeout(() => icon.classList.remove('rotate-180'), 500);
+                const vIcon = document.getElementById('visibleRefreshIcon');
+                if (vIcon) vIcon.style.transform = '';
+                return false;
+            } else {
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(true);
+                }
             }
 
+            let updatedStocksCount = 0;
+            let updatedFundsCount = 0;
 
+            // 1. Process Direct TradingView Quotes
+            if (isTvSuccess) {
+                tvRes.value.forEach(item => {
+                    const sym = item.s ? item.s.replace('EGX:', '') : '';
+                    const d = item.d;
+                    if (!sym || !d || d[1] === null || d[1] <= 0) return;
+
+                    const local = STOCKS_DATA.find(s => s.ticker === sym);
+                    if (local) {
+                        const prevClose = local.close;
+                        const newClose = Math.round(d[1] * 100) / 100;
+                        const hasPriceChanged = prevClose !== newClose;
+
+                        local.close = newClose;
+                        if (d[2] !== null) local.chg = Math.round(d[2] * 100) / 100;
+                        if (d[3] !== null) local.open = d[3];
+                        if (d[4] !== null) local.high = d[4];
+                        if (d[5] !== null) local.low = d[5];
+                        if (d[6] !== null) local.volume = d[6];
+                        if (d[7] !== null) local.rsi = Math.round(d[7] * 10) / 10;
+                        if (d[8] !== null) local.sma20 = d[8];
+                        if (d[9] !== null) local.sma50 = d[9];
+                        if (d[10] !== null) local.sma200 = d[10];
+                        if (d[11] !== null && d[11] > 0) local.pe = Math.round(d[11] * 10) / 10;
+
+                        // Second-by-Second In-Place DOM Flash & Text Updates (Zero Latency)
+                        if (hasPriceChanged) {
+                            const isUp = newClose > prevClose;
+                            document.querySelectorAll(`[data-ticker="${sym}"] .live-stock-price`).forEach(el => {
+                                el.textContent = `${newClose.toFixed(2)} ج`;
+                                el.classList.remove('text-emerald-400', 'text-rose-400', 'bg-emerald-950/60', 'bg-rose-950/60');
+                                el.classList.add(isUp ? 'text-emerald-400' : 'text-rose-400', isUp ? 'bg-emerald-950/60' : 'bg-rose-950/60');
+                                setTimeout(() => {
+                                    el.classList.remove('bg-emerald-950/60', 'bg-rose-950/60');
+                                }, 700);
+                            });
+
+                            // Update live change badge
+                            document.querySelectorAll(`[data-ticker="${sym}"] .live-stock-chg`).forEach(el => {
+                                const sign = local.chg >= 0 ? '+' : '';
+                                el.textContent = `${sign}${local.chg.toFixed(2)}%`;
+                                el.className = `live-stock-chg inline-block text-[10px] font-bold px-1.5 py-0.2 rounded border ${local.chg >= 0 ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800' : 'bg-rose-950/80 text-rose-300 border-rose-800'} mt-0.5`;
+                            });
+                        }
+                        updatedStocksCount++;
+                    }
+                });
+            }
 
             // 2. Process Cloud Market JSON (Funds NAVs + Gold + Fallback Stocks)
-
-            const cData = cloudRes.status === 'fulfilled' ? cloudRes.value : null;
-
             if (cData) {
 
                 window.GLOBAL_STATE = cData;
@@ -20955,9 +20980,20 @@ ${stocksUniverseContext}
 
 
 
-        // Live Fund Sync Engine (One-Click Synchronizer)
-
+        // Live Fund Sync Engine (One-Click Synchronizer - Strict Real-Time Mode)
         window.syncLiveFundsEngine = async function(force = true, silent = false) {
+            // Strict Offline Guard: Never serve stale or fake data when offline
+            if (!navigator.onLine) {
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(false);
+                }
+                if (!silent) {
+                    triggerHaptic('error');
+                    showToast('⚠️ لا يوجد اتصال بالإنترنت حالياً — تعذر جلب أسعار وإفصاحات الصناديق اللحظية. لم يتم استدعاء نسخ قديمة منعاً للتضليل', 'error');
+                }
+                return false;
+            }
+
             if (!silent) {
                 triggerHaptic('medium');
                 showToast('جاري الاتصال بالسحابة وسحب أحدث أسعار وإفصاحات الصناديق الرسمية... ⏳', 'info');
@@ -20973,7 +21009,10 @@ ${stocksUniverseContext}
                     headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
                 });
                 if (res.ok) {
-                    cloudFundsData = await res.json();
+                    const parsed = await res.json();
+                    if (parsed && !parsed.is_offline && !parsed.error) {
+                        cloudFundsData = parsed;
+                    }
                 }
             } catch (e) {
                 console.warn('[FundsSync] Local fetch failed, trying direct Raw GitHub...', e);
@@ -20986,38 +21025,41 @@ ${stocksUniverseContext}
                         cache: 'no-store'
                     });
                     if (rawRes.ok) {
-                        cloudFundsData = await rawRes.json();
+                        const rawParsed = await rawRes.json();
+                        if (rawParsed && !rawParsed.is_offline && !rawParsed.error) {
+                            cloudFundsData = rawParsed;
+                        }
                     }
                 } catch (err) {
                     console.error('[FundsSync] Raw GitHub fetch failed:', err);
                 }
             }
 
-            // Fallback dictionary only if network is completely offline
-            const fallbackNavs = {
-                CMS: 22.4805,
-                AZG: 23.5686,
-                BWA: 2.1827,
-                NMF: 49.5200,
-                THNDR_GOLD: 7015.00
-            };
+            // Strict Validation: If network failed or data is invalid, NEVER serve stale fallback
+            if (!cloudFundsData || !cloudFundsData.funds) {
+                console.warn('[FundsSync] Failed to fetch live fund disclosures. Aborting to avoid stale data.');
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(false, "تعذر جلب إفصاحات الصناديق الحية");
+                }
+                if (!silent) {
+                    showToast('⚠️ تعذر الاتصال بالسحابة لجلب إفصاحات الصناديق المحدثة. لم يتم استدعاء نسخ قديمة منعاً لتضليل الحسابات', 'error');
+                }
+                return false;
+            }
+
+            if (typeof window.updateNetworkLivenessUI === 'function') {
+                window.updateNetworkLivenessUI(true);
+            }
 
             const liveNavs = {};
             const liveChanges = {};
 
-            if (cloudFundsData && cloudFundsData.funds) {
-                Object.keys(cloudFundsData.funds).forEach(ticker => {
-                    const f = cloudFundsData.funds[ticker];
-                    if (f && f.close > 0) {
-                        liveNavs[ticker] = f.close;
-                        if (f.chg !== undefined) liveChanges[ticker] = f.chg;
-                    }
-                });
-            }
-
-            // If any fund is missing from cloud data, fill from fallback
-            Object.keys(fallbackNavs).forEach(k => {
-                if (!liveNavs[k]) liveNavs[k] = fallbackNavs[k];
+            Object.keys(cloudFundsData.funds).forEach(ticker => {
+                const f = cloudFundsData.funds[ticker];
+                if (f && f.close > 0) {
+                    liveNavs[ticker] = f.close;
+                    if (f.chg !== undefined) liveChanges[ticker] = f.chg;
+                }
             });
 
             // Update userHoldings in-place
@@ -21069,11 +21111,12 @@ ${stocksUniverseContext}
             }
 
             if (!silent) {
-                const cmsP = liveNavs.CMS ? liveNavs.CMS.toFixed(4) : '22.4805';
-                const azgP = liveNavs.AZG ? liveNavs.AZG.toFixed(4) : '23.5686';
-                const bwaP = liveNavs.BWA ? liveNavs.BWA.toFixed(4) : '2.1827';
+                const cmsP = liveNavs.CMS ? liveNavs.CMS.toFixed(4) : '—';
+                const azgP = liveNavs.AZG ? liveNavs.AZG.toFixed(4) : '—';
+                const bwaP = liveNavs.BWA ? liveNavs.BWA.toFixed(4) : '—';
                 showToast(`✓ تم سحب أسعار الصناديق الحية وتحديثها: CMS (${cmsP} ج) | AZG (${azgP} ج) | BWA (${bwaP} ج) بنجاح!`, 'success');
             }
+            return true;
         };
 
 
@@ -26328,41 +26371,46 @@ ${stocksUniverseContext}
 
 
         async function syncAllLiveSections() {
-
-            // Flash badge
-
-            const badge = document.getElementById('liveUpdateBadge');
-
-            if (badge) { badge.textContent = '🔄 جارٍ التحديث...'; }
-
-            try {
-
-                if (typeof syncLiveMarketData === 'function') await syncLiveMarketData(false);
-
-            } catch(e) { console.warn('sync error:', e); }
-
-            // Update secondary sections
-
-            updateLiveGoalsInput();
-
-            updateLiveZakatInput();
-
-                        if (badge) {
-
-                badge.textContent = '🟢 محدث الآن';
-
-                badge.style.color = '#34d399';
-
-                setTimeout(() => {
-
-                    badge.textContent = '⚡ أسعار حية';
-
-                    badge.style.color = '';
-
-                }, 3500);
-
+            if (!navigator.onLine) {
+                if (typeof window.updateNetworkLivenessUI === 'function') {
+                    window.updateNetworkLivenessUI(false);
+                }
+                showToast('⚠️ لا يوجد اتصال بالإنترنت حالياً — تعذر المزامنة. تم إيقاف العملية تجنباً لعرض بيانات قديمة', 'error');
+                return false;
             }
 
+            // Flash badge
+            const badge = document.getElementById('liveUpdateBadge');
+            if (badge) { badge.textContent = '🔄 جارٍ التحديث...'; }
+
+            let success = false;
+            try {
+                if (typeof syncLiveMarketData === 'function') {
+                    const res = await syncLiveMarketData(false);
+                    if (res !== false) success = true;
+                }
+            } catch(e) { console.warn('sync error:', e); }
+
+            if (success) {
+                // Update secondary sections
+                updateLiveGoalsInput();
+                updateLiveZakatInput();
+                if (badge) {
+                    badge.textContent = '🟢 محدث الآن';
+                    badge.style.color = '#34d399';
+                    setTimeout(() => {
+                        badge.textContent = '⚡ أسعار حية';
+                        badge.style.color = '';
+                    }, 3500);
+                }
+                return true;
+            } else {
+                if (badge) {
+                    badge.textContent = '❌ تعذر التحديث (غير متصل)';
+                    badge.style.color = '#f87171';
+                }
+                return false;
+            }
         }
 
 
