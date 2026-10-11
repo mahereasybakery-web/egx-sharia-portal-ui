@@ -6857,29 +6857,46 @@
 
             <!-- Top Segmented Tabs: 1. أسهم | 2. صناديق -->
 
-            <div class="glass-card rounded-2xl p-1 bg-slate-900/90 border border-slate-800 flex gap-1 shadow-sm">
-
-                <button id="newsSubTabStocksBtn" onclick="switchNewsSubTab('stocks')" class="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow active:scale-95">
-
+            <div class="glass-card rounded-2xl p-1 bg-slate-900/90 border border-slate-800 flex gap-1 shadow-sm" dir="rtl">
+                <button id="newsSubTabStocksBtn" onclick="switchNewsSubTab('stocks')" class="flex-1 py-2 px-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow active:scale-95">
                     <span>📈</span>
-
-                    <span>أخبار وإفصاحات الأسهم</span>
-
+                    <span class="truncate">أخبار وإفصاحات الأسهم</span>
                     <span id="newsStocksCountBadge" class="bg-black/30 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">--</span>
-
                 </button>
-
-                <button id="newsSubTabFundsBtn" onclick="switchNewsSubTab('funds')" class="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white active:scale-95">
-
+                <button id="newsSubTabFundsBtn" onclick="switchNewsSubTab('funds')" class="flex-1 py-2 px-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white active:scale-95">
                     <span>🏦</span>
-
-                    <span>أخبار وتقارير الصناديق</span>
-
+                    <span class="truncate">أخبار وتقارير الصناديق</span>
                     <span id="newsFundsCountBadge" class="bg-slate-800 text-amber-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">--</span>
-
                 </button>
-
+                <button id="newsSubTabAlertsBtn" onclick="switchNewsSubTab('alerts')" class="flex-1 py-2 px-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white active:scale-95">
+                    <span>🔔</span>
+                    <span class="truncate">تنبيهات وإشعارات عامة</span>
+                    <span id="newsAlertsCountBadge" class="bg-slate-800 text-sky-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">--</span>
+                </button>
             </div>
+
+                <!-- News Quick Actions & Archive Controller Bar -->
+                <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <span class="text-emerald-400 font-bold">📰 مركز الأخبار والإفصاحات اللحظية:</span>
+                        <span class="text-[10px] text-slate-400">مرتبة تنازلياً بالأحدث وقتاً</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="openFloatingAiCopilot('حلل لي أحدث إفصاحات وأخبار السوق وتأثيرها على الأسهم والصناديق')" class="px-2.5 py-1 rounded-lg bg-indigo-900/60 hover:bg-indigo-800/80 border border-indigo-700/60 text-indigo-300 font-bold text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95">
+                            <span>🤖</span>
+                            <span>تحليل الأخبار بـ Gemini</span>
+                        </button>
+                        <button onclick="refreshNewsData()" class="px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/60 text-emerald-300 font-bold text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95" title="تحديث الأخبار وسحب أحدث الإفصاحات">
+                            <span>🔄</span>
+                            <span>تحديث</span>
+                        </button>
+                        <button onclick="confirmClearNewsArchive()" class="px-2.5 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 border border-rose-800/80 text-rose-300 font-bold text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95" title="مسح أرشيف الأخبار المحفوظة">
+                            <span>🗑️</span>
+                            <span>مسح الأرشيف</span>
+                        </button>
+                    </div>
+                </div>
+
 
 
 
@@ -7497,7 +7514,24 @@
 
             </div>
 
-        </section>
+        
+            <!-- SUB-VIEW 3: REGULATORY NOTICES & GENERAL ALERTS (تنبيهات وإشعارات عامة) -->
+            <div id="newsSubViewAlerts" class="space-y-3 hidden">
+                <div class="glass-card rounded-2xl p-3 border border-slate-800 flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🔔</span>
+                        <div>
+                            <h4 class="text-xs font-bold text-white">تنبيهات وإشعارات البورصة والجهات الرقابية (العامة)</h4>
+                            <p class="text-[10px] text-slate-400">إشعارات تنظيمية ومواعيد الجلسات والعطلات الرسمية وقرارات الرقابة المالية والبنك المركزي (معلومات إرشادية هامة للمتعاملين)</p>
+                        </div>
+                    </div>
+                    <span id="newsAlertsCountPill" class="text-[10px] font-mono font-bold bg-sky-950 text-sky-300 border border-sky-800 px-2 py-0.5 rounded-full">5 إشعارات معتمدة</span>
+                </div>
+                <div id="newsAlertsFeedContainer" class="space-y-3">
+                    <!-- Populated dynamically by renderAlertsNews() -->
+                </div>
+            </div>
+</section>
 
 
 
@@ -9713,5 +9747,105 @@
     <script src="js/data-ai-prompts.js"></script>
     <script src="js/app.js"></script>
     <script src="js/universal-export.js"></script>
+
+    <!-- =========================================================================
+         FLOATING PERSISTENT AI COPILOT BUTTON (مستشار Gemini العائم)
+         ========================================================================= -->
+    <button id="floatingAiCopilotBtn" onclick="openFloatingAiCopilot()" title="مستشار Gemini الذكي المباشر"
+            class="fixed bottom-20 left-4 md:bottom-6 md:left-6 z-40 bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-500 text-white font-extrabold shadow-2xl hover:shadow-indigo-500/50 rounded-full px-4 py-2.5 flex items-center gap-2 border border-white/20 active:scale-95 transition-all select-none cursor-pointer group">
+        <span class="text-lg">🤖</span>
+        <span class="text-xs font-bold font-sans">مستشار Gemini</span>
+        <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+    </button>
+
+    <!-- Modal: Confirm Clear News Archive -->
+    <div id="clearArchiveModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-5 space-y-4 text-right">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl p-2 rounded-xl bg-rose-950 border border-rose-800 text-rose-400">🗑️</span>
+                <div>
+                    <h3 class="font-bold text-white text-base">تأكيد مسح أرشيف الأخبار</h3>
+                    <p class="text-xs text-slate-400">هل أنت متأكد من رغبتك في مسح أرشيف الأخبار والإفصاحات المحفوظة؟</p>
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-300 bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+                سيتم إفراغ الأرشيف الحالي، ويمكنك استعادة الأخبار الرسمية المحدثة في أي وقت بالضغط على زر "تحديث".
+            </p>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeModal('clearArchiveModal')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">إلغاء</button>
+                <button onclick="executeClearNewsArchive()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold">نعم، مسح الأرشيف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Floating Global AI Gemini Copilot -->
+    <div id="floatingAiCopilotModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[100] hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="glass-card rounded-2xl max-w-3xl w-full border border-indigo-700/80 bg-slate-900/98 shadow-2xl flex flex-col h-[94vh] max-h-[820px] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b border-slate-800 px-4 py-3 shrink-0 bg-slate-950/90" dir="rtl">
+                <div class="flex items-center gap-2.5">
+                    <span class="text-2xl p-2 rounded-xl bg-gradient-to-tr from-purple-900/60 to-indigo-900/60 border border-indigo-700/50 shadow-inner">🤖</span>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="font-extrabold text-white text-sm sm:text-base">مستشار Google Gemini المالي والشرعي</h3>
+                            <span class="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-600 font-bold flex items-center gap-1 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>جاهز ومباشر 100%</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-0.5 text-[11px]">
+                            <span id="floatingAiActivePageBadge" class="text-indigo-300 font-medium">📍 المحادثة والتحليل المالي المباشر</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="resetFloatingAiChat()" title="بدء محادثة جديدة" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-indigo-900/80 text-indigo-300 text-xs font-bold border border-slate-700 transition active:scale-95 flex items-center gap-1 shadow-sm">
+                        <span>🔄</span>
+                        <span class="hidden sm:inline">محادثة جديدة</span>
+                    </button>
+                    <button onclick="closeFloatingAiCopilot()" title="إغلاق النافذة" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-950 text-slate-300 hover:text-rose-300 border border-slate-700 hover:border-rose-800 transition active:scale-95 flex items-center justify-center font-bold text-base shadow-sm">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scrollable Chat Stream (Multi-Turn Conversation) -->
+            <div id="floatingAiChatStream" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3.5 scroll-smooth bg-gradient-to-b from-slate-950/40 via-slate-900/60 to-slate-950/80">
+                <!-- Initial Welcome / Suggestions Card -->
+                <div id="floatingAiWelcomeCard" class="p-4 rounded-2xl bg-slate-950/80 border border-indigo-900/50 space-y-3 shadow-sm text-right">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-2xl">🤖</span>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">مرحباً بك! أنا مستشارك الذكي Google Gemini التنفيذي</h4>
+                            <p class="text-[11px] text-slate-400">يمكنك محادثتي باستمرار، طرح أسئلة متعاقبة، تحليل أي سهم أو خبر أو تقرير، وتدقيق حسابات محفظتك بدقة متناهية.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Page Suggestions Container -->
+                    <div class="pt-2 border-t border-slate-800/80 space-y-2">
+                        <div class="flex items-center justify-between text-[11px] text-amber-300 font-bold">
+                            <span>💡 أسئلة مقترحة بناءً على الصفحة المفتوحة حالياً:</span>
+                            <span class="text-[9.5px] text-slate-500 font-mono">اضغط على أي سؤال للإرسال فوراً</span>
+                        </div>
+                        <div id="floatingAiDynamicSuggestionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+                            <!-- Populated dynamically by openFloatingAiCopilot() -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="border-t border-slate-800 p-2.5 sm:p-3 bg-slate-950/95 shrink-0" dir="rtl">
+                <div class="flex items-center gap-2">
+                    <input type="text" id="floatingAiCustomInput" onkeydown="if(event.key==='Enter') submitFloatingAiQuery();" placeholder="اكتب سؤالك أو استفسارك المالي هنا..." class="flex-1 bg-slate-900 border border-slate-700/80 focus:border-indigo-500 rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-500 outline-none">
+                    <button onclick="submitFloatingAiQuery()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-md transition active:scale-95 flex items-center gap-1.5 shrink-0">
+                        <span>إرسال</span>
+                        <span>🚀</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
