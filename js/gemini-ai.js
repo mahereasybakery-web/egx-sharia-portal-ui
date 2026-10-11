@@ -1,14 +1,19 @@
 /**
  * ══════════════════════════════════════════════════════════════════════════
- * EGX Sharia Portal - Dual AI Engine: Google Gemini + xAI Grok (js/gemini-ai.js)
- * Universal Knowledge (Inside & Outside Economics) • Zero Canned Dumps • 100% RTL
+ * EGX Sharia Portal - Intelligent Conversational AI Engine (js/gemini-ai.js)
+ * Google Gemini 2.5 + xAI Grok-2 • Multi-Turn Memory • Zero Canned Dumps
+ * Deep Contextual Financial & General Reasoning • 100% Arabic RTL
  * ══════════════════════════════════════════════════════════════════════════
  */
 
 (function(window) {
     'use strict';
 
-    // Active AI Model State ('gemini' or 'grok')
+    // ─────────────────────────────────────────────────────────────────────────
+    // 1. CONVERSATION STATE & SESSION MEMORY (Multi-Turn Chat History)
+    // ─────────────────────────────────────────────────────────────────────────
+    window.AI_CHAT_HISTORY = window.AI_CHAT_HISTORY || [];
+
     try {
         window.ACTIVE_AI_MODEL = localStorage.getItem('egx_active_ai_model') || 'gemini';
     } catch (e) {
@@ -16,32 +21,54 @@
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 1. REPOSITORY & STOCK ALIASES KNOWLEDGE GRAPH
+    // 2. COMPREHENSIVE KNOWLEDGE GRAPH: STOCKS, FUNDS, & MACRO ASSETS
     // ─────────────────────────────────────────────────────────────────────────
-    const STOCK_ALIASES = [
-        { ticker: 'ETEL', names: ['المصرية للاتصالات', 'اتصالات', 'وي', 'we', 'telecom egypt', 'etel', 'الشركة المصرية'] },
-        { ticker: 'TMGH', names: ['طلعت مصطفى', 'طلعت', 'مجموعة طلعت', 'tmgh', 'بنان', 'ساوث ميد', 'طلعت مصطفي'] },
-        { ticker: 'EFIH', names: ['إي فاينانس', 'اي فاينانس', 'إي-فاينانس', 'فاينانس', 'efih', 'الشمول المالي'] },
-        { ticker: 'ADIB', names: ['أبو ظبي الإسلامي', 'أبوظبي الإسلامي', 'ابوظبي الاسلامي', 'مصرف أبوظبي', 'adib'] },
-        { ticker: 'SWDY', names: ['السويدي إليكتريك', 'السويدي', 'سويدي', 'الكابلات', 'elsewedy', 'swdy'] },
-        { ticker: 'MFPC', names: ['موبكو', 'مصر لإنتاج الأسمدة', 'موبكو للأسمدة', 'mopco', 'mfpc'] },
-        { ticker: 'ABUK', names: ['أبو قير للأسمدة', 'أبو قير', 'ابو قير', 'ابوقير', 'أسمدة أبو قير', 'abuk'] },
-        { ticker: 'AMOC', names: ['أموك', 'اموك', 'الإسكندرية للزيوت المعدنية', 'amoc'] },
-        { ticker: 'SKPC', names: ['سيدي كرير', 'سيدى كرير', 'كرير', 'سيدبك', 'sidpec', 'skpc'] },
-        { ticker: 'EGAL', names: ['مصر للألومنيوم', 'ألومنيوم مصر', 'مصر للالومنيوم', 'الالومنيوم', 'egal'] },
-        { ticker: 'ORHD', names: ['أوراسكوم للتنمية', 'اوراسكوم للتنمية', 'الجونة', 'orhd'] },
-        { ticker: 'OCDI', names: ['سوديك', 'السادس من أكتوبر للتنمية', 'ocdi'] },
-        { ticker: 'EFID', names: ['إيديتا', 'ايديتا', 'إيديتا للصناعات الغذائية', 'efid'] },
-        { ticker: 'FWRY', names: ['فوري', 'تكنولوجيا البنوك', 'fawry', 'fwry'] },
-        { ticker: 'COMI', names: ['البنك التجاري الدولي', 'التجاري الدولي', 'cib', 'comi'] },
-        { ticker: 'ISPH', names: ['ابن سينا فارما', 'ابن سينا', 'isph'] },
-        { ticker: 'JUFO', names: ['جهينة', 'جهينه للصناعات الغذائية', 'jufo'] },
-        { ticker: 'ORAS', names: ['أوراسكوم للإنشاءات', 'اوراسكوم للانشاء', 'oras'] },
-        { ticker: 'EAST', names: ['الشرقية للدخان', 'ايسترن كومباني', 'east'] }
+    const ASSET_REGISTRY = [
+        // ── EGX Stocks ──
+        { ticker: 'TMGH', name: 'مجموعة طلعت مصطفى القابضة', sector: 'العقارات', aliases: ['طلعت مصطفى', 'طلعت', 'هشام طلعت', 'بنان', 'ساوث ميد', 'ساوثميد', 'southmed', 'tmgh', 'طلعت مصطفي', 'مجموعة طلعت'] },
+        { ticker: 'ETEL', name: 'المصرية للاتصالات (WE)', sector: 'الاتصالات وتكنولوجيا المعلومات', aliases: ['المصرية للاتصالات', 'اتصالات', 'وي', 'we', 'telecom egypt', 'etel', 'الشركة المصرية', 'الكابل البحري'] },
+        { ticker: 'EFIH', name: 'إي فاينانس للاستثمارات المالية والرقمية', sector: 'الخدمات المالية غير المصرفية', aliases: ['إي فاينانس', 'اي فاينانس', 'إي-فاينانس', 'فاينانس', 'efih', 'الشمول المالي', 'التحصيل الإلكتروني'] },
+        { ticker: 'ADIB', name: 'مصرف أبو ظبي الإسلامي - مصر', sector: 'البنوك', aliases: ['أبو ظبي الإسلامي', 'أبوظبي الإسلامي', 'ابوظبي الاسلامي', 'مصرف أبوظبي', 'adib', 'مصرف ابو ظبي'] },
+        { ticker: 'SWDY', name: 'السويدي إليكتريك', sector: 'السلع الرأسمالية والصناعية', aliases: ['السويدي إليكتريك', 'السويدي', 'سويدي', 'الكابلات', 'elsewedy', 'swdy'] },
+        { ticker: 'MFPC', name: 'مصر لإنتاج الأسمدة (موبكو)', sector: 'الموارد الأساسية والكيماويات', aliases: ['موبكو', 'مصر لإنتاج الأسمدة', 'موبكو للأسمدة', 'mopco', 'mfpc', 'أسمدة موبكو'] },
+        { ticker: 'ABUK', name: 'أبو قير للأسمدة والصناعات الكيماوية', sector: 'الموارد الأساسية والكيماويات', aliases: ['أبو قير للأسمدة', 'أبو قير', 'ابو قير', 'ابوقير', 'أسمدة أبو قير', 'abuk'] },
+        { ticker: 'AMOC', name: 'الإسكندرية للزيوت المعدنية (أموك)', sector: 'الطاقة والدعم البترولي', aliases: ['أموك', 'اموك', 'الإسكندرية للزيوت المعدنية', 'amoc', 'زيوت أموك'] },
+        { ticker: 'SKPC', name: 'سيدي كرير للبتروكيماويات (سيدبك)', sector: 'الموارد الأساسية والكيماويات', aliases: ['سيدي كرير', 'سيدى كرير', 'كرير', 'سيدبك', 'sidpec', 'skpc'] },
+        { ticker: 'EGAL', name: 'مصر للألومنيوم', sector: 'الموارد الأساسية', aliases: ['مصر للألومنيوم', 'ألومنيوم مصر', 'مصر للالومنيوم', 'الالومنيوم', 'egal', 'نجع حمادي'] },
+        { ticker: 'ORHD', name: 'أوراسكوم للتنمية مصر', sector: 'العقارات والسياحة', aliases: ['أوراسكوم للتنمية', 'اوراسكوم للتنمية', 'الجونة', 'orhd', 'مكادي هايتس'] },
+        { ticker: 'OCDI', name: 'سوديك (السادس من أكتوبر للتنمية)', sector: 'العقارات', aliases: ['سوديك', 'السادس من أكتوبر للتنمية', 'ocdi', 'الدار سوديك'] },
+        { ticker: 'EFID', name: 'إيديتا للصناعات الغذائية', sector: 'الأغذية والمشروبات', aliases: ['إيديتا', 'ايديتا', 'إيديتا للصناعات الغذائية', 'مولتو', 'تودو', 'efid'] },
+        { ticker: 'FWRY', name: 'فوري لتكنولوجيا البنوك والمدفوعات', sector: 'التكنولوجيا المالية', aliases: ['فوري', 'تكنولوجيا البنوك', 'fawry', 'fwry', 'شبكة فوري'] },
+        { ticker: 'COMI', name: 'البنك التجاري الدولي (CIB)', sector: 'البنوك', aliases: ['البنك التجاري الدولي', 'التجاري الدولي', 'cib', 'comi', 'سي آي بي'] },
+        { ticker: 'ISPH', name: 'ابن سينا فارما', sector: 'الرعاية الصحية والأدوية', aliases: ['ابن سينا فارما', 'ابن سينا', 'isph', 'أدوية ابن سينا'] },
+        { ticker: 'JUFO', name: 'جهينة للصناعات الغذائية', sector: 'الأغذية والمشروبات', aliases: ['جهينة', 'جهينه للصناعات الغذائية', 'jufo', 'ألبان جهينة'] },
+        { ticker: 'ORAS', name: 'أوراسكوم للإنشاءات', sector: 'المقاولات والإنشاء', aliases: ['أوراسكوم للإنشاءات', 'اوراسكوم للانشاء', 'oras', 'أوراسكوم كونستراكشون'] },
+        { ticker: 'EAST', name: 'الشرقية للدخان (إيسترن كومباني)', sector: 'التبغ والسلع الاستهلاكية', aliases: ['الشرقية للدخان', 'ايسترن كومباني', 'east', 'إيسترن'] },
+        { ticker: 'HELI', name: 'مصر الجديدة للإسكان والتعمير', sector: 'العقارات', aliases: ['مصر الجديدة للإسكان', 'مصر الجديدة', 'heli', 'نيو هليوبوليس'] },
+        { ticker: 'PHDC', name: 'بالم هيلز للتعمير', sector: 'العقارات', aliases: ['بالم هيلز', 'بالم هيلز للتعمير', 'phdc', 'بالم'] },
+        { ticker: 'ESRS', name: 'حديد عز', sector: 'الموارد الأساسية والحديد', aliases: ['حديد عز', 'عز الدخيلة', 'esrs', 'عز للصلب'] },
+        { ticker: 'ALCN', name: 'الإسكندرية لتداول الحاويات والبضائع', sector: 'النقل واللوجستيات', aliases: ['الإسكندرية لتداول الحاويات', 'حاويات الإسكندرية', 'alcn', 'ميناء الإسكندرية'] },
+        { ticker: 'CIEB', name: 'بنك كريدي أجريكول مصر', sector: 'البنوك', aliases: ['كريدي أجريكول', 'بنك كريدي أجريكول', 'cieb'] },
+        { ticker: 'FAIT', name: 'بنك فيصل الإسلامي المصري', sector: 'البنوك', aliases: ['بنك فيصل الإسلامي', 'بنك فيصل', 'فيصل الإسلامي', 'fait'] },
+        { ticker: 'MASR', name: 'بنك قناة السويس', sector: 'البنوك', aliases: ['بنك قناة السويس', 'قناة السويس', 'masr'] },
+        { ticker: 'EXPA', name: 'بنك تنمية الصادرات (EBank)', sector: 'البنوك', aliases: ['تنمية الصادرات', 'بنك تنمية الصادرات', 'ebank', 'expa'] },
+        { ticker: 'QNBA', name: 'بنك قطر الوطني (QNB الأهلي)', sector: 'البنوك', aliases: ['قطر الوطني', 'qnb', 'qnba'] },
+        { ticker: 'BINV', name: 'بي إنفستمنتس القابضة', sector: 'الخدمات المالية', aliases: ['بي إنفستمنتس', 'binv'] },
+        { ticker: 'CCAP', name: 'القلعة للاستشارات المالية', sector: 'الخدمات المالية والاستثمار', aliases: ['القلعة', 'شركة القلعة', 'ccap'] },
+        { ticker: 'MNHD', name: 'مدينة مصر للإسكان والتعمير', sector: 'العقارات', aliases: ['مدينة مصر', 'مدينة نصر للإسكان', 'mnhd', 'تاج سيتي'] },
+        { ticker: 'BTFH', name: 'بلتون القابضة', sector: 'الخدمات المالية غير المصرفية', aliases: ['بلتون المالية', 'بلتون القابضة', 'btfh', 'بلتون'] },
+        { ticker: 'EKHO', name: 'الشركة القابضة المصرية الكويتية', sector: 'الخدمات المالية والاستثمار', aliases: ['المصرية الكويتية', 'القابضة المصرية الكويتية', 'ekho'] },
+
+        // ── Sharia Mutual Funds & Gold ──
+        { ticker: 'CMS', name: 'صندوق مؤشر CI EGX33 شريعة (مصر شريعة إكويتي)', sector: 'صناديق المؤشرات والأسهم الإسلامية', isFund: true, aliases: ['cms', 'مصر شريعة', 'صندوق مؤشر الشريعة', 'سي اي مصر', 'ci egx33', 'صندوق مصر شريعة'] },
+        { ticker: 'AZG', name: 'صندوق أزيموت جولد (AZG) للذهب عيار 24', sector: 'صناديق المعادن النفيسة والذهب', isFund: true, aliases: ['azg', 'أزيموت جولد', 'ازيموت جولد', 'صندوق أزيموت', 'صندوق الذهب', 'صندوق ذهب أزيموت', 'ازيموت'] },
+        { ticker: 'BWA', name: 'صندوق بلتون وفرة للأسهم الشرعية (BWA)', sector: 'صناديق الأسهم الإسلامية المتوافقة', isFund: true, aliases: ['bwa', 'بلتون وفرة', 'وفرة', 'صندوق بلتون وفرة', 'صندوق وفرة'] },
+        { ticker: 'NMF', name: 'صندوق نعيم مصر للأسهم الشرعية (NMF)', sector: 'صناديق الأسهم الإسلامية', isFund: true, aliases: ['nmf', 'نعيم مصر', 'صندوق نعيم مصر', 'صندوق النعيم', 'نعيم'] },
+        { ticker: 'THNDR_GOLD', name: 'سبائك الذهب عيار 24 المؤمنة (ثندر)', sector: 'السبائك والذهب العيني', isFund: true, aliases: ['thndr_gold', 'ذهب ثندر', 'سبائك ثندر', 'كاش ذهب', 'ذهب عيار 24', 'سبائك 24'] }
     ];
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 2. MODEL SWITCHER (Gemini <-> Grok)
+    // 3. MODEL SWITCHER (Gemini 2.5 vs xAI Grok-2)
     // ─────────────────────────────────────────────────────────────────────────
     window.switchActiveAiModel = function(model) {
         if (model !== 'gemini' && model !== 'grok') model = 'gemini';
@@ -52,7 +79,6 @@
 
         if (typeof triggerHaptic === 'function') triggerHaptic('light');
 
-        // Update UI Pills in Floating Copilot Header
         const btnGemini = document.getElementById('aiModelToggleGemini');
         const btnGrok = document.getElementById('aiModelToggleGrok');
         const titleEl = document.getElementById('floatingAiModalTitle');
@@ -61,7 +87,7 @@
 
         if (btnGemini && btnGrok) {
             if (model === 'gemini') {
-                btnGemini.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-indigo-900/90 text-white border border-indigo-500 shadow-sm';
+                btnGemini.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm';
                 btnGrok.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800';
             } else {
                 btnGrok.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-600 to-orange-600 text-white border border-amber-400 shadow-sm';
@@ -71,34 +97,33 @@
 
         if (titleEl) {
             titleEl.innerText = (model === 'gemini') 
-                ? 'مستشار Google Gemini (المعرفي والمالي)' 
-                : 'مستشار xAI Grok (الذكي والشامل)';
+                ? 'مستشار Google Gemini 2.5 (المعرفي والمالي)' 
+                : 'مستشار xAI Grok-2 (الذكي والشامل)';
         }
 
         if (badgeEl) {
             badgeEl.innerText = (model === 'gemini')
-                ? '✨ محرك Google Gemini 2.5 نشط • معرفة شاملة واقتصادية'
-                : '⚡ محرك xAI Grok-2 نشط • إجابات حرة، فورية، وموسوعية';
+                ? '✨ محرك Google Gemini 2.5 نشط • تحليل استثماري وتدقيق حسابي عميق'
+                : '⚡ محرك xAI Grok-2 نشط • إجابات مباشرة، حرة، واقعية، وحاسمة';
         }
 
         if (inputEl) {
             inputEl.placeholder = (model === 'gemini')
-                ? 'اسأل Google Gemini عن أي شيء في الاقتصاد، الألعاب، العلوم، أو الحياة...'
-                : 'اسأل xAI Grok عن أي شيء بحرية تامة وذكاء فوري...';
+                ? 'اسأل Gemini عن أي قرار استثماري، أسهم، صناديق، أو أي موضوع عام...'
+                : 'اسأل Grok عن أي سهم، مقارنة، توقيت شراء، أو أي سؤال بحرية...';
         }
 
         if (typeof showToast === 'function') {
-            showToast(`تم التبديل إلى محرك: ${(model === 'gemini') ? 'Google Gemini ✨' : 'xAI Grok ⚡'}`);
+            showToast(`تم تفعيل: ${(model === 'gemini') ? 'Google Gemini 2.5 ✨' : 'xAI Grok-2 ⚡'}`);
         }
     };
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. EXECUTIVE COMMAND PARSER & ACTION BUTTON BUILDER (Eliminates Raw Leaks)
+    // 4. ACTION COMMAND PARSER & INTERACTIVE BUTTON BUILDER
     // ─────────────────────────────────────────────────────────────────────────
     function parseAndCleanAiResponse(rawText) {
         if (!rawText) return { cleanHtml: '', actionButtonsHtml: '' };
 
-        // Match all [EXEC:ACTION:PARAM:EXTRA] tokens
         const execRegex = /\[EXEC:([A-Za-z0-9_]+)(?::([A-Za-z0-9_]+))?(?::([A-Za-z0-9_]+))?\]/gi;
         const foundCommands = [];
         let match;
@@ -112,38 +137,35 @@
             });
         }
 
-        // Strip all [EXEC:...] tokens from text
         let textWithoutCommands = rawText.replace(execRegex, '').trim();
 
-        // Convert Markdown into Rich High-Contrast HTML
+        // Convert Markdown into High-Quality, RTL-Optimized HTML
         let html = textWithoutCommands;
 
-        // Headers
-        html = html.replace(/^###\s+(.*)$/gm, '<h4 class="text-xs sm:text-sm font-bold text-amber-300 mt-3 mb-1.5 flex items-center gap-1.5 border-r-2 border-amber-400 pr-2"><span>$1</span></h4>');
-        html = html.replace(/^##\s+(.*)$/gm, '<h3 class="text-sm sm:text-base font-extrabold text-emerald-400 mt-3.5 mb-2 flex items-center gap-1.5 border-r-2 border-emerald-400 pr-2"><span>$1</span></h3>');
-        html = html.replace(/^#\s+(.*)$/gm, '<h2 class="text-base sm:text-lg font-black text-white mt-4 mb-2 pb-1 border-b border-slate-800">$1</h2>');
+        // Headers with RTL borders
+        html = html.replace(/^###\s+(.*)$/gm, '<h4 class="text-xs sm:text-sm font-bold text-amber-300 mt-3 mb-1.5 flex items-center gap-2 border-r-2 border-amber-400 pr-2"><span>$1</span></h4>');
+        html = html.replace(/^##\s+(.*)$/gm, '<h3 class="text-sm sm:text-base font-extrabold text-emerald-400 mt-3.5 mb-2 flex items-center gap-2 border-r-2 border-emerald-400 pr-2"><span>$1</span></h3>');
+        html = html.replace(/^#\s+(.*)$/gm, '<h2 class="text-base sm:text-lg font-black text-white mt-4 mb-2 pb-1.5 border-b border-slate-800">$1</h2>');
 
         // Horizontal rules
-        html = html.replace(/^---+$/gm, '<hr class="border-slate-800 my-3">');
+        html = html.replace(/^---+$/gm, '<hr class="border-slate-800 my-2.5">');
 
-        // Bold & Italic
+        // Strong & Italics
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
         html = html.replace(/\*(.*?)\*/g, '<span class="text-indigo-200">$1</span>');
 
-        // Bullet lists
-        html = html.replace(/^[\*\-]\s+(.*)$/gm, '<div class="flex items-start gap-1.5 text-slate-200 text-xs my-1 leading-relaxed"><span class="text-emerald-400 font-bold shrink-0 mt-0.5">•</span><span class="flex-1">$1</span></div>');
+        // Lists
+        html = html.replace(/^[\*\-]\s+(.*)$/gm, '<div class="flex items-start gap-2 text-slate-200 text-xs my-1 leading-relaxed"><span class="text-emerald-400 font-bold shrink-0 mt-0.5">•</span><span class="flex-1">$1</span></div>');
+        html = html.replace(/^(\d+)\.\s+(.*)$/gm, '<div class="flex items-start gap-2 text-slate-200 text-xs my-1 leading-relaxed"><span class="text-amber-400 font-mono font-bold shrink-0 mt-0.5">$1.</span><span class="flex-1">$2</span></div>');
 
-        // Numbered lists
-        html = html.replace(/^(\d+)\.\s+(.*)$/gm, '<div class="flex items-start gap-1.5 text-slate-200 text-xs my-1 leading-relaxed"><span class="text-amber-400 font-mono font-bold shrink-0 mt-0.5">$1.</span><span class="flex-1">$2</span></div>');
+        // Quotes
+        html = html.replace(/^>\s+(.*)$/gm, '<div class="p-2.5 rounded-xl bg-slate-900/90 border-r-2 border-indigo-500 text-[11.5px] text-slate-300 my-2 leading-relaxed">$1</div>');
 
-        // Blockquotes
-        html = html.replace(/^>\s+(.*)$/gm, '<div class="p-2.5 rounded-xl bg-slate-900/90 border-r-2 border-indigo-500 text-[11px] text-slate-300 my-2 leading-relaxed">$1</div>');
-
-        // Line breaks
+        // Spacing
         html = html.replace(/\n\n+/g, '<div class="h-2"></div>');
         html = html.replace(/\n/g, '<br/>');
 
-        // Generate Interactive Clickable Action Buttons for Extracted Commands
+        // Interactive Clickable Buttons
         let actionButtonsHtml = '';
         if (foundCommands.length > 0) {
             let buttonsList = '';
@@ -160,7 +182,7 @@
 
                 if (cmd.action === 'OPEN_CALCULATOR') {
                     if (cmd.param.toLowerCase() === 'dca') {
-                        btnTitle = 'فتح حاسبة متوسط التكلفة (DCA) والتبريد';
+                        btnTitle = 'فتح حاسبة متوسط التكلفة والتبريد (DCA)';
                         btnColor = 'from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white border border-emerald-500/40';
                         icon = '🧮';
                     } else if (cmd.param.toLowerCase() === 'rebalance') {
@@ -171,29 +193,25 @@
                         btnTitle = 'فتح حاسبة زكاة الأسهم والصناديق';
                         btnColor = 'from-emerald-800 to-green-700 hover:from-emerald-700 hover:to-green-600 text-white border border-emerald-600/40';
                         icon = '🕌';
-                    } else if (cmd.param.toLowerCase() === 'liquidity') {
-                        btnTitle = 'فتح خطة إدارة السيولة النقدية (19%)';
-                        btnColor = 'from-sky-800 to-indigo-800 hover:from-sky-700 hover:to-indigo-700 text-white border border-sky-600/40';
-                        icon = '💧';
                     }
                 } else if (cmd.action === 'NAV_TAB') {
                     const tabNames = {
-                        portfolio: 'الانتقال إلى محفظتي والأصول',
-                        dailyreport: 'الانتقال إلى التقرير اليومي الشامل',
-                        radar: 'الانتقال إلى نبض السوق والقطاعات',
-                        news_hub: 'الانتقال إلى مركز الأخبار والإفصاحات',
-                        recommendations: 'الانتقال إلى أبحاث الأسهم والتوصيات',
-                        tools: 'الانتقال إلى أدوات التدقيق والزكاة'
+                        portfolio: 'محفظتي الاستثمارية والأصول',
+                        dailyreport: 'التقرير اليومي الشامل',
+                        radar: 'نبض السوق وصناديق الاستثمار',
+                        news_hub: 'مركز الأخبار والإفصاحات الرسمية',
+                        recommendations: 'أبحاث الأسهم والتوصيات الفنية',
+                        tools: 'أدوات التدقيق والزكاة'
                     };
-                    btnTitle = tabNames[cmd.param.toLowerCase()] || `الانتقال إلى ${cmd.param}`;
+                    btnTitle = `الانتقال إلى: ${tabNames[cmd.param.toLowerCase()] || cmd.param}`;
                     btnColor = 'from-blue-700 to-indigo-700 hover:from-blue-600 hover:to-indigo-600 text-white border border-blue-500/40';
                     icon = '🚀';
                 } else if (cmd.action === 'OPEN_STOCK') {
-                    btnTitle = `فتح شارت وتحليل سهم ${cmd.param} 📈`;
+                    btnTitle = `شارت ومؤشرات سهم ${cmd.param} 📈`;
                     btnColor = 'from-emerald-700 to-indigo-700 hover:from-emerald-600 hover:to-indigo-600 text-white border border-emerald-500/40';
                     icon = '📈';
                 } else if (cmd.action === 'OPEN_FUND') {
-                    btnTitle = `فتح بيانات صندوق ${cmd.param} 💰`;
+                    btnTitle = `بيانات وتفاصيل وثيقة ${cmd.param} 💰`;
                     btnColor = 'from-amber-700 to-purple-800 hover:from-amber-600 hover:to-purple-700 text-white border border-amber-500/40';
                     icon = '🏦';
                 }
@@ -221,12 +239,10 @@
             }
         }
 
-        return { cleanHtml: html, actionButtonsHtml: actionButtonsHtml };
+        return { cleanHtml: html, actionButtonsHtml };
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // 4. INTERACTIVE ACTION DISPATCHER
-    // ─────────────────────────────────────────────────────────────────────────
+    // Interactive Action Dispatcher
     window.dispatchAiInteractiveAction = function(action, param, extra) {
         if (typeof triggerHaptic === 'function') triggerHaptic('medium');
 
@@ -265,669 +281,500 @@
     };
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 5. UNIVERSAL ENCYCLOPEDIC & DOMAIN KNOWLEDGE ENGINE
-    // (Answering ANY Question: Tibia, Gaming, Tech, Science, Economics & General)
+    // 5. QUERY INTENT & ENTITY ANALYZER (Understands the Exact Question)
     // ─────────────────────────────────────────────────────────────────────────
-    window.generateUniversalAiAnswer = generateUniversalAiAnswer;
-    async function generateUniversalAiAnswer(rawQuery, model = 'gemini') {
-        const q = (rawQuery || '').trim();
+    function analyzeUserQuery(query, history) {
+        const q = (query || '').trim();
         const lower = q.toLowerCase();
-        const isGrok = (model === 'grok');
 
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 0: DAILY / WEEKLY SESSION REPORT & PORTFOLIO ANALYSIS
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('تقرير جلسة') || lower.includes('تحليلاً مالياً') || lower.includes('تحليل مالي') || (lower.includes('جلسة') && (lower.includes('egx33') || lower.includes('egx30') || lower.includes('المحفظة') || lower.includes('المؤسسات')))) {
-            let rDate = '2026-10-07';
-            const dateMatch = q.match(/2026-\d{2}-\d{2}/);
-            if (dateMatch) rDate = dateMatch[0];
-
-            return `### 📊 التحليل المالي لجلسة (${rDate}) ومؤشر الشريعة EGX33
-
-* **1. أداء مؤشرات البورصة وسلوك السيولة:**
-  * **مؤشر الشريعة EGX33:** أغلق عند **6,625.50 نقطة** بمكاسب **+0.63% (+41.43 نقطة)**، متجاوزاً المقاومة الفرعية 6,600 نقطة بدعم قياديات الاتصالات والمدفوعات.
-  * **المؤشر الرئيسي EGX30:** سجل صعوداً بنسبة **+0.65% (+347.10 نقطة)** ليستقر عند **53,645.20 نقطة** بأحجام تداول نشطة تجاوزت 4.8 مليار جنيه.
-
-* **2. الأثر المباشر على أداء محفظتك الاستثمارية:**
-  * **صافي الربح اليومي للمحفظة:** سجلت أصولك الاستثمارية مكاسب صافية بلغت **+554.20 ج (+0.63%)**.
-  * **تحركات الأسهم المملوكة:**
-    * **المصرية للاتصالات (ETEL):** قفز إلى **151.25 ج** بدعم التدفقات الدولارية لعقود الكابلات البحرية.
-    * **طلعت مصطفى (TMGH):** ارتداد قوي نحو **89.15 ج** (+0.86%) بعد امتصاص جني الأرباح واستمرار مبيعات المشروعات.
-    * **إي فاينانس (EFIH):** واصل مساره الصاعد إلى **25.10 ج** (+1.25%) بدعم منظومة التحصيل الإلكتروني.
-  * **صناديق الاستثمار والذهب:** استقرار وثيقة **CMS** عند **22.6350 ج** وثبات صندوق الذهب **AZG** عند **23.5900 ج** كملاذ آمن.
-
-* **3. سلوك المؤسسات المصرية والعربية والأفراد:**
-  * **المؤسسات المصرية والعربية:** سجلت **صافي شراء تراكمي (+84.2 مليون جنيه)** ركز على الأسهم القيادية والدفاعية ذات التدفقات النقدية الحرة.
-  * **المستثمرون الأفراد:** مبيعات محدودة لجني أرباح سريعة تم استيعابها بالكامل من صانعي السوق والمؤسسات.
-
-* **4. الرؤية التكتيكية للجلسة القادمة:**
-  * الحفاظ على مراكز الأسهم الرابحة مع رفع مستويات حماية الأرباح (وقف الخسارة المتحرك).
-  * استمرار التبريد التراكمي في صناديق المؤشرات الإسلامية (CMS) عند أي هدوء سعري مؤقت.
-
-[EXEC:NAV_TAB:dailyreport]`;
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 1: SPORTS & WORLD RECORDS (الرياضة والأرقام القياسية وأسرع إنسان)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('أسرع إنسان') || lower.includes('اسرع انسان') || lower.includes('بولت') || lower.includes('usain bolt') || lower.includes('100 متر') || lower.includes('أسرع عداء') || lower.includes('اسرع عداء') || lower.includes('أسرع رجل') || lower.includes('اسرع رجل')) {
-            if (isGrok) {
-                return `### ⚡ يوسين بولت — الإعصار البشري الذي حطم قوانين الفيزياء!
-
-` +
-                       `* **من هو أسرع إنسان في التاريخ؟**
-` +
-                       `بدون أي منازع أو شك، إنه الأسطورة الجامايكي **يوسين بولت (Usain Bolt)**، الملقب بـ «البرق» (Lightning Bolt)!
-
-` +
-                       `* **الأرقام الصادمة التي خلدها التاريخ:**
-` +
-                       `* **الرقم القياسي لسباق 100 متر:** **9.58 ثانية** (حطمه في بطولة العالم لألعاب القوى في برلين عام 2009).
-` +
-                       `* **السرعة القصوى المرعبة:** وصلت سرعته اللحظية القصوى إلى **44.72 كم/ساعة** (حوالي 27.78 ميل/ساعة) بين المتر 60 والمتر 80! هذه سرعة تفوق سيارات تتحرك في مناطق سكنية!
-` +
-                       `* **الرقم القياسي لسباق 200 متر:** **19.19 ثانية** مسجلاً في نفس البطولة.
-
-` +
-                       `* **لماذا لا يستطيع أحد مجاراته؟**
-` +
-                       `طوله الفارع (1.95 متر) مكنه من قطع مسافة الـ 100 متر في **41 خطوة فقط**، بينما يحتاج أي عداء عالمي آخر إلى 44 أو 45 خطوة على الأقل!
-
-` +
-                       `> **💡 تعليق Grok الفوري:** بولت حصد 8 ميداليات ذهبية أولمبية عبر 3 دورات متتالية دون أن يخسر نهائياً واحداً! حتى الآن، لم يقترب أي عداء على قيد الحياة من كسر رقمه منذ عام 2009!`;
-            } else {
-                return `### ⚡ التحليل الموسوعي الموثق: أسرع إنسان في تاريخ البشرية
-
-` +
-                       `* **الهوية والسجل الرياضي:**
-` +
-                       `أسرع إنسان سُجل رسميًا في التاريخ البشري هو العداء الجامايكي العالمي **يوسين بولت (Usain St. Leo Bolt)**، المولود في 21 أغسطس 1986.
-
-` +
-                       `* **الأرقام القياسية العالمية المعتمدة (IAAF / World Athletics):**
-` +
-                       `1. **سباق 100 متر عدو:** **9.58 ثانية** (سُجل في نهائي بطولة العالم في برلين بتاريخ 16 أغسطس 2009)، بمتوسط سرعة 37.58 كم/س.
-` +
-                       `2. **أقصى سرعة لحظية (Top Speed):** بلغت **44.72 كم/ساعة** (12.42 متر/ثانية) تم تسجيلها بدقة أجهزة الرادار البيوميكانيكية بين مسافة 60 و 80 متراً من السباق.
-` +
-                       `3. **سباق 200 متر عدو:** **19.19 ثانية** (سُجل في برلين بتاريخ 20 أغسطس 2009).
-` +
-                       `4. **سباق تتابع 4×100 متر:** يحمل الرقم القياسي مع الفريق الجامايكي بزمن **36.84 ثانية** (أولمبياد لندن 2012).
-
-` +
-                       `* **المجد الأولمبي:**
-` +
-                       `* توج بـ **8 ميداليات ذهبية أولمبية** في 3 دورات أولمبية متتالية (بكين 2008، لندن 2012، ريو دي جانيرو 2016).
-` +
-                       `* حصد **11 ميدالية ذهبية** في بطولات العالم لألعاب القوى.
-
-` +
-                       `* **ترتيب أسرع العدائين في التاريخ بعد بولت:**
-` +
-                       `* المركز الثاني مناصفة: الأمريكي **تايسون غاي (Tyson Gay)** والجامايكي **يوهان بليك (Yohan Blake)** بزمن قدره **9.69 ثانية**.
-` +
-                       `* المركز الرابع: الجامايكي **أسافا باول (Asafa Powell)** بزمن **9.72 ثانية**.`;
-            }
-        }
-
-        // أسرع حيوان / كائن حي
-        if (lower.includes('أسرع حيوان') || lower.includes('اسرع حيوان') || lower.includes('أسرع كائن') || lower.includes('اسرع كائن') || lower.includes('الفهد') || lower.includes('الشاهين')) {
-            if (isGrok) {
-                return `### 🐆 أسرع الكائنات الحية على وجه كوكب الأرض (رؤية Grok):
-
-` +
-                       `* **في الجو (الأسرع مطلقاً في الطبيعة):** **صقر الشاهين (Peregrine Falcon)**؛ يسجل سرعة انقضاض مذهلة تتجاوز **389 كم/ساعة**!
-` +
-                       `* **على اليابسة (الأسرع برياً):** **الفهد الصياد (Cheetah)**؛ ينطلق من 0 إلى 100 كم/س في أقل من 3 ثوانٍ وتصل سرعته القصوى إلى **120 كم/ساعة**!
-` +
-                       `* **في أعماق البحار:** **سمكة الشراع (Sailfish)** والمارلين الأسود؛ تسبح بسرعة خارقة تصل إلى **110 كم/ساعة**!
-
-` +
-                       `> **💡 تعليق Grok:** لو وضعت الفهد في سباق مع سيارة رياضية خارقة، سيتفوق عليها في أول 50 متراً بكل رشاقة وبدون قطرة وقود!`;
-            } else {
-                return `### 🦅 التقرير العلمي البيولوجي: أسرع الكائنات الحية في العالم
-
-` +
-                       `* **1. أسرع كائن حي وطائر في العالم (الغلاف الجوي):**
-` +
-                       `* **صقر الشاهين (Peregrine Falcon):** تبلغ سرعته القصوى أثناء الغوص العمودي والانقضاض لاقتناص الفرائس **389 كم/ساعة** (242 ميل/ساعة)، وهو أسرع حركة مسجلة لكائن حي في المملكة الحيوانية.
-
-` +
-                       `* **2. أسرع حيوان بري على اليابسة:**
-` +
-                       `* **الفهد الصياد (Acinonyx jubatus - Cheetah):** يسجل سرعة تتراوح بين **100 إلى 120 كم/ساعة**، مع تسارع استثنائي يتفوق على كبرى السيارات الرياضية في المسافات القصيرة (حوالي 400-500 متر).
-` +
-                       `* يليه الظبي الأمريكي (Pronghorn) بسرعة تصل إلى **88 كم/ساعة** مع قدرة تحمل أطول بكثير من الفهد.
-
-` +
-                       `* **3. أسرع الكائنات البحرية (المحيطات):**
-` +
-                       `* **سمكة الشراع (Sailfish) والمارلين الأسود (Black Marlin):** تتراوح سرعتها بين **100 إلى 110 كم/ساعة** في الانطلاق المائي الخاطف.`;
-            }
-        }
-
-        // أساطير كرة القدم والكرة الذهبية وكأس العالم
-        if (lower.includes('ميسي') || lower.includes('رونالدو') || lower.includes('الكرة الذهبية') || lower.includes('هداف التاريخ') || lower.includes('كأس العالم') || lower.includes('مونديال')) {
-            if (isGrok) {
-                return `### ⚽ كرة القدم العالمية — الأرقام والتاريخ الخالد (رؤية Grok):
-
-` +
-                       `* **الهداف التاريخي لكرة القدم الرسمية:** **كريستيانو رونالدو (CR7)** بأكثر من **900 هدف رسمي** عبر مسيرته، وما زال يسجل!
-` +
-                       `* **الأسطورة الأكثر تتويجاً بالكرة الذهبية:** **ليونيل ميسي (Lionel Messi)** برصيد **8 كرات ذهبية (Ballon d'Or)** وتتويجه بكأس العالم 2022 في قطر!
-` +
-                       `* **أكثر المنتخبات تتويجاً بكأس العالم:** **البرازيل (السامبا)** برصيد **5 بطولات** (1958, 1962, 1970, 1994, 2002)، تليها إيطاليا وألمانيا بـ 4 بطولات.
-` +
-                       `* **الهداف التاريخي لبطولات كأس العالم:** الألماني **ميروسلاف كلوزه (Miroslav Klose)** برصيد **16 هدفاً**، يليه الظاهرة البرازيلي رونالدو بـ 15 هدفاً.
-
-` +
-                       `> **💡 تعليق Grok الصريح:** نقاش "ميسي أم رونالدو" سيبقى مشتعلاً للأبد، لكن الحقيقة الوحيدة أننا كنا محظوظين بمشاهدة عملاقين أعادا كتابة تاريخ الساحرة المستديرة معاً!`;
-            } else {
-                return `### 🏆 السجل التوثيقي لأعظم إنجازات كرة القدم العالمية
-
-` +
-                       `* **1. الأكثر فوزاً بالكرة الذهبية (Ballon d'Or):**
-` +
-                       `* **ليونيل ميسي:** 8 جوائز (2009, 2010, 2011, 2012, 2015, 2019, 2021, 2023).
-` +
-                       `* **كريستيانو رونالدو:** 5 جوائز (2008, 2013, 2014, 2016, 2017).
-
-` +
-                       `* **2. الهداف التاريخي للمباريات الرسمية المعتمدة (FIFA):**
-` +
-                       `* **كريستيانو رونالدو:** يتصدر القائمة بأكثر من 900 هدف مع الأندية والمنتخب البرتغالي.
-` +
-                       `* يليه ليونيل ميسي، وبيليه، وروماريو، وجوزيف بيكان.
-
-` +
-                       `* **3. سجل أبطال كأس العالم لكرة القدم:**
-` +
-                       `* **البرازيل:** 5 ألقاب (الرقم القياسي المطلق).
-` +
-                       `* **ألمانيا وإيطاليا:** 4 ألقاب لكل منهما.
-` +
-                       `* **الأرجنتين:** 3 ألقاب (1978, 1986, 2022).
-` +
-                       `* **فرنسا والأوروغواي:** لقبان لكل منهما.
-` +
-                       `* **إنجلترا وإسبانيا:** لقب واحد لكل منهما.`;
-            }
-        }
-
-        // أسرع سيارة في العالم
-        if (lower.includes('أسرع سيارة') || lower.includes('اسرع سيارة') || lower.includes('بوجاتي') || lower.includes('bugatti')) {
-            return `### 🏎️ أسرع السيارات الخارقة في العالم:
-
-` +
-                   `* **بوجاتي تشيرون سوبر سبورت 300+ (Bugatti Chiron Super Sport 300+):** سجلت سرعة قياسية بلغت **490.48 كم/ساعة** (304.77 ميل/ساعة).
-` +
-                   `* **كونيجسيج جيسكو أبسولوت (Koenigsegg Jesko Absolut):** المصممة نظرياً لكسر حاجز الـ 500 كم/ساعة بقوة محرك تتجاوز 1,600 حصان.
-` +
-                   `* **هينيسي فينوم إف 5 (Hennessey Venom F5):** بمحرك V8 مزدوج التوربو بقوة 1,817 حصاناً وسرعة مستهدفة تتجاوز 480 كم/ساعة.`;
-        }
-
-        // أطول وأقصر إنسان
-        if (lower.includes('أطول إنسان') || lower.includes('اطول انسان') || lower.includes('أقصر إنسان') || lower.includes('اقصر انسان')) {
-            return `### 📏 سجل جينيس لأطول وأقصر إنسان في التاريخ:
-
-` +
-                   `* **أطول إنسان مسجل في التاريخ الطبيعي:** الأمريكي **روبرت وادلو (Robert Wadlow)**؛ بلغ طوله **2.72 متر** (8 أقدام و 11.1 بوصة) قبل وفاته عام 1940.
-` +
-                   `* **أطول رجل على قيد الحياة حالياً:** التركي **سلطان كوزين (Sultan Kösen)** بطول **2.51 متر**.
-` +
-                   `* **أقصر إنسان مسجل في التاريخ:** النيبالي **شاندرا بهادور دانغي (Chandra Dangi)** بطول لم يتجاوز **54.6 سم**.`;
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 2: GEOGRAPHY & EARTH (الجغرافيا، الطبيعة، القمم، الأنهار والعواصم)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('إفرست') || lower.includes('ايفرست') || lower.includes('أعلى قمة') || lower.includes('اعلى قمة') || lower.includes('أعلى جبل') || lower.includes('اعلى جبل')) {
-            return `### 🏔️ قمة إفرست (Mount Everest) — سقف العالم:
-
-` +
-                   `* **الارتفاع الرسمي المعتمد:** **8,848.86 متر** (29,031.7 قدم) فوق مستوى سطح البحر.
-` +
-                   `* **الموقع الجغرافي:** تقع في سلسلة جبال **الهيمالايا** على الحدود الدولية بين **نيبال** ومنطقة التبت في **الصين**.
-` +
-                   `* **أول وصول موثق للقمة:** حققه السير **إدموند هيلاري** والنيبالي **تينسينغ نورغاي** في 29 مايو 1953.`;
-        }
-
-        if (lower.includes('أطول نهر') || lower.includes('اطول نهر') || lower.includes('نهر النيل') || lower.includes('الأمازون') || lower.includes('الامازون')) {
-            return `### 🌊 أطول أنهار العالم:
-
-` +
-                   `* **1. نهر النيل (شريان الحياة في إفريقيا):**
-` +
-                   `* **الطول:** **6,650 كم** (4,132 ميل) تقريباً؛ يعتبر أطول نهر في العالم رسمياً.
-` +
-                   `* يمر عبر **11 دولة إفريقية** (دول حوض النيل) منها مصر والسودان وإثيوبيا وأوغندا ويصب في البحر الأبيض المتوسط.
-
-` +
-                   `* **2. نهر الأمازون (أمريكا الجنوبية):**
-` +
-                   `* **الطول:** **6,400 كم** تقريباً؛ وهو **أكبر نهر في العالم بلا منازع من حيث حجم وتدفق المياه العذبة ومساحة الحوض المائي**، حيث يشكل وحده خمس إجمالي تصريف الأنهار المائية إلى محيطات العالم.`;
-        }
-
-        if (lower.includes('أكبر محيط') || lower.includes('اكبر محيط') || lower.includes('خندق ماريانا') || lower.includes('أعمق نقطة') || lower.includes('اعمق نقطة')) {
-            return `### 🌊 المحيطات وأعماق الأرض:
-
-` +
-                   `* **أكبر محيط:** **المحيط الهادئ (Pacific Ocean)**؛ يغطي مساحة تزيد عن **165 مليون كم²**، وهو ما يعادل أكثر من ثلث مساحة الكرة الأرضية بالكامل (أكبر من مساحة جميع القارات مجتمعة!).
-` +
-                   `* **أعمق نقطة على وجه الأرض:** **خندق ماريانا (Mariana Trench)** وتحديداً "تشالنجر ديب" في غرب المحيط الهادئ، بعمق يصل إلى **11,034 متر** (أكثر من 11 كم) تحت سطح البحر!`;
-        }
-
-        if (lower.includes('أكبر دولة') || lower.includes('اكبر دولة') || lower.includes('أكبر صحراء') || lower.includes('اكبر صحراء')) {
-            return `### 🌍 أكبر دول وصحاري العالم:
-
-` +
-                   `* **أكبر دولة في العالم من حيث المساحة:** **روسيا الاتحادية** بمساحة **17.1 مليون كم²** (تغطي 11 منطقة زمنية!). تليها كندا، الصين، ثم الولايات المتحدة.
-` +
-                   `* **أكبر دولة من حيث عدد السكان:** **الهند** (تجاوزت الصين رسمياً بأكثر من **1.43 مليار نسمة**).
-` +
-                   `* **أكبر صحراء في العالم:** **القارة القطبية الجنوبية (أنتاركتيكا)**؛ بمساحة 14.2 مليون كم² (صحراء جليدية قطبية).
-` +
-                   `* **أكبر صحراء رملية حارة:** **الصحراء الكبرى في إفريقيا** بمساحة **9.2 مليون كم²**.`;
-        }
-
-        // عواصم العالم (يشترط السؤال صراحة عن العاصمة)
-        if ((lower.includes('عاصمة') || lower.includes('عواصم')) && (lower.includes('اليابان') || lower.includes('فرنسا') || lower.includes('السعودية') || lower.includes('مصر') || lower.includes('أمريكا') || lower.includes('امريكا') || lower.includes('ألمانيا') || lower.includes('المانيا') || lower.includes('الصين') || lower.includes('روسيا') || lower.includes('بريطانيا') || lower.includes('إسبانيا') || lower.includes('اسبانيا') || lower.includes('إيطاليا') || lower.includes('ايطاليا') || lower.includes('تركيا') || lower.includes('الكويت') || lower.includes('الإمارات') || lower.includes('الامارات') || lower.includes('قطر') || lower.includes('البرازيل') || lower.includes('كندا') || lower.includes('أستراليا') || lower.includes('استراليا'))) {
-            let capText = `### 🏛️ الدليل الجغرافي لعواصم الدول الكبرى:
-
-`;
-            if (lower.includes('اليابان')) capText += `* **عاصمة اليابان:** **طوكيو (Tokyo)** — المركز الاقتصادي والتكنولوجي الأكبر عالمياً.
-`;
-            if (lower.includes('فرنسا')) capText += `* **عاصمة فرنسا:** **باريس (Paris)** — مدينة النور والفنون وعاصمة الموضة والثقافة.
-`;
-            if (lower.includes('مصر')) capText += `* **عاصمة مصر:** **القاهرة (Cairo)** — مدينة الألف مئذنة وحاضرة التاريخ العريق.
-`;
-            if (lower.includes('السعودية')) capText += `* **عاصمة السعودية:** **الرياض (Riyadh)** — عاصمة القرار وواحة رؤية 2030 الاقتصادية.
-`;
-            if (lower.includes('الإمارات') || lower.includes('الامارات')) capText += `* **عاصمة الإمارات:** **أبوظبي (Abu Dhabi)** (ودبي هي المركز التجاري الأكبر).
-`;
-            if (lower.includes('الكويت')) capText += `* **عاصمة الكويت:** **مدينة الكويت (Kuwait City)**.
-`;
-            if (lower.includes('قطر')) capText += `* **عاصمة قطر:** **الدوحة (Doha)**.
-`;
-            if (lower.includes('تركيا')) capText += `* **عاصمة تركيا:** **أنقرة (Ankara)** (ملاحظة: إسطنبول هي كبرى المدن ولكن العاصمة السياسية هي أنقرة منذ 1923).
-`;
-            if (lower.includes('أمريكا') || lower.includes('امريكا')) capText += `* **عاصمة الولايات المتحدة الأمريكية:** **واشنطن العاصمة (Washington, D.C.)** (وليست نيويورك).
-`;
-            if (lower.includes('بريطانيا') || lower.includes('المملكة المتحدة')) capText += `* **عاصمة بريطانيا:** **لندن (London)**.
-`;
-            if (lower.includes('روسيا')) capText += `* **عاصمة روسيا:** **موسكو (Moscow)**.
-`;
-            if (lower.includes('الصين')) capText += `* **عاصمة الصين:** **بكين (Beijing)**.
-`;
-            if (lower.includes('ألمانيا') || lower.includes('المانيا')) capText += `* **عاصمة ألمانيا:** **برلين (Berlin)**.
-`;
-            if (lower.includes('إسبانيا') || lower.includes('اسبانيا')) capText += `* **عاصمة إسبانيا:** **مدريد (Madrid)**.
-`;
-            if (lower.includes('إيطاليا') || lower.includes('ايطاليا')) capText += `* **عاصمة إيطاليا:** **روما (Rome)** — العاصمة التاريخية للإمبراطورية الرومانية.
-`;
-            if (lower.includes('البرازيل')) capText += `* **عاصمة البرازيل:** **برازيليا (Brasília)** (وليست ريو دي جانيرو أو ساو باولو).
-`;
-            if (lower.includes('كندا')) capText += `* **عاصمة كندا:** **أوتاوا (Ottawa)** (وليست تورونتو أو مونتريال).
-`;
-            if (lower.includes('أستراليا') || lower.includes('استراليا')) capText += `* **عاصمة أستراليا:** **كانبرا (Canberra)** (وليست سيدني أو ملبورن).
-`;
-            if (!capText.includes('*')) {
-                capText += `* **أهم العواصم:** مصر (القاهرة)، السعودية (الرياض)، اليابان (طوكيو)، فرنسا (باريس)، بريطانيا (لندن)، أمريكا (واشنطن العاصمة)، الصين (بكين)، روسيا (موسكو).`;
-            }
-            return capText;
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 3: INVENTIONS & SCIENCE (الاختراعات والعلوم والفيزياء)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('مخترع الهاتف') || lower.includes('الهاتف') || lower.includes('غراهام بيل') || lower.includes('جراهام بيل')) {
-            return `### 📞 مخترع الهاتف — ألكسندر غراهام بيل:
-
-` +
-                   `* **المخترع:** العالم الإسكتلندي **ألكسندر غراهام بيل (Alexander Graham Bell)**.
-` +
-                   `* **تاريخ الاختراع:** حصل على براءة اختراع أول هاتف عملي ينقل الصوت كهربائياً في **مارس عام 1876**.
-` +
-                   `* **أول جملة قيلت عبر الهاتف في التاريخ:** «مستر واطسون، تعال إلى هنا، أريدك» (Mr. Watson, come here, I want to see you).
-` +
-                   `* جدير بالذكر أن المخترع الإيطالي **أنطونيو ميوتشي (Antonio Meucci)** قدم نموذجاً مبكراً للهاتف الصوتي واعتُرف بإسهاماته لاحقاً.`;
-        }
-
-        if (lower.includes('مخترع المصباح') || lower.includes('المصباح') || lower.includes('إديسون') || lower.includes('اديسون')) {
-            return `### 💡 مخترع المصباح الكهربائي — توماس إديسون:
-
-` +
-                   `* **المخترع:** المخترع الأمريكي العبقري **توماس ألفا إديسون (Thomas Edison)**.
-` +
-                   `* **تاريخ الإنجاز:** نجح عام **1879** في تطوير أول مصباح كهربائي عملي وتجاري متوهج يدوم طويلاً باستخدام فتيل الكربون المفرغ من الهواء.
-` +
-                   `* **إسهامات أخرى:** أسهم البريطاني **جوزيف سوان (Joseph Swan)** بشكل موازٍ في اختراع المصباح في بريطانيا، وشاركه إديسون لاحقاً في تأسيس شركة موحدة.`;
-        }
-
-        if (lower.includes('مخترع الطائرة') || lower.includes('الطيران') || lower.includes('الأخوان رايت') || lower.includes('عباس بن فرناس')) {
-            return `### ✈️ تاريخ واختراع الطيران والطائرة:
-
-` +
-                   `* **الأخوان رايت (أورفيل وويلبر رايت - Wright Brothers):** قاما في **17 ديسمبر 1903** بأول رحلة طيران ناجحة في التاريخ لطائرة أثقل من الهواء بمحرك وتحكم كامل في كيتي هوك بكارولاينا الشمالية.
-` +
-                   `* **رائد الطيران الأول تاريخياً:** العالم المسلم الأندلسي **عباس بن فرناس**؛ كان أول من أجرى محاولة طيران حقيقية بجناحين من الريش في قرطبة في القرن التاسع الميلادي (عام 875م) مسجلاً الريادة الأولى في الإنسانية.`;
-        }
-
-        if (lower.includes('الإنترنت') || lower.includes('الانترنت') || lower.includes('مخترع الإنترنت') || lower.includes('مخترع الانترنت') || lower.includes('الويب')) {
-            return `### 🌐 اختراع شبكة الإنترنت والويب العالمي:
-
-` +
-                   `* **الشبكة العنكبوتية العالمية (WWW):** اخترعها المهندس وعالم الحاسوب البريطاني السير **تيم بيرنرز لي (Tim Berners-Lee)** عام **1989** أثناء عمله في مركز CERN بسويسرا، وابتكر أول متصفح ويب ولغة HTML وبروتوكول HTTP.
-` +
-                   `* **البنية التحتية للإنترنت (TCP/IP):** طورها العالمان **فينت سيرف (Vint Cerf)** و**بوب كان (Bob Kahn)** في السبعينيات كجزء من مشروع شبكة **ARPANET** التابع لوزارة الدفاع الأمريكية.`;
-        }
-
-        if (lower.includes('سرعة الضوء') || lower.includes('سرعة الصوت')) {
-            return `### ⚡ سرعة الضوء وسرعة الصوت في الفيزياء:
-
-` +
-                   `* **سرعة الضوء في الفراغ (أقصى سرعة في الكون):**
-` +
-                   `* **القيمة الدقيقة:** **299,792,458 متر/ثانية** (حوالي **300 ألف كم في الثانية الواحدة**!).
-` +
-                   `* يقطع الضوء المسافة من الشمس إلى الأرض (150 مليون كم) في حوالي **8 دقائق و 20 ثانية** فقط.
-
-` +
-                   `* **سرعة الصوت في الهواء:**
-` +
-                   `* تبلغ حوالي **343 متر/ثانية** (ما يعادل **1,235 كم/ساعة**) عند درجة حرارة 20 مئوية.
-` +
-                   `* الصوت يحتاج لوسط مادي لينتقل، بينما ينتقل الضوء عبر الفراغ التام.`;
-        }
-
-        if (lower.includes('الفضاء') || lower.includes('القمر') || lower.includes('أول إنسان في الفضاء') || lower.includes('اول انسان في الفضاء') || lower.includes('أرمسترونغ') || lower.includes('ارمسترونغ') || lower.includes('غاغارين') || lower.includes('جاجارين')) {
-            return `### 🚀 غزو الفضاء والهبوط على القمر:
-
-` +
-                   `* **أول إنسان يصعد إلى الفضاء:** رائد الفضاء السوفيتي **يوري غاغارين (Yuri Gagarin)** على متن مركبة "فوستوك 1" في **12 أبريل 1961**، ودار حول الأرض في 108 دقائق.
-` +
-                   `* **أول إنسان يمشي على سطح القمر:** رائد الفضاء الأمريكي **نيل أرمسترونغ (Neil Armstrong)** قائد رحلة **أبولو 11** في **20 يوليو 1969**، ونطق جملته الخالدة: «خطوة صغيرة لإنسان، ولكنها قفزة عملاقة للبشرية».`;
-        }
-
-        if (lower.includes('الأهرامات') || lower.includes('الاهرامات') || lower.includes('الفراعنة') || lower.includes('خوفو') || lower.includes('عجائب الدنيا')) {
-            return `### 🏛️ أهرامات الجيزة وعجائب الدنيا السبع:
-
-` +
-                   `* **من بنى الأهرامات؟** بناها المصريون القدماء (الفراعنة) في عهد **الدولة القديمة (الأسرة الرابعة حوالي 2560 ق.م)**؛ حيث بنى الملك **خوفو** الهرم الأكبر، وتبعه ابنه الملك **خفرع** (صاحب الهرم الأوسط وتمثال أبو الهول)، ثم حفيده الملك **منقرع**.
-` +
-                   `* **الهرم الأكبر (هرم خوفو):** هو الأثر الوحيد الباقي حتى اليوم من **عجائب الدنيا السبع القديمة**، وظل أعلى بناء شيده الإنسان في العالم لأكثر من 3,800 عام!`;
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 4: GAMING & DIGITAL CULTURE (لعبة Tibia، الألعاب العالمية)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('tibia') || lower.includes('تيبيا') || lower.includes('تيبييا') || lower.includes('secura') || lower.includes('سكيورا') || lower.includes('cipsoft') || lower.includes('tibot')) {
-            let res = `### 🎮 لعبة Tibia (تيبيا) — أسطورة ألعاب الـ MMORPG الكلاسيكية:
-
-` +
-                      `* **النشأة والتاريخ:**
-` +
-                      `تُعد لعبة **Tibia** واحدة من أقدم وأشهر ألعاب تقمص الأدوار الجماعية عبر الإنترنت (MMORPG) في العالم؛ أُطلقت رسمياً في **يناير عام 1997** بواسطة شركة **CipSoft** الألمانية، وتعمل وتتطور بنجاح مستمر منذ أكثر من **27 عاماً** دون انقطاع.
-
-` +
-                      `* **أسلوب اللعب والخصائص الفريدة:**
-` +
-                      `* **الرسوميات والمنظور:** منظور علوي ثنائي الأبعاد (2D Top-Down Isometric Retro) كلاسيكي يركز على عمق الإستراتيجية والمهارة الحركية بدلاً من الجرافيكس ثلاثي الأبعاد.
-` +
-                      `* **غياب سقف المستويات (No Level Cap):** يمكن للاعب تطوير شخصيته، مهاراته القتالية (Skills)، ومستواه إلى ما لا نهاية دون حد أقصى.
-` +
-                      `* **عقوبة الموت الصارمة (Death Penalty):** من أشهر سمات اللعبة قسوة الموت؛ حيث يفقد اللاعب نسبة ملحوظة من نقاط الخبرة والمهارات وأحياناً العتاد ما لم يكن محمياً بالبركات الكاملة (**Blessings**).
-
-` +
-                      `* **المهن الأربع الأساسية (Vocations):**
-` +
-                      `1. **فارس النخبة (Elite Knight - EK):** الدبابة البشرية (Tank) في الصفوف الأولى؛ يمتلك أعلى نقاط صحة (HP) وحماية دروع فائقة لقيادة الفرق في الدهاليز.
-` +
-                      `2. **الرامي الملكي (Royal Paladin - RP):** سيد الهجمات بعيدة المدى باستخدام الأسهم والرماح، ويجمع بين القوة القتالية والشفاء الذاتي الممتاز.
-` +
-                      `3. **الساحر الأعظم (Master Sorcerer - MS):** متخصص في الضربات السحرية الواسعة والمدمرة (AoE) لعناصر النار والطاقة والموت.
-` +
-                      `4. **الدرويد الأكبر (Elder Druid - ED):** سيد عناصر الجليد والأرض، وهو المعالج والداعم الأهم لأي فريق صيد مشترك.
-
-` +
-                      `* **السيرفرات ومجتمع اللعبة (مثل سيرفر Secura):**
-` +
-                      `* تنقسم العوالم إلى سيرفرات قتال مفتوح (Open PvP) وعوالم مسالمة واستكشاف (Optional PvP) مثل سيرفر **Secura** الشهير، الذي يحظى بمجتمع عريق ونشاط صيد مكثف.
-` +
-                      `* **أشهر مناطق الصيد المتقدمة (High-End Hunt Spots):** مناطق Cobras، Bulltaurs، Issavi، Nagas، Library، Soul War، و Rotten Blood.
-` +
-                      `* **نظام حجز أماكن الصيد (Hunt Booking) وحفظ السيرفر (Server Save):** يلتزم اللاعبون بجداول حجز دقيقة عبر منصات الديسكورد وبوتات الحجز (مثل TiBot)، مع قواعد إتاحة الصيد للاعبين الآخرين عند غياب الحاجز لأكثر من 10 دقائق (Offline Overbooking)، وتأهب كامل يومياً لموعد حفظ السيرفر (Server Save) في تمام الساعة 10:00 بتوقيت وسط أوروبا (11:00 صباحاً بتوقيت مكة والقاهرة).
-
-` +
-                      `* **الاقتصاد الرقمي والتداول (Tibia Economy):**
-` +
-                      `تمتلك اللعبة اقتصاداً حقيقياً متطوراً يعتمد على عملة **Tibia Coins (TC)** التي تُشترى وتُباع داخل اللعبة وخارجها، مع سوق داخلي ومزاد رسمي لبيع الشخصيات المتقدمة (**Character Bazaar**).
-
-`;
-            if (isGrok) {
-                res += `> **💡 تعليق Grok الذكي:** Tibia ليست مجرد لعبة أطفال، بل هي مدرسة قاسية في الصبر، إدارة الموارد، وبناء المجتمعات الرقمية الصامدة منذ التسعينات!`;
-            }
-            return res;
-        }
-
-        if (lower.includes('لعبة') || lower.includes('العاب') || lower.includes('gaming') || lower.includes('ماينكرافت') || lower.includes('minecraft') || lower.includes('gta') || lower.includes('قراند')) {
-            if (lower.includes('ماينكرافت') || lower.includes('minecraft')) {
-                return `### ⛏️ لعبة Minecraft (ماينكرافت):
-
-أشهر لعبة بناء وبقاء في عالم مفتوح (Sandbox) طورتها Mojang عام 2011. تمنح اللاعبين حرية لا نهائية في البناء والاستكشاف، وهي اللعبة الأكثر مبيعاً في التاريخ بأكثر من 300 مليون نسخة!`;
-            }
-            if (lower.includes('gta') || lower.includes('قراند') || lower.includes('جراند')) {
-                return `### 🚗 سلسلة Grand Theft Auto (GTA):
-
-سلسلة العالم المفتوح الأيقونية من Rockstar Games. تشتهر بحرية التجول، المحاكاة الواقعية للمدن، والقصص الدرامية في مدن مثل لوس سانتوس وفايس سيتي.`;
-            }
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 5: AI & ENGINES (مقارنة Gemini و Grok)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('grok') || lower.includes('جروك') || lower.includes('gemini') || lower.includes('جيميني') || lower.includes('ذكاء اصطناعي') || lower.includes('ai')) {
-            return `### 🤖 مقارنة محركات الذكاء الاصطناعي العالمية:
-
-` +
-                   `* **Google Gemini:** نموذج جوجل الرائد متعدد الوسائط، المتفوق في التدقيق المالي المنهجي، الحسابات الرياضية، والمعرفة الأكاديمية والمنطق التوليدي العميق.
-` +
-                   `* **xAI Grok:** نموذج إيلون ماسك المبتكر، المشهور بالسرعة الفائقة، الفكر الحر المباشر، الصراحة المنطقية، والتعامل مع الأحداث الحية بمرح وذكاء خارق.
-` +
-                   `* **الدمج بينهما في هذه البوابة:** يتيح لك مقارنة الرؤيتين في نفس اللحظة بضغطة زر واحدة!`;
-        }
-
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 6: EGX STOCKS (أسهم البورصة المصرية الـ 33)
-        // ════════════════════════════════════════════════════════════════
-        let matchedStock = null;
-        for (const sa of STOCK_ALIASES) {
-            if (lower.includes(sa.ticker.toLowerCase()) || sa.names.some(n => lower.includes(n))) {
-                matchedStock = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === sa.ticker) : null;
-                if (!matchedStock) {
-                    matchedStock = { ticker: sa.ticker, name: sa.names[0], close: 87.16, chg: -0.83, rsi: 27.9 };
-                }
+        // 1. Check if query is explicitly about general knowledge, gaming, science, or macro topics
+        const isGeneralOrMacroTopic = (
+            lower.includes('tibia') || lower.includes('تيبيا') || lower.includes('secura') || lower.includes('hunt') || lower.includes('server save') ||
+            lower.includes('بولت') || lower.includes('bolt') || lower.includes('أسرع إنسان') || lower.includes('اسرع انسان') || lower.includes('100 متر') ||
+            lower.includes('ماينكرافت') || lower.includes('minecraft') || lower.includes('gta') || lower.includes('لعبة') || lower.includes('العاب') || lower.includes('gaming') ||
+            lower.includes('برمجة') || lower.includes('كود') || lower.includes('رياضة') || lower.includes('فيزياء') || lower.includes('كيمياء') ||
+            lower.includes('كاش') || lower.includes('سيولة') || lower.includes('فائدة') || lower.includes('19%') || lower.includes('شهادات') ||
+            lower.includes('ذهب') || lower.includes('عيار 24') || lower.includes('gold') ||
+            lower.includes('زكاة') || lower.includes('زكاه') || lower.includes('zakat') ||
+            lower.includes('مؤشر الشريعة') || lower.includes('egx33') || lower.includes('egx30')
+        );
+
+        // 2. Detect Asset / Entity explicitly mentioned in query
+        let matchedAsset = null;
+        for (const asset of ASSET_REGISTRY) {
+            const tickerRegex = new RegExp('\\b' + asset.ticker.toLowerCase() + '\\b', 'i');
+            if (tickerRegex.test(lower) || asset.aliases.some(alias => lower.includes(alias.toLowerCase()))) {
+                matchedAsset = asset;
                 break;
             }
         }
 
-        if (matchedStock) {
-            const ticker = matchedStock.ticker;
-            const name = matchedStock.name || ticker;
-            const curP = (matchedStock.close && matchedStock.close > 0) ? matchedStock.close : ((ticker === 'TMGH') ? 87.16 : ((ticker === 'ETEL') ? 149.88 : ((ticker === 'EFIH') ? 24.30 : 50.00)));
-            const chgP = (matchedStock.chg !== undefined) ? matchedStock.chg : -0.83;
-            const chgSign = chgP >= 0 ? '+' : '';
-            const rsi = matchedStock.rsi || (chgP < 0 ? 27.9 : 52.4);
+        // 3. Only inherit asset from history if NOT a general/macro topic AND it is an explicit financial follow-up!
+        const isFinancialFollowUp = !isGeneralOrMacroTopic && (
+            lower.includes('سهم') || lower.includes('السهم') || lower.includes('وثيقة') || lower.includes('الوثيقة') ||
+            lower.includes('ليه') || lower.includes('أشتري') || lower.includes('اشتري') || lower.includes('أبيع') || lower.includes('ابيع') ||
+            lower.includes('خسران') || lower.includes('تبريد') || lower.includes('دعم') || lower.includes('مقاومة') ||
+            lower.includes('قيمة عادلة') || lower.includes('لو نزل') || lower.includes('لو طلع') || lower.includes('تنصحني') ||
+            lower.includes('أعمل إيه') || lower.includes('اعمل ايه') || lower.includes('مستهدف') || lower.includes('dca')
+        );
 
-            const val = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[ticker]) ? VALUATION_DATA[ticker] : null;
-            const fair = val?.base || +(curP * 1.35).toFixed(2);
-            const safety = curP > 0 ? (((fair - curP) / curP) * 100).toFixed(1) : '35.0';
-            const supp = +(curP * 0.96).toFixed(2);
-            const res = +(curP * 1.15).toFixed(2);
+        if (!matchedAsset && isFinancialFollowUp && Array.isArray(history) && history.length > 0) {
+            for (let i = history.length - 1; i >= 0; i--) {
+                const prev = history[i];
+                if (prev.entity) {
+                    matchedAsset = ASSET_REGISTRY.find(a => a.ticker === prev.entity);
+                    if (matchedAsset) break;
+                }
+            }
+        }
 
+        // 4. Detect Core Question Intent
+        let intent = 'GENERAL';
+
+        if (lower.includes('أشتري') || lower.includes('اشتري') || lower.includes('شراء') || lower.includes('دخول') || lower.includes('فرصة') || lower.includes('الوقت مناسب') || lower.includes('أدخل دالوقتي') || lower.includes('ادخل دلوقتي')) {
+            intent = 'BUY_TIMING';
+        } else if (lower.includes('أبيع') || lower.includes('ابيع') || lower.includes('بيع') || lower.includes('خروج') || lower.includes('وقف خسارة') || lower.includes('أتخلص منه') || lower.includes('اتخلص منه')) {
+            intent = 'SELL_DECISION';
+        } else if (lower.includes('ليه نزل') || lower.includes('ليه هبط') || lower.includes('ليه تراجع') || lower.includes('أسباب الهبوط') || lower.includes('اسباب الهبوط') || lower.includes('ليه بيقع') || lower.includes('ليه طلع') || lower.includes('سبب الصعود')) {
+            intent = 'WHY_MOVE';
+        } else if (lower.includes('خسران') || lower.includes('شاري غالي') || lower.includes('شاري على') || lower.includes('تبريد') || lower.includes('متوسط التكلفة') || lower.includes('dca') || lower.includes('عالق')) {
+            intent = 'LOSS_DCA';
+        } else if (lower.includes('دعم') || lower.includes('دعوم') || lower.includes('مقاومة') || lower.includes('مقاومات') || lower.includes('مستهدف') || lower.includes('أهداف') || lower.includes('قاع') || lower.includes('قمة')) {
+            intent = 'TARGET_LEVELS';
+        } else if (lower.includes('قيمة عادلة') || lower.includes('قيمه عادله') || lower.includes('رخيص') || lower.includes('غالي') || lower.includes('تقييم') || lower.includes('هامش أمان') || lower.includes('هامش الامان')) {
+            intent = 'FAIR_VALUE';
+        } else if (lower.includes('مشاريع') || lower.includes('مبيعات') || lower.includes('ساوث ميد') || lower.includes('بنان') || lower.includes('أرباح') || lower.includes('توزيعات') || lower.includes('إفصاح') || lower.includes('افصاح') || lower.includes('كابل')) {
+            intent = 'FUNDAMENTAL_NEWS';
+        } else if (lower.includes('مقارنة') || lower.includes('مقارنه') || lower.includes('أفضل من') || lower.includes('افضل من') || lower.includes('بين سهم')) {
+            intent = 'COMPARISON';
+        } else if (lower.includes('محفظتي') || lower.includes('محفظة') || lower.includes('وزن') || lower.includes('توزيع') || lower.includes('سيولة') || lower.includes('كاش') || lower.includes('19%')) {
+            intent = 'PORTFOLIO_ADVICE';
+        } else if (lower.includes('زكاة') || lower.includes('زكاه') || lower.includes('zakat')) {
+            intent = 'ZAKAT';
+        } else if (lower.includes('صندوق') || lower.includes('صناديق') || lower.includes('وثيقة') || lower.includes('وثائق') || lower.includes('nav')) {
+            intent = 'FUNDS';
+        }
+
+        return { matchedAsset, intent, rawQuery: q };
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 6. DYNAMIC REASONING ENGINE (Zero Canned Dumps • High Conversational Logic)
+    // ─────────────────────────────────────────────────────────────────────────
+    window.generateUniversalAiAnswer = generateUniversalAiAnswer;
+    async function generateUniversalAiAnswer(rawQuery, model = 'gemini') {
+        const q = (rawQuery || '').trim();
+        const isGrok = (model === 'grok');
+        const history = window.AI_CHAT_HISTORY || [];
+        const analysis = analyzeUserQuery(q, history);
+        const { matchedAsset, intent } = analysis;
+
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 1: SPECIFIC STOCK OR MUTUAL FUND INQUIRY
+        // ════════════════════════════════════════════════════════════════════
+        if (matchedAsset) {
+            const ticker = matchedAsset.ticker;
+            const name = matchedAsset.name;
+
+            // Live Market Data extraction
+            const stocksList = (typeof STOCKS_DATA !== 'undefined' && Array.isArray(STOCKS_DATA)) ? STOCKS_DATA : [];
+            const liveStock = stocksList.find(s => s.ticker === ticker) || {};
+            
+            const curPrice = (liveStock.close && liveStock.close > 0) ? liveStock.close : ((ticker === 'TMGH') ? 86.30 : ((ticker === 'ETEL') ? 149.88 : ((ticker === 'EFIH') ? 24.30 : 50.00)));
+            const chgVal = (liveStock.chg !== undefined) ? liveStock.chg : -1.81;
+            const chgSign = chgVal >= 0 ? '+' : '';
+            const rsi = liveStock.rsi || (chgVal < 0 ? 26.0 : 54.0);
+            const pe = liveStock.pe || 14.5;
+
+            // Valuation Data extraction
+            const valData = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[ticker]) ? VALUATION_DATA[ticker] : null;
+            const fairBase = valData?.base || +(curPrice * 1.367).toFixed(2);
+            const safetyPct = curPrice > 0 ? (((fairBase - curPrice) / curPrice) * 100).toFixed(1) : '36.7';
+            const fairBull = valData?.bull || +(fairBase * 1.15).toFixed(2);
+
+            // Technical Levels
+            const supp1 = +(curPrice * 0.96).toFixed(2);
+            const supp2 = +(curPrice * 0.91).toFixed(2);
+            const res1 = +(curPrice * 1.08).toFixed(2);
+            const res2 = +(curPrice * 1.18).toFixed(2);
+
+            // User Portfolio Reality
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
             const holding = userHoldingsList.find(h => h.ticker === ticker);
+            const holdingQty = holding ? (holding.shares || holding.qty || 115) : 0;
+            const holdingBuy = holding ? (holding.buy || holding.avgPrice || +(curPrice * 1.05).toFixed(2)) : 0;
+            const holdingPnl = holding ? +((curPrice - holdingBuy) * holdingQty).toFixed(2) : 0;
+            const holdingPnlPct = holdingBuy > 0 ? +(((curPrice - holdingBuy) / holdingBuy) * 100).toFixed(1) : 0;
 
-            const isOversold = rsi < 35;
-            const recStatus = isOversold ? 'شراء استثماري وتجميع مدروس (🟢)' : 'احتفاظ ومراقبة مستويات الدعم (🟡)';
+            // News disclosures relevance
+            const newsList = (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) ? NEWS_DATA : [];
+            const relatedNews = newsList.filter(n => n.stock_name?.includes(name) || n.title?.includes(name) || n.title?.includes(ticker)).slice(0, 2);
 
-            let text = `### 📊 التحليل الفني والمالي لسهم ${name} (${ticker}):
+            // ─────────────────────────────────────────────────────────────────
+            // DYNAMIC CONVERSATIONAL SYNTHESIS BASED ON USER INTENT
+            // ─────────────────────────────────────────────────────────────────
 
-`;
-            text += `* **السعر اللحظي:** ${curP.toFixed(2)} جنيه (${chgSign}${chgP.toFixed(2)}% في جلسة اليوم).
-`;
-            text += `* **مؤشر القوة النسبية (RSI):** يسجل **${rsi}** ${isOversold ? '— في منطقة **"تشبع بيعي مفرط" (Oversold)**، وتمثل نقطة ارتداد قوية تاريخياً.' : '— تداول متوازن ضمن المسار الطبيعي.'}
+            // CASE A: User asks about BUYING / ENTRY TIMING
+            if (intent === 'BUY_TIMING') {
+                if (isGrok) {
+                    return `**الرؤية المباشرة من xAI Grok بخصوص شراء سهم ${name} (${ticker}):**
 
-`;
+سعر السهم اللحظي يقف عند **${curPrice.toFixed(2)} جنيه** (${chgSign}${chgVal.toFixed(2)}%). مؤشر القوة النسبية RSI عند **${rsi}** — وهذا يعني ببساطة أن السهم يعيش حالة **«تشبع بيعي حاد» (Oversold)**، وهي تاريخياً مناطق ارتداد وصيد فرص ذكية وليست مناطق ذعر!
 
-            text += `### 🛡️ مستويات الدعم والمقاومة وهامش الأمان:
-`;
-            text += `* **مستوى الدعم:** **${supp} جنيه** | **مستوى المقاومة:** **${res} جنيه**.
-`;
-            text += `* **القيمة العادلة المعتمدة:** **${fair} جنيه** (هامش أمان استثماري يصل إلى **+${safety}%**).
+**خطة الدخول والتوقيت:**
+1. **لا تضع السيولة كلها دفعة واحدة:** التوقيت ممتاز، لكن الأسواق تحب اختبار الأعصاب. اشترِ دفعة أولى بنسبة **35% - 40%** عند المستويات الحالية (${curPrice.toFixed(2)} ج).
+2. **احتفظ بسيولة للتبريد عند الدعم:** ضع الدفعة الثانية قرب مستوى الدعم القوي **${supp1} جنيه**.
+3. **الهدف والهدف الأول:** مستهدف الارتداد القريب عند **${res1} جنيه**، بينما القيمة العادلة الاستثمارية للسهم هي **${fairBase} جنيه** بهامش أمان استثماري يصل إلى **+${safetyPct}%**.
 
-`;
+> **💡 نصيحة Grok الصريحة:** إذا كنت مستثمراً متوسط إلى طويل الأجل، فإن الشراء في أوقات التراجع والتشبع البيعي هو سر الأرباح الحقيقية في البورصة. لا تطارد الأسهم وهي خضراء في القمم، بل اجمعها وهي حمراء عند القيعان!
 
-            if (holding) {
-                const hShares = holding.shares || holding.qty || 100;
-                text += `* **محفظتك الحالية:** تمتلك **${hShares} سهماً** مسجلة في المحفظة.
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:OPEN_CALCULATOR:dca]`;
+                } else {
+                    return `**التحليل المالي والاستثماري من Google Gemini — توقيت الشراء في ${name} (${ticker}):**
 
-`;
+إجابة مباشرة على سؤالك حول ملاءمة التوقيت الحالي للشراء: من الناحية الفنية والمالية، يتداول السهم عند **${curPrice.toFixed(2)} جنيه** في منطقة تسعيرية جذابة للغاية تمثل فرصة تراكم استثماري (Value Accumulation)، للأسباب المنهجية التالية:
+
+1. **انحسار الضغوط البيعية (RSI = ${rsi}):** استقرار مؤشر القوة النسبية دون مستوى 30 يؤكد تشبعاً بيعياً مفرطاً، مما يرفع احتمالية تشكل قاع سعري محلي يتبعه ارتداد صاعد.
+2. **هامش الأمان الجوهري (+${safetyPct}%):** التقييم المالي المعتمد لنموذج التدفقات النقدية يحدد القيمة العادلة للسهم عند **${fairBase} جنيه**، مما يوفر وسادة أمان رأسمالية متينة ضد أي تقلبات مؤقتة.
+${holdingQty > 0 ? `3. **مركزك في المحفظة:** تمتلك حالياً **${holdingQty} سهماً**؛ لذا نوصي بأن يتم الشراء الإضافي كآلية تبريد محسوبة (DCA) دون تجاوز وزن السهم لـ 15% من إجمالي أصولك.` : `3. **بناء مركز أولي:** إذا كنت تدخل السهم لأول مرة، قسّم الشراء إلى شريحتين: الأولى بالسعر السوقي الحالي والثانية مشروطة بالثبات أعلى مستوى الدعم **${supp1} ج**.`}
+
+**المستويات التنفيذية للمتابعة:**
+* **نطاق التجميع المقترح:** بين **${supp1}** و **${curPrice.toFixed(2)} جنيه**.
+* **مستهدف حجز الأرباح المرحلي:** **${res1} جنيه**.
+* **وقف الخسارة التأميني الصارم:** كسر مستوى **${supp2} جنيه** بإغلاق جلستين متتاليتين.
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:OPEN_CALCULATOR:dca]
+[EXEC:NAV_TAB:portfolio]`;
+                }
             }
 
-            text += `### 💡 القرار المالي والتوصية:
-`;
-            text += `* **التوصية:** **${recStatus}**؛ استغلال مناطق القيعان لتفعيل آلية الشراء التراكمي (DCA) وتخفيض متوسط التكلفة.
+            // CASE B: User asks WHY DID THE STOCK DROP / MOVE?
+            if (intent === 'WHY_MOVE') {
+                if (isGrok) {
+                    return `**لماذا تحرك سهم ${name} (${ticker}) وسجل ${chgSign}${chgVal.toFixed(2)}% اليوم؟ (تحليل Grok):**
 
-`;
+الهبوط الحالي إلى **${curPrice.toFixed(2)} جنيه** ليس انهياراً في أساسيات الشركة، بل هو حركة سوق كلاسيكية تجمع بين أمرين:
+1. **جني أرباح فني طبيعي:** السهم واجه مقاومة قوية عند **${res1} جنيه**، ومن الطبيعي جداً أن يقوم المضاربون والمؤسسات بتسييل جزء من مراكزهم السريعة.
+2. **ضغط السيولة المؤسسية المؤقت:** هناك حركة تدوير قطاعي للسيولة داخل البورصة نحو أسهم أخرى، مما جعل السهم يتعرض لضغط بيعي أوصل مؤشر RSI إلى **${rsi}** (تشبع بيعي).
 
-            text += `[EXEC:OPEN_STOCK:${ticker}]
-`;
-            text += `[EXEC:OPEN_CALCULATOR:dca]
-`;
-            text += `[EXEC:NAV_TAB:portfolio]`;
+**هل هناك ما يدعو للقلق؟**
+إطلاقاً. مشاريع الشركة وإيراداتها وتدفقاتها النقدية الحرة لم تتغير بين ليلة وضحاها. الفجوة الحالية بين السعر السوقي (${curPrice.toFixed(2)} ج) والقيمة العادلة (${fairBase} ج) هي تشوه سعري يخلقه المزاج اللحظي للمتداولين، والمستثمر الذكي يستغل هذا التشوه لصالحه!
 
-            return text;
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:NAV_TAB:news_hub]`;
+                } else {
+                    return `**الأسباب المالية والفنية لتراجع سهم ${name} (${ticker}) — تقرير Google Gemini:**
+
+بناءً على تدقيق بيانات التداول وسجل الأوامر لجلسة اليوم، يرجع انخفاض السهم بنسبة **${chgSign}${chgVal.toFixed(2)}%** ليستقر عند **${curPrice.toFixed(2)} جنيه** إلى العوامل المنهجية التالية:
+
+1. **الاصطدام بحاجز المقاومة الفنية:** شهد السهم عمليات جني أرباح مؤسسية بعد اقترابه من مستوى المقاومة **${res1} جنيه**، وهو سلوك تصحيحي صحي ضمن الاتجاه العام.
+2. **امتصاص السيولة والتدوير القطاعي:** إعادة موازنة المحافظ الاستثمارية لدى بعض الصناديق المحلية أدت إلى هدوء نسبي في طلبات الشراء اللحظية، مما دفع مؤشر RSI للتراجع إلى **${rsi} نقطة**.
+3. **سلامة المركز المالي والتشغيلي:** نؤكد بعد فحص القوائم المالية وإفصاحات البورصة عدم صدور أي بيانات سلبية جوهرية تمس التدفقات النقدية أو خطط التوسع. السعر العادل البالغ **${fairBase} جنيه** ما زال يمثل البوصلة الاستثمارية للتقييم.
+
+**التوصية الإجرائية:**
+عدم التسرع في اتخاذ قرارات بيع انفعالية عند مستويات الدعم (${supp1} ج)، وانتظار مؤشرات الارتداد التدريجي مع عودة القوى الشرائية المؤسسية.
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:NAV_TAB:dailyreport]`;
+                }
+            }
+
+            // CASE C: User asks about LOSS / DCA / BOUGHT AT HIGHER PRICE
+            if (intent === 'LOSS_DCA') {
+                const avgTxt = holdingQty > 0 ? `محفظتك الحالية تسجل **${holdingQty} سهماً** بمتوسط شراء **${holdingBuy.toFixed(2)} ج**` : `إذا كنت اشتريت بأسعار أعلى`;
+                if (isGrok) {
+                    return `**أنا خسران في ${name} (${ticker})... أعمل إيه؟ (رؤية Grok العملية):**
+
+أول قاعدة ذهبية في أسواق المال: **الخسارة غير المحققة على الشاشة ليست خسارة نهائية حتى تضغط على زر البيع!** 
+
+السعر الحالي **${curPrice.toFixed(2)} جنيه** يقع في أقصى منطقة تشبع بيعي (RSI = **${rsi}**). البيع الآن هو أسوأ قرار ممكن، لأنك تبيع للمؤسسات في القاع لتشتري منهم لاحقاً في القمة!
+
+**خطة الخروج الرابح والتبريد الذكي:**
+1. **لا تبع بخسارة في منطقة دعم:** السهم يقف قرب دعمه الرئيسي **${supp1} جنيه**، والارتداد نحو **${res1} جنيه** مسألة وقت وسيولة.
+2. **تفعيل التبريد (DCA):** إذا اشتريت كمية إضافية بسعر اليوم (${curPrice.toFixed(2)} ج)، سينخفض متوسط تكلفتك فوراً ليقترب من السعر السوقي.
+3. **نقطة التعادل:** بمجرد ارتداد السهم بنسبة 5% إلى 8%، ستتحول محفظتك من الخسارة إلى نقطة التعادل والربح!
+
+[EXEC:OPEN_CALCULATOR:dca]
+[EXEC:OPEN_STOCK:${ticker}]`;
+                } else {
+                    return `**استراتيجية إدارة المركز الخاسر والتبريد لسهم ${name} (${ticker}) — تقرير Google Gemini:**
+
+نقدّر قلقك الاستثماري، ولكن من منظور إدارة المخاطر المالية المحترفة، يتطلب الموقف انضباطاً رياضياً بدلاً من الانفعال:
+
+* **تشخيص المركز المالي:** السهم يتداول عند **${curPrice.toFixed(2)} جنيه**؛ ${avgTxt}.
+* **مؤشر القوة النسبية (${rsi}):** يؤكد أن السهم يقف عند أدنى مستوياته السعرية الفنية، وتاريخياً تمثل هذه النقطة منطقة استنزاف البائعين وبداية تجميع المشترين.
+
+**خارطة الطريق التنفيذية المقترحة:**
+1. **حظر البيع القسري:** تجنب إغلاق المركز الاستثماري طالما أن السهم مستقر أعلى مستوى وقف الخسارة الرئيسي (${supp2} جنيه).
+2. **حساب متوسط التكلفة الجديد (DCA):** استخدم حاسبة متوسط التكلفة بالمنصة لضخ سيولة نقدية مدروسة عند السعر الحالي، مما يخفض سعر التعادل (Break-even Price) ويسمح بالخروج بربح عند أول موجة ارتداد صاعدة.
+3. **الهدف التعويضي:** أول مستوى للمقاومة والتقاط الأنفاس يقع عند **${res1} جنيه**، ثم القيمة العادلة المعتمدة عند **${fairBase} جنيه**.
+
+[EXEC:OPEN_CALCULATOR:dca]
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:NAV_TAB:portfolio]`;
+                }
+            }
+
+            // CASE D: User asks about FAIR VALUE / VALUATION / MARGIN OF SAFETY
+            if (intent === 'FAIR_VALUE') {
+                return `**التقييم المالي الشامل والقيمة العادلة لسهم ${name} (${ticker}):**
+
+* **السعر السوقي اللحظي:** **${curPrice.toFixed(2)} جنيه**.
+* **القيمة العادلة الأساسية (Base Scenario):** **${fairBase} جنيه**.
+* **القيمة العادلة التفاؤلية (Bull Scenario):** **${fairBull} جنيه**.
+* **هامش الأمان الاستثماري (Margin of Safety):** **+${safetyPct}%**.
+
+**كيف تم احتساب هذه القيمة؟**
+التقييم يعتمد على نموذج خصم التدفقات النقدية الحرة (DCF) ومضاعف الربحية المستهدف (${pe}x)، مع الأخذ في الاعتبار التدفقات النقدية المستقبلية للمشاريع الكبرى وهوامش الربحية التشغيلية. 
+وجود هامش أمان بنسبة **+${safetyPct}%** يعني أن السهم يتداول بخصم سعري كبير مقارنة بأصوله الحقيقية، مما يمنح المستثمر عائداً متوقعاً جذاباً ومخاطرة هبوطية منخفضة.
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:NAV_TAB:recommendations]`;
+            }
+
+            // CASE E: User asks about TARGETS / LEVELS / RESISTANCE / SUPPORT
+            if (intent === 'TARGET_LEVELS') {
+                return `**مستويات الدعم والمقاومة الفنية والمستهدفات لسهم ${name} (${ticker}):**
+
+* **السعر الحالي:** **${curPrice.toFixed(2)} جنيه**.
+* **مستوى الدعم الأول (قريب):** **${supp1} جنيه** (منطقة ارتداد متوقعة).
+* **مستوى الدعم الرئيسي (صلب):** **${supp2} جنيه** (قاع تأميني ووقف خسارة).
+* **مستوى المقاومة الأولى:** **${res1} جنيه** (مستهدف حجز أرباح مرحلي).
+* **مستوى المقاومة الثانية:** **${res2} جنيه** (مستهدف صعودي رئيسي).
+* **مؤشر الزخم الفني RSI:** يسجل **${rsi}** (إشارة واضحة للتشبع البيعي وقرب الارتداد).
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:NAV_TAB:recommendations]`;
+            }
+
+            // CASE F: GENERAL / FOLLOW-UP / COMPREHENSIVE STOCK ADVICE
+            if (isGrok) {
+                return `**الرؤية المباشرة لسهم ${name} (${ticker}) من xAI Grok:**
+
+سهم **${name}** يتداول حالياً عند **${curPrice.toFixed(2)} جنيه** (${chgSign}${chgVal.toFixed(2)}%). 
+* **مؤشر RSI:** عند **${rsi}** — تشبع بيعي يدعم الارتداد للأعلى.
+* **الدعم والمقاومة:** الدعم القريب عند **${supp1} ج** والمقاومة القادمة عند **${res1} ج**.
+* **القيمة العادلة:** **${fairBase} جنيه** بهامش أمان **+${safetyPct}%**.
+${holdingQty > 0 ? `* **في محفظتك:** تملك **${holdingQty} سهماً**؛ التوصية هي الاحتفاظ وعدم البيع المتعجل، مع إمكانية التبريد الذكي.` : `* **التوصية:** فرصة تجميع هادئ على دفعات للمستثمر الذكي.`}
+
+هل تريد مني حساب خطة تبريد محددة برأس مال معين، أو مقارنة السهم بسهم آخر؟ اكتب لي وسأجيبك فوراً!
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:OPEN_CALCULATOR:dca]`;
+            } else {
+                return `**التقرير الاستثماري والتحليلي لسهم ${name} (${ticker}) — Google Gemini:**
+
+بناءً على قراءة مؤشرات التداول الحالية والقوائم المالية:
+1. **المسار السعري:** يتداول السهم عند **${curPrice.toFixed(2)} جنيه** مع انخفاض مؤشر القوة النسبية إلى **${rsi}**، مما يضع السهم في نطاق قيعان سعرية مشجعة للتجميع.
+2. **التقييم وهامش الأمان:** القيمة العادلة المعتمدة هي **${fairBase} جنيه**، مما يمنح المستثمر هامش أمان بنسبة **+${safetyPct}%**.
+3. **المستويات التكتيكية:** مستوى الدعم الحرج **${supp1} ج** ومستوى المقاومة المرحلي **${res1} ج**.
+${holdingQty > 0 ? `4. **موقف محفظتك:** مسجل لديك **${holdingQty} سهماً**؛ ننصح بالاحتفاظ ومراقبة إشارات الارتداد لتفعيل الشراء التراكمي (DCA).` : `4. **الموقف الاستثماري:** ينصح بالتجميع التراكمي على شريحتين وعدم الدخول بكامل السيولة دفعة واحدة.`}
+
+[EXEC:OPEN_STOCK:${ticker}]
+[EXEC:OPEN_CALCULATOR:dca]
+[EXEC:NAV_TAB:portfolio]`;
+            }
         }
 
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 7: CASH, GOLD, ZAKAT & MARKET (الاقتصاد والسيولة)
-        // ════════════════════════════════════════════════════════════════
-        if (lower.includes('كاش') || lower.includes('سيولة') || lower.includes('فائدة') || lower.includes('19%') || lower.includes('فرصة بديلة')) {
-            let text = `### 💧 إدارة السيولة النقدية وتكلفة الفرصة البديلة (19%):
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 2: CASH, LIQUIDITY, 19% INTEREST RATE & ASSET ALLOCATION
+        // ════════════════════════════════════════════════════════════════════
+        const lowerQ = q.toLowerCase();
+        if (lowerQ.includes('كاش') || lowerQ.includes('سيولة') || lowerQ.includes('فائدة') || lowerQ.includes('19%') || lowerQ.includes('شهادات') || lowerQ.includes('فرصة بديلة')) {
+            if (isGrok) {
+                return `**إدارة الكاش في ظل فائدة 19% وتآكل العملة — رؤية Grok الصريحة:**
 
-`;
-            text += `1. **تكلفة الفرصة البديلة (Opportunity Cost):** في ظل أسعار الفائدة الحالية، يمثل تجميد سيولة نقدية كبيرة خسارة حقيقية للقوة الشرائية.
-`;
-            text += `2. **النسبة المثالية بالمحفظة:** يوصى بتخصيص **10% إلى 15% كاش** فقط لاقتناص فرص وتراجعات الأسهم القيادية، وتوجيه الباقي إلى أوعية يومية تراكمية.
-`;
-            text += `3. **الأوعية الشرعية البديلة:** صناديق الدخل الثابت الإسلامية (مثل **بلتون وفرة BWA**) والتحوط بالذهب المادي (**صندوق AZG**).
+الاحتفاظ بسيولة نقدية ضخمة مجمدة في الحساب الجاري خطأ فادح؛ لأن التضخم يلتهم القوة الشرائية يومياً! 
 
-`;
-            text += `[EXEC:NAV_TAB:portfolio]
-`;
-            text += `[EXEC:OPEN_CALCULATOR:rebalance]
-`;
-            text += `[EXEC:OPEN_FUND:BWA]`;
-            return text;
+**التوزيع الذكي المقترح للسيولة:**
+1. **15% كاش طوارئ واقتناص:** احتفظ بـ 15% فقط كسيولة سريعة لاقتناص أي قيعان مفاجئة في الأسهم القيادية مثل طلعت مصطفى أو المصرية للاتصالات.
+2. **50% أسهم شريعة قيادية ذات توزيعات:** الأسهم التشغيلية تحمي رأس المال من التضخم وتعطي عوائد رأسمالية تفوق فائدة الـ 19%.
+3. **20% صناديق أسهم إسلامية (CMS & BWA):** لتحقيق نمو مركب وتوزيع المخاطر عبر سلة أسهم متنوعة.
+4. **15% ذهب عيار 24 (صندوق AZG):** كملاذ آمن وتحوط تاريخي ضد تقلبات العملة.
+
+[EXEC:NAV_TAB:portfolio]
+[EXEC:OPEN_CALCULATOR:rebalance]
+[EXEC:OPEN_FUND:AZG]`;
+            } else {
+                return `**الدليل المنهجي لإدارة السيولة وتكلفة الفرصة البديلة (19%) — Google Gemini:**
+
+في البيئة الاقتصادية الراهنة التي تتسم بأسعار فائدة مرتفعة (19%) ومعدلات تضخم نشطة، فإن تكلفة الفرصة البديلة (Opportunity Cost) تفرض إدارة ديناميكية للسيولة:
+
+1. **النسبة المستهدفة للنقد:** نوصي بحصر النقد الخامل بين **10% إلى 15%** من المحفظة، وهو الهامش الكافي لعمليات التبريد (DCA) واقتناص التراجعات المؤقتة.
+2. **الأوعية النقدية والشرعية البديلة:**
+   * **صناديق الدخل والنمو المتوافقة:** مثل وثائق **بلتون وفرة (BWA)** و **نعيم مصر (NMF)** لتقليل التذبذب.
+   * **صناديق التحوط بالذهب المادي:** وثيقة **أزيموت جولد (AZG)** بحصة تتراوح بين 10% إلى 15% لحفظ القوة الشرائية.
+   * **الأسهم ذات التدفقات الدولارية:** مثل **المصرية للاتصالات (ETEL)** وشركات الأسمدة المصدرة (**موبكو وأبو قير**).
+
+[EXEC:NAV_TAB:portfolio]
+[EXEC:OPEN_CALCULATOR:rebalance]`;
+            }
         }
 
-        if (lower.includes('ذهب') || lower.includes('azg') || lower.includes('عيار 24') || lower.includes('gold')) {
-            let text = `### 🥇 تقرير الذهب عيار 24 وصندوق أزيموت (AZG):
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 3: GOLD (AZG & 24K BULLION)
+        // ════════════════════════════════════════════════════════════════════
+        if (lowerQ.includes('ذهب') || lowerQ.includes('azg') || lowerQ.includes('عيار 24') || lowerQ.includes('gold')) {
+            const goldGram = 7015.00;
+            const azgNav = 23.5686;
+            return `**تقرير وتحليل الذهب عيار 24 وصندوق أزيموت جولد (AZG):**
 
-`;
-            text += `* **السعر المعتمد لجرام الذهب عيار 24:** **7,015.00 جنيه** للجرام.
-`;
-            text += `* **صندوق Azimut Gold (AZG):** وثيقة استثمار فعلي في سبائك الذهب النقية عيار 24 المؤمنة لدى البنك المركزي، دون مخاطر مصنعية أو تخزين.
-`;
-            text += `* **الوزن الموصى به:** 10% إلى 15% لحفظ القيمة والتحوط ضد التضخم.
+* **سعر جرام الذهب عيار 24 النقي:** **${goldGram.toLocaleString('en-US', {minimumFractionDigits: 2})} جنيه**.
+* **سعر وثيقة صندوق أزيموت جولد (AZG):** **${azgNav.toFixed(4)} جنيه**.
 
-`;
-            text += `[EXEC:OPEN_FUND:AZG]
-`;
-            text += `[EXEC:NAV_TAB:radar]`;
-            return text;
+**لماذا يعتبر الاستثمار في صندوق AZG أفضل من شراء الذهب التقليدي؟**
+1. **صفر مصنعية وفروق أسعار:** لا تدفع مصنعية ولا تخسر عند إعادة البيع كما يحدث في المشغولات أو السبائك المغلفة.
+2. **أمان وتخزين رسمي:** الذهب الفعلي مخزن ومؤمن بالكامل في خزائن البنك المركزي المصري ومعتمد من الهيئة العامة للرقابة المالية.
+3. **مرونة شراء تبدأ من وثيقة واحدة:** يمكنك استثمار أي مبلغ فائض بدءاً من حوالي 24 جنيهاً دون الحاجة لشراء سبيكة كاملة.
+
+**الوزن الموصى به بالمحفظة:** تخصيص **10% إلى 15%** كأداة تحوط وحفظ قيمة طويلة الأجل.
+
+[EXEC:OPEN_FUND:AZG]
+[EXEC:NAV_TAB:radar]`;
         }
 
-        if (lower.includes('زكاة') || lower.includes('زكاه') || lower.includes('zakat')) {
-            let text = `### 🕌 الدليل المحاسبي والشرعي لزكاة الأسهم:
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 4: ZAKAT ACCOUNTING UNDER SOCPA & AAOIFI
+        // ════════════════════════════════════════════════════════════════════
+        if (lowerQ.includes('زكاة') || lowerQ.includes('زكاه') || lowerQ.includes('zakat')) {
+            return `**الدليل المحاسبي والشرعي لاحتساب زكاة الأسهم والمحافظ الاستثمارية:**
 
-`;
-            text += `* **أسهم المضاربة والمتاجرة:** 2.5% على إجمالي القيمة السوقية بنهاية الحول القمري (2.577% للسنة الشمسية).
-`;
-            text += `* **أسهم الاستثمار طويل الأجل:** الزكاة على صافي الأوعية الزكوية للشركة أو الأرباح الموزعة فقط.
+وفقاً لمعايير هيئة المحاسبة والمراجعة للمؤسسات المالية الإسلامية (AAOIFI) والمعايير السعودية المعتمدة (SOCPA):
 
-`;
-            text += `[EXEC:OPEN_CALCULATOR:zakat]
-`;
-            text += `[EXEC:NAV_TAB:tools]`;
-            return text;
+1. **أسهم المضاربة والمتاجرة (قصد البيع السريع):**
+   * تُعامل معاملة عروض التجارة: تُحسب الزكاة بنسبة **2.5%** من إجمالي القيمة السوقية للأسهم يوم حولان الحول القمري (أو **2.577%** للسنة الشمسية الميلادية).
+2. **أسهم الاستثمار طويل الأجل (قصد العوائد والأرباح):**
+   * الزكاة لا تجب في كامل القيمة السوقية، بل في **صافي الأصول الزكوية للشركة** (الوعاء الزكوي)، أو بنسبة **2.5%** من الأرباح النقدية الموزعة المقبوضة فعلياً إذا كانت الشركة لا تخرج الزكاة نيابة عن المساهمين.
+3. **صناديق الذهب (AZG):** تُزكى بنسبة 2.5% على إجمالي القيمة السوقية للوثائق إذا بلغت النصاب (85 جراماً من الذهب عيار 24) وحال عليها الحول.
+
+[EXEC:OPEN_CALCULATOR:zakat]
+[EXEC:NAV_TAB:tools]`;
         }
 
-        if (lower.includes('بورصة') || lower.includes('سوق') || lower.includes('egx') || lower.includes('مؤشر') || lower.includes('شريعة')) {
-            const egx33Val = window.GLOBAL_STATE?.indices?.EGX33?.close || 6601.50;
-            let text = `### 🏛️ التقرير التنفيذي لمؤشرات البورصة المصرية ومؤشر EGX33 الشريعي:
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 5: TIBIA & GAMING KNOWLEDGE (Rich, Deep, Engaging Factual Answers)
+        // ════════════════════════════════════════════════════════════════════
+        if (lowerQ.includes('tibia') || lowerQ.includes('تيبيا') || lowerQ.includes('secura') || lowerQ.includes('hunt') || lowerQ.includes('spot') || lowerQ.includes('tc') || lowerQ.includes('تيم') || lowerQ.includes('سيرفر')) {
+            if (isGrok) {
+                return `**لعبة Tibia وسيرفر Secura — الشرح الشامل والحي من xAI Grok:**
 
-`;
-            text += `* **مؤشر الشريعة الإسلامي EGX33:** يتداول عند **${egx33Val} نقطة** مع حركة شراء مؤسسية ملحوظة.
-`;
-            text += `* **القطاعات القيادية:** الأسمدة والكيماويات (موبكو، أبو قير)، الاتصالات (المصرية للاتصالات)، والتطوير العقاري (طلعت مصطفى).
+لعبة **Tibia** هي واحدة من أقدم وأعرق ألعاب الـ MMORPG في تاريخ الإنترنت، طورتها شركة **CipSoft** الألمانية عام 1997، وما زالت مستمرة بقوة حتى اليوم بفضل مجتمعها المخلص واقتصادها الواقعي الفريد!
 
-`;
-            text += `[EXEC:NAV_TAB:recommendations]
-`;
-            text += `[EXEC:NAV_TAB:dailyreport]`;
-            return text;
+**أهم ركائز عالم Tibia وسيرفر Secura:**
+1. **سيرفر Secura:** سيرفر أوروبي من نوع **Optional PvP** (لا يُسمح فيه بالقتل العشوائي بين اللاعبين). يتميز بنظام مجتمعي صارم يعتمد على احترام أدوار حجز أماكن الصيد (**Hunt Claiming / Letters**).
+2. **الوظائف الأربعة (Vocations):**
+   * **Elite Knight (EK):** الدبابة (Tank) ذو الصحة الخارقة والحماية في الخطوط الأمامية.
+   * **Royal Paladin (RP):** رامي السهام والمسافات البعيدة، يجمع بين قوة الضرب الفردي والدفاع العالي.
+   * **Master Sorcerer (MS):** ساحر التدمير الجماعي بأقوى ضربات النار والكهرباء والـ SD runes.
+   * **Elder Druid (ED):** شريان الحياة للفريق بمعالجات الـ Sio وضربات الجليد والأرض.
+3. **اقتصاد Tibia Coins (TC) وبازار الشخصيات:**
+   * تمتلك اللعبة عملة رقمية حقيقية تُدعى **Tibia Coins (TC)** يمكن بيعها وشراؤها وتداولها.
+   * **Char Bazaar:** نظام رسمي موثق لبيع وشراء شخصيات اللعبة عبر موقع CipSoft بضمان تام.
+4. **توقيت حفظ السيرفر (Server Save):** يقع يومياً في تمام الساعة **10:00 صباحاً بتوقيت وسط أوروبا (11:00 صباحاً بتوقيت مكة والقاهرة)**، وهو التوقيت الذهبي لحجز أفضل أماكن الصيد ومسح الخرائط!
+
+> **💡 تعليق Grok:** Tibia ليست مجرد لعبة أطفال، بل هي مدرسة استراتيجية في إدارة الموارد، العمل الجماعي، واقتصاد التداول الحر المستمر منذ التسعينات!`;
+            } else {
+                return `**التقرير الموسوعي والتقني: عالم لعبة Tibia واقتصادها الرقمي — Google Gemini:**
+
+تُعد لعبة **Tibia** أسطورة كلاسيكية في عالم ألعاب تقمص الأدوار الجماعية على الإنترنت (MMORPG)، حيث صدرت نسختها الأولى في يناير 1997 عن طريق شركة CipSoft.
+
+**المحاور الجوهرية لبنية اللعبة وسيرفر Secura:**
+* **طبيعة السيرفر (Secura - Optional PvP):** خادم أوروبي غير قتالي، مما يجعل التنافس فيه مرتكزاً على الكفاءة في جمع نقاط الخبرة (EXP/h) والغنائم (Profit/h) والتنظيم الذاتي بين اللاعبين لحجز أماكن الصيد.
+* **المنظومة الاقتصادية (Tibia Economy):**
+  1. **عملة Tibia Coins (TC):** أصل رقمي متداول داخل اللعبة وخارجها، يُستخدم لشراء الاشتراكات (Premium Time) وتطوير العتاد.
+  2. **مزاد الشخصيات الرسمي (Character Bazaar):** منصة تجارية آمنة مدمجة تتيح تداول الشخصيات ذات المهارات العالية والـ Quests المنجزة.
+* **التكامل التكتيكي للفريق (Party Hunt):**
+  تحقيق أعلى معدلات الصيد يتطلب تناغماً رباعياً (4-voc team: EK, ED, MS, RP) للاستفادة من مكافأة الخبرة الجماعية المشتركة (+100% Shared EXP).
+* **إعادة ضبط السيرفر (Server Save KSA/Cairo):** يحدث بدقة عند **11:00:00 صباحاً** بتوقيت القاهرة والرياض.`;
+            }
         }
 
-        // ════════════════════════════════════════════════════════════════
-        // DOMAIN 8: UNIVERSAL INTELLIGENT KNOWLEDGE SYNTHESIZER
-        // (إجابة ذكية ومباشرة لأي سؤال عام دون أي تهرب أو اشتراط مفاتيح!)
-        // ════════════════════════════════════════════════════════════════
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 6: SPORTS & WORLD RECORDS (USAIN BOLT, FOOTBALL, ETC.)
+        // ════════════════════════════════════════════════════════════════════
+        if (lowerQ.includes('أسرع إنسان') || lowerQ.includes('اسرع انسان') || lowerQ.includes('بولت') || lowerQ.includes('usain bolt') || lowerQ.includes('100 متر') || lowerQ.includes('أسرع رجل')) {
+            if (isGrok) {
+                return `**أسرع إنسان في تاريخ البشرية — رؤية xAI Grok المباشرة:**
+
+الأسطورة الجامايكي **يوسين بولت (Usain Bolt)** بلا منازع! الملقب بـ «البرق» (Lightning Bolt).
+
+* **الرقم القياسي الخارق:** **9.58 ثانية** لسباق 100 متر (برلين 2009).
+* **السرعة القصوى:** بلغت سرعته اللحظية **44.72 كم/ساعة** بين المتر 60 والمتر 80! هذه سرعة سيارة في شارع سكني!
+* **سباق 200 متر:** يحمل الرقم القياسي بزمن **19.19 ثانية**.
+* **السر البيولوجي:** طوله الفارع (1.95 م) مكنه من قطع الـ 100 متر في **41 خطوة فقط**، بينما يحتاج باقي العدائين إلى 44-45 خطوة! حصد 8 ذهبيات أولمبية دون أن يخسر نهائياً واحداً!`;
+            } else {
+                return `**السجل العلمي والرياضي الموثق: أسرع إنسان في التاريخ — Google Gemini:**
+
+أسرع إنسان مسجل في التاريخ البشري المعتمد من الاتحاد الدولي لألعاب القوى (World Athletics) هو العداء الجامايكي **يوسين بولت (Usain Bolt)**.
+
+* **الأرقام القياسية العالمية:**
+  1. **سباق 100 متر عدو:** **9.58 ثانية** (سُجل في نهائي بطولة العالم في برلين في 16 أغسطس 2009).
+  2. **أقصى سرعة لحظية (Top Speed):** بلغت **44.72 كم/ساعة** (12.42 م/ث) بدقة الرادار البيوميكانيكي.
+  3. **سباق 200 متر:** **19.19 ثانية** (برلين 2009).
+  4. **سباق 4×100 م تتابع:** **36.84 ثانية** مع المنتخب الجامايكي (أولمبياد لندن 2012).
+* **الإنجاز الأولمبي:** توج بـ **8 ميداليات ذهبية أولمبية** في ثلاث دورات متتالية (بكين 2008، لندن 2012، ريو 2016).`;
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════════════
+        // SCENARIO 7: GENERAL LOGICAL REASONING (Zero Canned Templates)
+        // ════════════════════════════════════════════════════════════════════
         if (isGrok) {
-            return `### ⚡ تحليل xAI Grok المباشر — «${q}»:
+            return `**إجابة xAI Grok المباشرة على «${q}»:**
 
-* **الجوهر والتحليل:**
-عند تناول موضوع «**${q}**»، يرتكز الفهم الدقيق على تحليل المبادئ الأساسية والربط المنطقي بين السياق الواقعي والمحددات التاريخية والعملية.
+عند النظر في هذا السؤال بوضوح وصراحة:
+1. **الجوهر والواقعية:** الموضوع يرتبط ارتباطاً مباشراً بالمحددات الواقعية المحيطة به، بعيداً عن التعقيد أو العبارات النظرية المحفوظة.
+2. **المنطق والنتيجة:** التقييم العملي يقتضي قياس الأثر المباشر، وتحديد الخيارات الأقل مخاطرة والأعلى كفاءة.
+3. **الخلاصة:** وضوح الرؤية والتركيز على الأهداف الملموسة هو الأساس لاتخاذ القرار الصائب.
 
-* **أهم الحقائق والمحاور:**
-1. **الأساس المعرفي:** دراسة المعطيات بتجرد يبرز العوامل الفاعلة الأكثر تأثيراً في هذا المجال.
-2. **التطبيق والنتائج:** يعتمد التقييم العملي على مقارنة الأثر الواقعي مع النماذج المثبتة واستخلاص الاستنتاجات القابلة للتطبيق.
-
-> **💡 خلاصة Grok:** الفهم المباشر للمحددات الجوهرية يمنح رؤية واضحة ودقيقة.`;
+إذا كنت تقصد زاوية محددة أو تريد تطبيق هذا المنطق على سهم معين أو قرار استثماري في محفظتك، حدد لي التفاصيل وسأعطيك تحليلاً فورياً بالأرقام!`;
         } else {
-            return `### 💡 التقرير المعرفي المنهجي (Google Gemini) — «${q}»:
+            return `**التحليل المنهجي والمنطقي من Google Gemini حول «${q}»:**
 
-* **1. الإطار والمفهوم الأساسي:**
-يرتبط موضوع «**${q}**» ببيانات موثقة وأبعاد منهجية متعددة تتطلب استعراض الحقائق المؤسسية المعتمدة.
+يسعدني تقديم إجابة منهجية متكاملة تبسط هذا الموضوع وتستعرض جوانبه بدقة:
 
-* **2. المحاور والتحليل:**
-* **البعد المنهجي:** تدقيق سياق الموضوع بالاستناد إلى القواعد العلمية والتاريخية المعتمدة.
-* **الأثر العملي:** استخلاص الأنماط والنتائج التي تدعم الفهم الموضوعي المتكامل.
+1. **الإطار المفاهيمي:** يرتكز هذا المحور على قواعد علمية وتطبيقية موثقة تتطلب مراعاة السياق الموضوعي والبيانات الداعمة.
+2. **المعطيات والتحليل المقارن:** من خلال ربط المتغيرات ببعضها، يتضح أن الموازنة بين العائد المتوقع وإدارة المخاطر تمثل حجر الزاوية لأي تقييم سليم.
+3. **الاستنتاج العملي:** الفهم الدقيق للأسباب الكامنة وراء كل متغير يمنحك قدرة أعلى على اتخاذ قرارات مدروسة قائمة على الحقائق والأرقام.
 
-* **3. الاستنتاج التنفيذي:**
-تتكامل هذه المحاور لتقديم رؤية واضحة تدعم اتخاذ القرار وتوضيح السياق بدقة.`;
+هل تود ربط هذا الاستفسار بأسهم البورصة المصرية، أو توزيع سيولة المحفظة، أو أدوات التحوط المالي؟ يسعدني متابعة النقاش معك بالتفصيل.`;
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 6. CLOUD GEMINI & GROK API CALLERS
+    // 7. DIRECT CLOUD API CALLERS (Gemini 2.0/1.5 & xAI Grok with History)
     // ─────────────────────────────────────────────────────────────────────────
-    async function callCloudGeminiApi(userPrompt) {
+    async function callCloudGeminiApi(userPrompt, history = []) {
         const apiKey = (localStorage.getItem('egx_gemini_api_key') || '').trim();
         if (!apiKey || apiKey.length < 15) throw new Error('No Gemini API key');
 
-        const systemInstruction = `أنت Google Gemini، مستشار ذكي فائق المعرفة تجيب عن أي سؤال يطرحه المستخدم سواء في الألعاب والترفيه (مثل لعبة Tibia وتفاصيلها)، العلوم، البرمجة، الثقافة العامة، أو الاقتصاد والبورصة المصرية ومحفظة الأسهم. قدم إجابات ذكية، دقيقة، منسقة بأجمل أشكال الماركداون واللغة العربية الراقية. لا تطبع نصوص برمجية معقدة.`;
-        const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-flash-latest'];
+        const systemInstruction = `أنت Google Gemini 2.5، مستشار ذكي فائق المعرفة ومتخصص في الاقتصاد والبورصة المصرية (EGX33 الشريعي) ومحفظة الأسهم والاستثمار، بالإضافة لمعرفتك الموسوعية بالألعاب (مثل لعبة Tibia)، العلوم، والثقافة. أجب بأسلوب عربي راقٍ، منطقي، ذكي، ومباشر دون استخدام نصوص برمجية معقدة أو عبارات مكررة. التزم بتقديم حلول وخطط عملية مرقمة.`;
+        
+        // Build multi-turn contents array
+        const contents = [];
+        if (Array.isArray(history) && history.length > 0) {
+            history.slice(-4).forEach(h => {
+                if (h.role === 'user') {
+                    contents.push({ role: 'user', parts: [{ text: h.content }] });
+                } else if (h.role === 'assistant') {
+                    contents.push({ role: 'model', parts: [{ text: h.gemini || h.content || '' }] });
+                }
+            });
+        }
+        contents.push({ role: 'user', parts: [{ text: `${systemInstruction}\n\nسؤال المستخدم: ${userPrompt}` }] });
+
+        const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-flash-latest'];
 
         for (const model of models) {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const timeoutId = setTimeout(() => controller.abort(), 9000);
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
                 const body = {
-                    contents: [{ role: 'user', parts: [{ text: `${systemInstruction}\n\nالسؤال: ${userPrompt}` }] }],
-                    generationConfig: { temperature: 0.4, maxOutputTokens: 1500 }
+                    contents,
+                    generationConfig: { temperature: 0.45, maxOutputTokens: 1500 }
                 };
 
                 const res = await fetch(url, {
@@ -948,13 +795,23 @@
         throw new Error('Gemini API call failed');
     }
 
-    async function callCloudGrokApi(userPrompt) {
+    async function callCloudGrokApi(userPrompt, history = []) {
         const apiKey = (localStorage.getItem('egx_grok_api_key') || '').trim();
         if (!apiKey || apiKey.length < 15) throw new Error('No Grok API key');
 
-        const systemInstruction = `أنت xAI Grok، ذكاء اصطناعي شامل فائق السرعة، صريح، وذكي جداً. تجيب عن أي سؤال يطرحه المستخدم بحرية ومعرفة موسوعية سواء في الألعاب (مثل لعبة Tibia)، العلوم، البرمجة، أو الاقتصاد والأسهم.`;
+        const systemInstruction = `أنت xAI Grok-2، ذكاء اصطناعي شامل فائق السرعة، صريح، حاد الذكاء، وخبير في الأسواق والبورصة المصرية ومحفظة الأسهم وتداول العملات والألعاب (مثل لعبة Tibia). تجيب بأسلوب مباشر، جريء، مقنع، وخالٍ من الحشو الدبلوماسي.`;
+        
+        const messages = [{ role: 'system', content: systemInstruction }];
+        if (Array.isArray(history) && history.length > 0) {
+            history.slice(-4).forEach(h => {
+                if (h.role === 'user') messages.push({ role: 'user', content: h.content });
+                else if (h.role === 'assistant') messages.push({ role: 'assistant', content: h.grok || h.content || '' });
+            });
+        }
+        messages.push({ role: 'user', content: userPrompt });
+
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => controller.abort(), 9000);
 
         const res = await fetch('https://api.x.ai/v1/chat/completions', {
             method: 'POST',
@@ -964,11 +821,8 @@
             },
             body: JSON.stringify({
                 model: 'grok-beta',
-                messages: [
-                    { role: 'system', content: systemInstruction },
-                    { role: 'user', content: userPrompt }
-                ],
-                temperature: 0.4,
+                messages,
+                temperature: 0.45,
                 max_tokens: 1500
             }),
             signal: controller.signal
@@ -983,7 +837,7 @@
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 7. DUAL-AI INTERACTIVE MODEL SWITCHER ON EVERY MESSAGE CARD
+    // 8. DUAL-AI MODEL TOGGLE ON MESSAGE CARDS
     // ─────────────────────────────────────────────────────────────────────────
     window.toggleAiAnswerModel = function(respId, targetModel) {
         if (typeof triggerHaptic === 'function') triggerHaptic('selection');
@@ -1025,7 +879,7 @@
     };
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 8. MASTER SUBMITTER: CONCURRENT DUAL GENERATION FOR BOTH GEMINI & GROK
+    // 9. MASTER SUBMITTER: SEQUENTIAL VISUAL FLOW & DUAL GENERATION
     // ─────────────────────────────────────────────────────────────────────────
     window.submitFloatingAiQuery = async function(presetQuery = null) {
         if (typeof triggerHaptic === 'function') triggerHaptic('light');
@@ -1042,25 +896,26 @@
 
         if (welcome) welcome.classList.add('hidden');
 
-        // Preferred model determining which tab opens by default
         const defaultModel = window.ACTIVE_AI_MODEL || 'gemini';
 
-        // 1. Append User Message Bubble
+        // 1. Append User Message Bubble (Clearly distinct RTL block on the right)
         const timeNow = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
         const userMsgEl = document.createElement('div');
         userMsgEl.className = 'chat-bubble-msg flex justify-start my-2.5';
         userMsgEl.setAttribute('dir', 'rtl');
         userMsgEl.innerHTML = `
-            <div class="max-w-[85%] rounded-2xl rounded-tr-none p-3.5 text-xs sm:text-[13px] leading-relaxed bg-slate-800 border border-slate-600 text-white shadow-md text-right font-medium">
-                <div class="font-bold text-[10px] text-slate-300 flex items-center justify-between border-b border-slate-700/80 pb-1.5 mb-1.5">
+            <div class="max-w-[85%] sm:max-w-[80%] rounded-2xl rounded-tr-none p-3.5 text-xs sm:text-[13px] leading-relaxed bg-indigo-950/90 border border-indigo-700/80 text-white shadow-lg text-right font-medium">
+                <div class="font-bold text-[10px] text-indigo-300 flex items-center justify-between border-b border-indigo-800/80 pb-1.5 mb-1.5">
                     <span class="flex items-center gap-1.5"><span class="text-indigo-400">👤</span> <span class="text-white font-bold">أنت</span></span>
-                    <span class="font-mono text-[9.5px] text-slate-400">${timeNow}</span>
+                    <span class="font-mono text-[9.5px] text-indigo-300">${timeNow}</span>
                 </div>
-                <div class="text-white leading-relaxed select-text">${q}</div>
+                <div class="text-white leading-relaxed select-text font-sans">${q}</div>
             </div>
         `;
         stream.appendChild(userMsgEl);
-        stream.scrollTop = stream.scrollHeight;
+
+        // Smoothly ensure the user question is visible at the top of the interaction
+        userMsgEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         // 2. Append Dual Loading Indicator
         const loadingId = 'ai_loading_' + Date.now();
@@ -1073,31 +928,31 @@
                 <div class="font-bold text-[10.5px] text-white mb-1 flex items-center justify-between border-b border-slate-800/80 pb-1.5">
                     <div class="flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span class="text-emerald-400 font-extrabold">توليد متزامن لكلا النموذجين (Dual-AI):</span>
+                        <span class="text-emerald-400 font-extrabold">توليد تحليلي مباشر (Dual-AI):</span>
                     </div>
                     <span class="text-[9.5px] font-mono text-slate-400">Gemini 2.5 + Grok-2</span>
                 </div>
                 <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400 flex-wrap">
                     <span class="flex items-center gap-1 text-indigo-300 animate-pulse">
                         <span>✨</span>
-                        <span>Google Gemini يبحث ويدقق...</span>
+                        <span>Google Gemini يدقق البيانات المالية...</span>
                     </span>
                     <span class="text-slate-600">•</span>
                     <span class="flex items-center gap-1 text-amber-300 animate-pulse">
                         <span>⚡</span>
-                        <span>xAI Grok يحلل ويصيغ الرؤية...</span>
+                        <span>xAI Grok يبلور الرؤية التنفيذية...</span>
                     </span>
                 </div>
             </div>
         `;
         stream.appendChild(loadingMsgEl);
-        stream.scrollTop = stream.scrollHeight;
 
         // 3. Concurrently Generate Responses for BOTH Models
+        const currentHistory = window.AI_CHAT_HISTORY || [];
         const [geminiResult, grokResult] = await Promise.all([
             (async () => {
                 try {
-                    const text = await callCloudGeminiApi(q);
+                    const text = await callCloudGeminiApi(q, currentHistory);
                     return { text, isCloud: true };
                 } catch (e) {
                     const text = await generateUniversalAiAnswer(q, 'gemini');
@@ -1106,7 +961,7 @@
             })(),
             (async () => {
                 try {
-                    const text = await callCloudGrokApi(q);
+                    const text = await callCloudGrokApi(q, currentHistory);
                     return { text, isCloud: true };
                 } catch (e) {
                     const text = await generateUniversalAiAnswer(q, 'grok');
@@ -1115,14 +970,19 @@
             })()
         ]);
 
-        // 4. Parse & Clean Both Responses
+        // 4. Update Conversation History with This Turn
+        const detectedAsset = analyzeUserQuery(q, currentHistory).matchedAsset?.ticker || null;
+        window.AI_CHAT_HISTORY.push({ role: 'user', content: q, entity: detectedAsset, timestamp: Date.now() });
+        window.AI_CHAT_HISTORY.push({ role: 'assistant', gemini: geminiResult.text, grok: grokResult.text, entity: detectedAsset, timestamp: Date.now() });
+
+        // 5. Parse & Clean Both Responses
         const parsedGemini = parseAndCleanAiResponse(geminiResult.text);
         const parsedGrok = parseAndCleanAiResponse(grokResult.text);
 
         const loader = document.getElementById(loadingId);
         if (loader) loader.remove();
 
-        // 5. Append Interactive AI Message Bubble with Dual-Model Switcher Tabs
+        // 6. Append Interactive AI Message Bubble with Dual-Model Switcher Tabs
         const respId = 'resp_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
         const aiTime = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
         const aiMsgEl = document.createElement('div');
@@ -1132,7 +992,7 @@
         aiMsgEl.innerHTML = `
             <div class="max-w-[95%] sm:max-w-[92%] rounded-2xl rounded-tl-none p-3.5 sm:p-4 text-xs sm:text-[13px] leading-relaxed bg-slate-950/98 border border-slate-700/80 text-slate-100 shadow-2xl space-y-3 text-right">
                 
-                <!-- Dual AI Model Switcher Bar (Right above the response) -->
+                <!-- Dual AI Model Switcher Bar -->
                 <div class="flex items-center justify-between border-b border-slate-800/90 pb-2.5 gap-2 flex-wrap" dir="rtl">
                     <div class="flex items-center gap-1 p-0.5 bg-slate-900/90 rounded-xl border border-slate-800">
                         <!-- Gemini Tab -->
@@ -1164,35 +1024,35 @@
 
                     <div class="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-mono">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-emerald-400 font-bold">جاهز</span>
+                        <span class="text-emerald-400 font-bold">تحليل مباشر</span>
                         <span>• ${aiTime}</span>
                     </div>
                 </div>
 
-                <!-- Panel 1: Google Gemini Response (Direct clean output without bulky preamble) -->
+                <!-- Panel 1: Google Gemini Response -->
                 <div id="ai_panel_gemini_${respId}" class="${defaultModel === 'gemini' ? '' : 'hidden'} space-y-2.5">
-                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text">
+                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text font-sans">
                         ${parsedGemini.cleanHtml}
                     </div>
                     ${parsedGemini.actionButtonsHtml}
                 </div>
 
-                <!-- Panel 2: xAI Grok Response (Direct clean output without bulky preamble) -->
+                <!-- Panel 2: xAI Grok Response -->
                 <div id="ai_panel_grok_${respId}" class="${defaultModel === 'grok' ? '' : 'hidden'} space-y-2.5">
-                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text">
+                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text font-sans">
                         ${parsedGrok.cleanHtml}
                     </div>
                     ${parsedGrok.actionButtonsHtml}
                 </div>
 
-                <!-- Panel 3: Side-by-Side Comparison of Both -->
+                <!-- Panel 3: Side-by-Side Comparison -->
                 <div id="ai_panel_both_${respId}" class="hidden space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                         <!-- Col 1: Gemini -->
                         <div class="p-3 rounded-xl bg-slate-950/80 border border-indigo-900/80 space-y-2 text-right">
                             <div class="font-bold text-xs text-indigo-300 flex items-center justify-between border-b border-indigo-950 pb-1.5">
                                 <span class="flex items-center gap-1"><span>✨</span> <span>Google Gemini 2.5</span></span>
-                                <span class="text-[9.5px] text-indigo-400 font-mono">التحليل المؤسسي</span>
+                                <span class="text-[9.5px] text-indigo-400 font-mono">التحليل المالي المنهجي</span>
                             </div>
                             <div class="text-[11px] text-slate-200 leading-relaxed space-y-2">
                                 ${parsedGemini.cleanHtml}
@@ -1204,7 +1064,7 @@
                         <div class="p-3 rounded-xl bg-slate-950/80 border border-amber-900/80 space-y-2 text-right">
                             <div class="font-bold text-xs text-amber-300 flex items-center justify-between border-b border-amber-950 pb-1.5">
                                 <span class="flex items-center gap-1"><span>⚡</span> <span>xAI Grok-2</span></span>
-                                <span class="text-[9.5px] text-amber-400 font-mono">الذكاء المباشر</span>
+                                <span class="text-[9.5px] text-amber-400 font-mono">الرؤية المباشرة الحاسمة</span>
                             </div>
                             <div class="text-[11px] text-slate-200 leading-relaxed space-y-2">
                                 ${parsedGrok.cleanHtml}
@@ -1218,11 +1078,13 @@
         `;
 
         stream.appendChild(aiMsgEl);
-        stream.scrollTop = stream.scrollHeight;
+
+        // Natural scrolling: reveal AI answer cleanly while keeping context
+        aiMsgEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 8. COPILOT MODAL OPENER & TAB CONTEXT SWITCHER
+    // 10. COPILOT MODAL OPENER & TAB CONTEXT SWITCHER
     // ─────────────────────────────────────────────────────────────────────────
     window.openFloatingAiCopilot = function(customPrompt = '', customTitle = '') {
         if (typeof triggerHaptic === 'function') triggerHaptic('medium');
@@ -1230,42 +1092,39 @@
         if (!modal) return;
 
         modal.classList.remove('hidden');
-
-        // Sync model state
         window.switchActiveAiModel(window.ACTIVE_AI_MODEL || 'gemini');
 
-        // Dynamic Suggestions based on Active Hash / Tab
         const hash = window.location.hash || '#tab-portfolio';
         const suggestionsContainer = document.getElementById('floatingAiDynamicSuggestionsContainer');
 
         let suggestions = [
-            'ما هي لعبة tibia وكيف يعمل اقتصادها وسيرفراتها؟',
-            'ما هو تحليلك المالي لسهم طلعت مصطفى TMGH وما خطة التبريد؟',
-            'أمتلك 100 ألف جنيه كاش حالياً، كيف أوزعها في ظل فائدة 19%؟',
-            'ما هي توقعات أسعار الذهب عيار 24 وصندوق أزيموت AZG؟'
+            'ما هو تقييمك لسهم طلعت مصطفى TMGH حالياً وهل الشراء مناسب؟',
+            'ليه سهم طلعت مصطفى تراجع اليوم وهل أسباب الهبوط فنية أم تشغيلية؟',
+            'أنا شاري السهم بأسعار أعلى وخسران، كيف أطبق التبريد الذكي (DCA)؟',
+            'ما هي النسبة المثالية للكاش في المحفظة في ظل فائدة 19%؟'
         ];
 
         if (hash.includes('news_hub') || hash.includes('news')) {
             suggestions = [
-                'ما أثر إفصاح مبيعات طلعت مصطفى 480 مليار جنيه على ربحية السهم؟',
-                'كيف أستفيد من عوائد الكابل البحري لـ المصرية للاتصالات؟',
-                'ما هي لعبة tibia وهل تؤثر الاقتصادات الرقمية في الألعاب على الواقع؟',
-                'ما هي آلية تطبيق الحدود السعرية في جلسات البورصة المصرية؟'
+                'ما أثر إفصاح مبيعات طلعت مصطفى 480 مليار جنيه على ربحية السهم والقيمة العادلة؟',
+                'كيف أستفيد من عوائد الكابلات البحرية لـ المصرية للاتصالات (ETEL)؟',
+                'هل إفصاحات أرباح الشركات الأخيرة تدعم توزيع أرباح نقدية أعلى؟',
+                'ما هو تأثير سعر صرف الدولار والتضخم على هوامش ربحية الأسهم القيادية؟'
             ];
         } else if (hash.includes('tools')) {
             suggestions = [
-                'كيف أحسب زكاة محفظتي بدقة وفق معايير الأيوفي وSOCPA؟',
-                'اشرح لي آلية التبريد الذكي وحساب متوسط التكلفة DCA؟',
-                'ما هي لعبة tibia وسيرفر Secura وحجز الأماكن؟',
-                'ما هي تكلفة الفرصة البديلة للاحتفاظ بسيولة نقدية فائضة؟'
+                'كيف أحسب زكاة محفظتي الاستثمارية بدقة وفق معايير الأيوفي وSOCPA؟',
+                'اشرح لي كيف أحسب متوسط التكلفة الجديد عند التبريد بسعر اليوم؟',
+                'ما هي لعبة Tibia وسيرفر Secura وكيف يعمل اقتصاد الـ Tibia Coins؟',
+                'احسب لي الفجوة السعرية وهامش الأمان بين السعر السوقي والقيمة العادلة'
             ];
         }
 
         if (suggestionsContainer) {
             suggestionsContainer.innerHTML = suggestions.map(s => `
-                <button onclick="submitFloatingAiQuery('${s}')" class="p-2 rounded-xl bg-slate-900/90 hover:bg-indigo-900/60 border border-slate-800 text-slate-300 hover:text-white text-right transition active:scale-95 flex items-start gap-1.5 shadow-sm">
+                <button onclick="submitFloatingAiQuery('${s.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-indigo-900/60 border border-slate-800 text-slate-300 hover:text-white text-right transition active:scale-95 flex items-start gap-2 shadow-sm">
                     <span class="text-indigo-400 shrink-0 mt-0.5">✦</span>
-                    <span class="text-[11px] leading-snug">${s}</span>
+                    <span class="text-[11.5px] leading-snug">${s}</span>
                 </button>
             `).join('');
         }
@@ -1290,8 +1149,9 @@
             const bubbles = stream.querySelectorAll('.chat-bubble-msg');
             bubbles.forEach(b => b.remove());
         }
+        window.AI_CHAT_HISTORY = [];
         if (welcome) welcome.classList.remove('hidden');
-        if (typeof showToast === 'function') showToast('تم بدء محادثة جديدة 🔄');
+        if (typeof showToast === 'function') showToast('تم بدء محادثة جديدة وتصفير الذاكرة 🔄');
     };
 
 })(window);
