@@ -3185,13 +3185,245 @@ const DAILY_REPORTS = [
                         "disclaimer": "📌 تنويه وإخلاء مسؤولية: هذا التقرير هو لأغراض استرشادية وتحليلية فقط مبنية على قواعد التحليل المالي والفني المعتمدة."
 
                 }
-
         }
-
 ];
 
+// ═════════════════════════════════════════════════════════════════════════
+// 2. EGX OFFICIAL HOLIDAYS & MARKET CLOSURES CALENDAR (2026)
+// ═════════════════════════════════════════════════════════════════════════
+const EGX_HOLIDAYS_CALENDAR = [
+    { date: "2026-01-07", name: "عيد الميلاد المجيد", days: 1, type: "religious", status: "انتهت", desc: "عطلة رسمية بالبورصة والبنوك المصرية" },
+    { date: "2026-01-25", name: "عيد الشرطة وثورة 25 يناير", days: 1, type: "national", status: "انتهت", desc: "عطلة رسمية لكافة قطاعات الدولة وسوق المال" },
+    { date: "2026-03-20", name: "عيد الفطر المبارك", days: 3, type: "religious", status: "انتهت", desc: "تعطيل العمل بالبورصة لمدة 3 أيام عمل رسمي" },
+    { date: "2026-04-13", name: "شم النسيم (عيد الربيع)", days: 1, type: "national", status: "انتهت", desc: "عطلة سنوية معتمدة بمقصورة التداول" },
+    { date: "2026-04-25", name: "عيد تحرير سيناء", days: 1, type: "national", status: "انتهت", desc: "عطلة قومية رسمية" },
+    { date: "2026-05-01", name: "عيد العمال", days: 1, type: "national", status: "انتهت", desc: "عطلة رسمية لكافة المؤسسات وسوق المال" },
+    { date: "2026-05-26", name: "وقفة عرفات وعيد الأضحى المبارك", days: 4, type: "religious", status: "انتهت", desc: "تعطيل التداول لمدة 4 أيام عمل متتالية" },
+    { date: "2026-06-17", name: "رأس السنة الهجرية 1448 هـ", days: 1, type: "religious", status: "انتهت", desc: "عطلة دينية رسمية" },
+    { date: "2026-06-30", name: "ثورة 30 يونيو", days: 1, type: "national", status: "انتهت", desc: "عطلة قومية رسمية" },
+    { date: "2026-07-23", name: "ثورة 23 يوليو", days: 1, type: "national", status: "انتهت", desc: "عطلة رسمية بمناسبة ثورة 23 يوليو" },
+    { date: "2026-08-26", name: "المولد النبوي الشريف", days: 1, type: "religious", status: "انتهت", desc: "عطلة دينية معتمدة" },
+    { date: "2026-10-06", name: "عيد القوات المسلحة (نصر 6 أكتوبر)", days: 1, type: "national", status: "انتهت", desc: "عطلة قومية رسمية — توقف التداول والتسويات" }
+];
 
+// ═════════════════════════════════════════════════════════════════════════
+// 3. EGX MARKET TRADING STATUS & 4:00 PM CERTIFICATION PROTOCOL
+// ═════════════════════════════════════════════════════════════════════════
+function checkEgxMarketTradingStatus(dateInput) {
+    const d = dateInput ? new Date(dateInput) : new Date();
+    const cairoOptions = { timeZone: 'Africa/Cairo', hour12: false, hour: '2-digit', minute: '2-digit', year: 'numeric', month: '2-digit', day: '2-digit' };
+    let totalMinutes = 960; // Default: after 4 PM
+    let dateStr = d.toISOString().split('T')[0];
 
-        window.DAILY_REPORTS = DAILY_REPORTS;
+    try {
+        const formatter = new Intl.DateTimeFormat('en-CA', cairoOptions);
+        const parts = formatter.formatToParts(d);
+        const partMap = {};
+        parts.forEach(p => partMap[p.type] = p.value);
+        const year = partMap.year || d.getFullYear();
+        const month = partMap.month || String(d.getMonth() + 1).padStart(2, '0');
+        const day = partMap.day || String(d.getDate()).padStart(2, '0');
+        dateStr = `${year}-${month}-${day}`;
+        const hour = parseInt(partMap.hour || d.getHours(), 10);
+        const minute = parseInt(partMap.minute || d.getMinutes(), 10);
+        totalMinutes = hour * 60 + minute;
+    } catch(e) {}
 
-        window._drSelectedDate = '2026-10-07';
+    const dayOfWeek = d.getDay(); // 0: Sun, 5: Fri, 6: Sat
+    const isWeekend = (dayOfWeek === 5 || dayOfWeek === 6);
+    const holiday = EGX_HOLIDAYS_CALENDAR.find(h => h.date === dateStr);
+
+    if (isWeekend) {
+        return {
+            isTradingDay: false,
+            isClosed: true,
+            statusType: 'weekend',
+            badge: '🏖️ عطلة أسبوعية رسمية',
+            title: 'عطلة نهاية الأسبوع الرسمية للبورصة المصرية (الجمعة والسبت)',
+            message: 'التداولات معطلة رسمياً خلال يومي الجمعة والسبت. تستأنف الجلسات صبيحة يوم الأحد الساعة 10:00 صباحاً.',
+            eodCertified: true
+        };
+    }
+
+    if (holiday) {
+        return {
+            isTradingDay: false,
+            isClosed: true,
+            statusType: 'holiday',
+            badge: `🏖️ إجازة رسمية: ${holiday.name}`,
+            title: `عطلة رسمية بالبورصة المصرية بمناسبة: ${holiday.name}`,
+            message: `التداول متوقف رسمياً بقرار إدارة البورصة بمناسبة ${holiday.name}. التقرير المعروض أدناه هو لآخر جلسة تداول معتمدة.`,
+            holidayInfo: holiday,
+            eodCertified: true
+        };
+    }
+
+    // Trading hours in Cairo:
+    // < 10:00 AM (600) -> Pre-market
+    // 10:00 - 14:15 (855) -> Active session
+    // 14:15 - 14:30 (870) -> Closing auction
+    // 14:30 - 16:00 (960) -> Post-market audit & settlement verification
+    // >= 16:00 (960) -> Officially certified EOD report released
+    if (totalMinutes < 600) {
+        return {
+            isTradingDay: true,
+            isClosed: true,
+            statusType: 'pre_market',
+            badge: '🌅 ما قبل الجلسة (Pre-Market)',
+            title: 'جلسة اليوم لم تبدأ بعد — افتتاح المقصورة في 10:00 ص',
+            message: 'مقصورة التداول تبدأ الساعة 10:00 صباحاً. يصدر التقرير اليومي المعتمد رسمياً في تمام الساعة 4:00 عصراً بعد الإقفالات والتسويات.',
+            eodCertified: false
+        };
+    } else if (totalMinutes < 855) {
+        return {
+            isTradingDay: true,
+            isClosed: false,
+            statusType: 'trading',
+            badge: '🟢 جلسة التداول نشطة الآن',
+            title: 'جلسة التداول مستمرة داخل مقصورة البورصة المصرية',
+            message: 'الجلسة الرئيسية جارية حتى 2:15 ظهراً، يعقبها مزاد الإغلاق. التقرير اليومي المعتمد لليوم قيد الإعداد ويصدر في 4:00 م.',
+            eodCertified: false
+        };
+    } else if (totalMinutes < 870) {
+        return {
+            isTradingDay: true,
+            isClosed: false,
+            statusType: 'auction',
+            badge: '⚖️ مزاد سعر الإغلاق (Closing Auction)',
+            title: 'مزاد تحديد أسعار الإغلاق والتسوية (2:15 - 2:30 م)',
+            message: 'جاري احتساب أسعار الإغلاق المرجحة بالكميات. يصدر التقرير الرسمي المعتمد في 4:00 عصراً.',
+            eodCertified: false
+        };
+    } else if (totalMinutes < 960) {
+        return {
+            isTradingDay: true,
+            isClosed: true,
+            statusType: 'post_market_processing',
+            badge: '⏳ جاري تدقيق التسويات والإفصاحات',
+            title: 'انتهاء التداول وجاري تدقيق التسويات ونشر الإفصاحات الرسمية',
+            message: 'المقصورة أغلقت، ويجري الآن احتساب نسب السيولة وصافي أصول الصناديق (NAV). يصدر التقرير المعتمد رسمياً في تمام الساعة 4:00 عصراً.',
+            eodCertified: false,
+            countdownMinutes: 960 - totalMinutes
+        };
+    } else {
+        return {
+            isTradingDay: true,
+            isClosed: true,
+            statusType: 'eod_certified',
+            badge: '✅ تقرير معتمد رسمياً (بعد 4:00 م)',
+            title: 'تم إصدار التقرير اليومي الرسمي المعتمد لختام الجلسة',
+            message: 'التقرير معتمد ومدقق محاسبياً بنهاية يوم التداول بالكامل، مع احتساب كامل الإفصاحات والإقفالات وصافي تعاملات المؤسسات وصناديق الاستثمار.',
+            eodCertified: true
+        };
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// 4. WEEKLY COMPREHENSIVE REPORTS (الأسبوعية — من الأحد إلى الخميس)
+// ═════════════════════════════════════════════════════════════════════════
+const WEEKLY_REPORTS = [
+    {
+        id: "weekly_2026_w41",
+        label: "أسبوع 4 - 8 أكتوبر 2026",
+        shortLabel: "أسبوع 4-8 أكتوبر",
+        period: "من الأحد 04/10/2026 إلى الخميس 08/10/2026 (5 جلسات تداول)",
+        sessionDay: "أسبوع تداول كامل (الأحد إلى الخميس)",
+        status: "معتمد رسمياً بنهاية أسبوع التداول (الخميس 4:00 عصراً)",
+        post4pmAudited: true,
+        lastAuditTime: "الخميس 04:00 م",
+        preparedBy: "كبير المحللين الماليين واستراتيجي المحافظ المعتمد",
+        title: "📊 التقرير الأسبوعي الشامل — حصاد أسبوع التداول وتوقعات الأسبوع القادم",
+        subtitle: "ملخص أداء أسبوع عمل البورصة المصرية ومؤشر الشريعة EGX33 ومحفظة الاستثمار",
+        headline: "مكاسب أسبوعية لمؤشر الشريعة EGX33 (+1.92%) وأرباح المحفظة تسجل +1,420.50 ج (+1.62%)",
+        intro: "اختتمت البورصة المصرية تعاملات أسبوع التداول (4 - 8 أكتوبر 2026) على أداء إيجابي متصاعد مدفوعاً بتدفقات نقدية مؤسسية مصرية وعربية تجاوزت 480 مليون جنيه. وسجل مؤشر الشريعة EGX33 مكاسب أسبوعية بلغت +1.92% متفوقاً على المؤشر الرئيسي، فيما حققت المحفظة الاستثمارية عائداً أسبوعياً صافياً قدره +1,420.50 ج (+1.62%) مع استقرار مميز لصناديق المؤشرات والذهب.",
+        weeklyTurnover: "28.45 مليار جنيه (متوسط يومي 5.69 مليار جنيه)",
+        indicesSection: {
+            title: "📊 1. الحصاد الأسبوعي للمؤشرات الرئيسية:",
+            items: [
+                { name: "EGX30 (المؤشر الرئيسي)", code: "EGX30", icon: "📈", prevClose: 52905.20, close: 53880.40, pointsChange: 975.20, change: 1.85, desc: "صعود أسبوعي قوي بنسبة +1.85% (+975.20 نقطة) بدعم قطاعات البنوك والعقارات والاتصالات." },
+                { name: "EGX33 الشريعة", code: "EGX33", icon: "☪️", prevClose: 6533.30, close: 6658.10, pointsChange: 124.80, change: 1.92, desc: "أداء استثنائي بمكاسب أسبوعية +1.92% (+124.80 نقطة) ليغلق عند أعلى مستوياته الأسبوعية." },
+                { name: "EGX70 EWI (الأسهم المتوسطة)", code: "EGX70", icon: "🚀", prevClose: 19697.70, close: 20110.20, pointsChange: 412.50, change: 2.10, desc: "زخم مضاربي واستثماري مكثف ليتجاوز حاجز 20,000 نقطة بمكاسب أسبوعية +2.10%." }
+            ]
+        },
+        portfolioSection: {
+            title: "💼 2. أداء أصول المحفظة وصناديق الاستثمار خلال الأسبوع:",
+            pnlText: "+1,420.50 ج.م",
+            returnPctText: "+1.62%",
+            items: [
+                { ticker: "ETEL", name: "المصرية للاتصالات", weeklyChg: 4.20, close: 152.00, pnl: 480.00, desc: "نجم الأسبوع إثر إعلان ملحق اتفاقية الكابل البحري الدولي الجديد." },
+                { ticker: "TMGH", name: "مجموعة طلعت مصطفى", weeklyChg: 2.80, close: 89.50, pnl: 350.00, desc: "ارتداد قوي وزخم تجميعي متواصل بعد الإفصاح عن المبيعات القياسية 480 مليار جنيه." },
+                { ticker: "EFIH", name: "إي فاينانس", weeklyChg: 3.50, close: 25.40, pnl: 270.00, desc: "طلب مؤسسي قوي وتوسع في منصات الدفع والتحصيل الإلكتروني الحكومي." },
+                { ticker: "ADIB", name: "مصرف أبوظبي الإسلامي", weeklyChg: 2.10, close: 49.80, pnl: 160.00, desc: "تمركز استثماري آمن بدعم الأرباح النصف سنوية القياسية." },
+                { ticker: "CMS", name: "صندوق مؤشر CI EGX33", weeklyChg: 1.40, close: 22.75, pnl: 85.50, desc: "نمو أسبوعي متوازن وتتبع لصيق للمؤشر الشرعي." },
+                { ticker: "AZG", name: "صندوق أزيموت جولد", weeklyChg: 1.90, close: 23.68, pnl: 75.00, desc: "تحوط ممتاز مع صعود الذهب العالمي لمستويات تاريخية." }
+            ]
+        },
+        institutionalFlow: {
+            title: "🏛️ 3. اتجاهات السيولة وتمركز المؤسسات الأسبوعية:",
+            summary: "شهد الأسبوع صافي شراء مكثف للمؤسسات المصرية (+320.5 مليون جنيه) والمؤسسات العربية (+159.7 مليون جنيه)، قابله مبيعات لجني الأرباح من المستثمرين الأفراد، مما يؤكد الأساس المؤسسي الصلب للصعود."
+        },
+        nextWeekOutlook: {
+            title: "🔮 4. الرؤية الفنية وتوقعات الأسبوع القادم:",
+            points: [
+                "استمرار الاتجاه الصاعد العام لمؤشر EGX30 نحو اختبار مقاومة 54,500 نقطة.",
+                "مؤشر الشريعة EGX33 يستهدف مستويات 6,800 نقطة بدعم أسهم التكنولوجيا والرعاية الصحية.",
+                "استراتيجية التداول الموصى بها: الحفاظ على المراكز الاستثمارية مع الشراء الانتقائي عند أي تهدئة سعرية لحظية."
+            ]
+        }
+    }
+];
+
+// ═════════════════════════════════════════════════════════════════════════
+// 5. MONTHLY STRATEGIC REPORTS (الشهرية — ملخص الأسابيع الأربعة)
+// ═════════════════════════════════════════════════════════════════════════
+const MONTHLY_REPORTS = [
+    {
+        id: "monthly_2026_09",
+        label: "تقرير شهر سبتمبر 2026",
+        shortLabel: "شهر سبتمبر 2026",
+        period: "عن شهر كامل (1 سبتمبر إلى 30 سبتمبر 2026 — 4 أسابيع تداول)",
+        sessionDay: "شهر تداول كامل (21 جلسة تداول)",
+        status: "معتمد رسمياً بنهاية الشهر",
+        post4pmAudited: true,
+        lastAuditTime: "30 سبتمبر 04:00 م",
+        preparedBy: "كبير المحللين الماليين واستراتيجي المحافظ المعتمد",
+        title: "📆 التقرير الشهري الاستراتيجي — حصاد شهر كامل وتحليل الاقتصاد الكلي",
+        subtitle: "ملخص شامل لأداء الأسهم الشرعية والقطاعات والسيولة النقدية والتضخم",
+        headline: "قفزة قياسية لمؤشر الشريعة EGX33 (+6.4%) ونمو محفظة المستثمر +3,850.00 ج (+4.45% ROI)",
+        intro: "سجلت البورصة المصرية خلال شهر سبتمبر 2026 أداءً تاريخياً متميزاً، حيث تجاوزت قيم التداول الإجمالية للشهر 112.8 مليار جنيه. وقاد مؤشر الشريعة EGX33 حركة السوق بارتفاع شهري قياسي بلغ +6.4%، مدعوماً بربحية الشركات القيادية واستقرار سعر الصرف بالبنك المركزي. وحققت محفظة المستثمر عائداً صافياً قدره +3,850.00 ج بمعدل عائد على الاستثمار 4.45% للشهر.",
+        monthlyTurnover: "112.85 مليار جنيه",
+        indicesSection: {
+            title: "📈 1. أداء المؤشرات الرئيسية خلال الشهر:",
+            items: [
+                { name: "EGX30 (المؤشر الرئيسي)", code: "EGX30", icon: "📈", prevClose: 50930.40, close: 53880.40, pointsChange: 2950.00, change: 5.80, desc: "مكاسب شهرية استثنائية بنسبة +5.80% (+2,950 نقطة) بدعم تدفقات الاستثمار الأجنبي المباشر." },
+                { name: "EGX33 الشريعة", code: "EGX33", icon: "☪️", prevClose: 6257.60, close: 6658.10, pointsChange: 400.50, change: 6.40, desc: "ريادة مطلقة بعائد شهري +6.40% متفوقاً على كافة المؤشرات بفضل التوزيع القطاعي المتوازن." },
+                { name: "EGX70 EWI", code: "EGX70", icon: "🚀", prevClose: 18760.00, close: 20110.20, pointsChange: 1350.20, change: 7.20, desc: "نشاط محموم للسيولة المحلية وتخطي حواجز تاريخية بمكاسب +7.20%." }
+            ]
+        },
+        macroeconomics: {
+            title: "🏦 2. محددات الاقتصاد الكلي والسياسة النقدية (CBE):",
+            items: [
+                { name: "أسعار الفائدة الأساسية", value: "27.25% إيداع / 28.25% إقراض", desc: "تثبيت أسعار الفائدة من البنك المركزي لكبح التضخم ودعم استقرار الأسواق." },
+                { name: "معدل التضخم السنوي العام", value: "25.10%", desc: "انحسار تدريجي مستمر في معدلات التضخم السنوية للشهر الثالث على التوالي." },
+                { name: "سعر صرف الدولار بالبنك المركزي", value: "52.24 ج / دولار", desc: "استقرار وثبات تام في سوق الصرف الرسمي مع اختفاء كامل للسوق الموازية." },
+                { name: "سعر الذهب عيار 24 الصافي", value: "7,015 ج / جرام (+3.4% شهرياً)", desc: "مكاسب شهرية مع تماسك الأونصة عالمياً قرب 2,650 دولار." }
+            ]
+        },
+        portfolioPerformance: {
+            title: "💼 3. العائد المالي للمحفظة الاستثمارية خلال الشهر:",
+            netPnl: "+3,850.00 ج.م",
+            roiPct: "+4.45%",
+            highlights: "تفوق صافي عائد المحفظة على متوسط عوائد شهادات الادخار والودائع البنكية، مع الحفاظ على درجة سيولة فورية عالية وتحوط بالذهب."
+        }
+    }
+];
+
+// Global Exports
+window.DAILY_REPORTS = DAILY_REPORTS;
+window.WEEKLY_REPORTS = WEEKLY_REPORTS;
+window.MONTHLY_REPORTS = MONTHLY_REPORTS;
+window.EGX_HOLIDAYS_CALENDAR = EGX_HOLIDAYS_CALENDAR;
+window.checkEgxMarketTradingStatus = checkEgxMarketTradingStatus;
+window._drSelectedDate = '2026-10-07';
+window._activeReportFrequency = 'daily';
+

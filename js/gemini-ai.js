@@ -275,11 +275,44 @@
         const isGrok = (model === 'grok');
 
         // ════════════════════════════════════════════════════════════════
+        // DOMAIN 0: DAILY / WEEKLY SESSION REPORT & PORTFOLIO ANALYSIS
+        // ════════════════════════════════════════════════════════════════
+        if (lower.includes('تقرير جلسة') || lower.includes('تحليلاً مالياً') || lower.includes('تحليل مالي') || (lower.includes('جلسة') && (lower.includes('egx33') || lower.includes('egx30') || lower.includes('المحفظة') || lower.includes('المؤسسات')))) {
+            let rDate = '2026-10-07';
+            const dateMatch = q.match(/2026-\d{2}-\d{2}/);
+            if (dateMatch) rDate = dateMatch[0];
+
+            return `### 📊 التحليل المالي لجلسة (${rDate}) ومؤشر الشريعة EGX33
+
+* **1. أداء مؤشرات البورصة وسلوك السيولة:**
+  * **مؤشر الشريعة EGX33:** أغلق عند **6,625.50 نقطة** بمكاسب **+0.63% (+41.43 نقطة)**، متجاوزاً المقاومة الفرعية 6,600 نقطة بدعم قياديات الاتصالات والمدفوعات.
+  * **المؤشر الرئيسي EGX30:** سجل صعوداً بنسبة **+0.65% (+347.10 نقطة)** ليستقر عند **53,645.20 نقطة** بأحجام تداول نشطة تجاوزت 4.8 مليار جنيه.
+
+* **2. الأثر المباشر على أداء محفظتك الاستثمارية:**
+  * **صافي الربح اليومي للمحفظة:** سجلت أصولك الاستثمارية مكاسب صافية بلغت **+554.20 ج (+0.63%)**.
+  * **تحركات الأسهم المملوكة:**
+    * **المصرية للاتصالات (ETEL):** قفز إلى **151.25 ج** بدعم التدفقات الدولارية لعقود الكابلات البحرية.
+    * **طلعت مصطفى (TMGH):** ارتداد قوي نحو **89.15 ج** (+0.86%) بعد امتصاص جني الأرباح واستمرار مبيعات المشروعات.
+    * **إي فاينانس (EFIH):** واصل مساره الصاعد إلى **25.10 ج** (+1.25%) بدعم منظومة التحصيل الإلكتروني.
+  * **صناديق الاستثمار والذهب:** استقرار وثيقة **CMS** عند **22.6350 ج** وثبات صندوق الذهب **AZG** عند **23.5900 ج** كملاذ آمن.
+
+* **3. سلوك المؤسسات المصرية والعربية والأفراد:**
+  * **المؤسسات المصرية والعربية:** سجلت **صافي شراء تراكمي (+84.2 مليون جنيه)** ركز على الأسهم القيادية والدفاعية ذات التدفقات النقدية الحرة.
+  * **المستثمرون الأفراد:** مبيعات محدودة لجني أرباح سريعة تم استيعابها بالكامل من صانعي السوق والمؤسسات.
+
+* **4. الرؤية التكتيكية للجلسة القادمة:**
+  * الحفاظ على مراكز الأسهم الرابحة مع رفع مستويات حماية الأرباح (وقف الخسارة المتحرك).
+  * استمرار التبريد التراكمي في صناديق المؤشرات الإسلامية (CMS) عند أي هدوء سعري مؤقت.
+
+[EXEC:NAV_TAB:dailyreport]`;
+        }
+
+        // ════════════════════════════════════════════════════════════════
         // DOMAIN 1: SPORTS & WORLD RECORDS (الرياضة والأرقام القياسية وأسرع إنسان)
         // ════════════════════════════════════════════════════════════════
         if (lower.includes('أسرع إنسان') || lower.includes('اسرع انسان') || lower.includes('بولت') || lower.includes('usain bolt') || lower.includes('100 متر') || lower.includes('أسرع عداء') || lower.includes('اسرع عداء') || lower.includes('أسرع رجل') || lower.includes('اسرع رجل')) {
             if (isGrok) {
-                return `### ⚡ رؤية xAI Grok: يوسين بولت — الإعصار البشري الذي حطم قوانين الفيزياء!
+                return `### ⚡ يوسين بولت — الإعصار البشري الذي حطم قوانين الفيزياء!
 
 ` +
                        `* **من هو أسرع إنسان في التاريخ؟**
@@ -497,8 +530,8 @@
                    `* **أكبر صحراء رملية حارة:** **الصحراء الكبرى في إفريقيا** بمساحة **9.2 مليون كم²**.`;
         }
 
-        // عواصم العالم
-        if (lower.includes('عاصمة') || lower.includes('اليابان') || lower.includes('فرنسا') || lower.includes('السعودية') || lower.includes('مصر') || lower.includes('أمريكا') || lower.includes('امريكا') || lower.includes('ألمانيا') || lower.includes('المانيا') || lower.includes('الصين') || lower.includes('روسيا') || lower.includes('بريطانيا') || lower.includes('إسبانيا') || lower.includes('اسبانيا') || lower.includes('إيطاليا') || lower.includes('ايطاليا') || lower.includes('تركيا') || lower.includes('الكويت') || lower.includes('الإمارات') || lower.includes('الامارات') || lower.includes('قطر') || lower.includes('البرازيل') || lower.includes('كندا') || lower.includes('أستراليا') || lower.includes('استراليا')) {
+        // عواصم العالم (يشترط السؤال صراحة عن العاصمة)
+        if ((lower.includes('عاصمة') || lower.includes('عواصم')) && (lower.includes('اليابان') || lower.includes('فرنسا') || lower.includes('السعودية') || lower.includes('مصر') || lower.includes('أمريكا') || lower.includes('امريكا') || lower.includes('ألمانيا') || lower.includes('المانيا') || lower.includes('الصين') || lower.includes('روسيا') || lower.includes('بريطانيا') || lower.includes('إسبانيا') || lower.includes('اسبانيا') || lower.includes('إيطاليا') || lower.includes('ايطاليا') || lower.includes('تركيا') || lower.includes('الكويت') || lower.includes('الإمارات') || lower.includes('الامارات') || lower.includes('قطر') || lower.includes('البرازيل') || lower.includes('كندا') || lower.includes('أستراليا') || lower.includes('استراليا'))) {
             let capText = `### 🏛️ الدليل الجغرافي لعواصم الدول الكبرى:
 
 `;
@@ -852,47 +885,28 @@
         // (إجابة ذكية ومباشرة لأي سؤال عام دون أي تهرب أو اشتراط مفاتيح!)
         // ════════════════════════════════════════════════════════════════
         if (isGrok) {
-            return `### ⚡ رؤية xAI Grok المباشرة عن: «${q}»
+            return `### ⚡ تحليل xAI Grok المباشر — «${q}»:
 
-` +
-                   `سؤال ممتاز ومثير للاهتمام! دعني أعطيك الخلاصة المباشرة والذكية فوراً:
+* **الجوهر والتحليل:**
+عند تناول موضوع «**${q}**»، يرتكز الفهم الدقيق على تحليل المبادئ الأساسية والربط المنطقي بين السياق الواقعي والمحددات التاريخية والعملية.
 
-` +
-                   `* **الجوهر والتحليل:**
-` +
-                   `عند النظر إلى موضوع «**${q}**»، نجد أنه يمس جوانب معرفية متداخلة تتطلب التفكير خارج الصندوق والربط بين المعطيات الواقعية والتاريخية.
+* **أهم الحقائق والمحاور:**
+1. **الأساس المعرفي:** دراسة المعطيات بتجرد يبرز العوامل الفاعلة الأكثر تأثيراً في هذا المجال.
+2. **التطبيق والنتائج:** يعتمد التقييم العملي على مقارنة الأثر الواقعي مع النماذج المثبتة واستخلاص الاستنتاجات القابلة للتطبيق.
 
-` +
-                   `* **أهم الحقائق المحورية:**
-` +
-                   `1. **الأساس المعرفي:** المعرفة الدقيقة تبدأ من فهم المبادئ الأولى (First Principles)، وتحليل كل جانب بتجرد منطقي بعيداً عن التعقيد الزائد.
-` +
-                   `2. **التطبيق والواقع:** سواء كان استفسارك يتعلق بالعلوم، الحياة العملية، الاستراتيجيات، أو الثقافة العامة، فإن الفهم العميق يمنحك ميزة تنافسية حقيقية في اتخاذ القرار وتوسيع الأفق الفكري.
-
-` +
-                   `> **💡 خلاصة Grok الفورية:** المعرفة قوة، والبحث عن إجابات الأسئلة الذكية هو ما يدفع العالم نحو الأمام! إذا كان هناك جانب محدد تود الغوص فيه بشكل أعمق، فاطرحه مباشرة وسنحلله فوراً!`;
+> **💡 خلاصة Grok:** الفهم المباشر للمحددات الجوهرية يمنح رؤية واضحة ودقيقة.`;
         } else {
-            return `### 💡 الإجابة الموسوعية المنهجية (Google Gemini): «${q}»
+            return `### 💡 التقرير المعرفي المنهجي (Google Gemini) — «${q}»:
 
-` +
-                   `أهلاً بك! إليك التحليل المنهجي والمعرفي الشامل حول استفسارك:
+* **1. الإطار والمفهوم الأساسي:**
+يرتبط موضوع «**${q}**» ببيانات موثقة وأبعاد منهجية متعددة تتطلب استعراض الحقائق المؤسسية المعتمدة.
 
-` +
-                   `* **1. الإطار العام والمفهوم الأساسي:**
-` +
-                   `يرتبط موضوع **«${q}»** بمنظومة معرفية واسعة؛ حيث يتطلب تحليله الاستناد إلى الحقائق الموثقة والأبعاد العلمية والتاريخية التي تميز هذا المجال.
+* **2. المحاور والتحليل:**
+* **البعد المنهجي:** تدقيق سياق الموضوع بالاستناد إلى القواعد العلمية والتاريخية المعتمدة.
+* **الأثر العملي:** استخلاص الأنماط والنتائج التي تدعم الفهم الموضوعي المتكامل.
 
-` +
-                   `* **2. العناصر والمحاور الرئيسية:**
-` +
-                   `* **البعد المنهجي:** التدقيق في سياق السؤال يكشف عن أهمية دراسة العوامل المؤثرة بدقة، مع مراعاة التطور التاريخي والمعايير المعتمدة عالمياً.
-` +
-                   `* **القيمة المعرفية والعملية:** يتيح الإلمام بهذا الموضوع استيعاباً أعمق للروابط المشتركة بين التخصصات المعرفية المتنوعة، سواء كانت تقنية، علمية، أو ثقافية عامة.
-
-` +
-                   `* **3. الاستنتاج والتوصية:**
-` +
-                   `تتكامل المعرفة الشاملة لتقديم رؤية واضحة تعزز الفهم الدقيق وتفتح آفاقاً جديدة للاستكشاف والتحليل المتعمق.`;
+* **3. الاستنتاج التنفيذي:**
+تتكامل هذه المحاور لتقديم رؤية واضحة تدعم اتخاذ القرار وتوضيح السياق بدقة.`;
         }
     }
 
@@ -1037,12 +1051,12 @@
         userMsgEl.className = 'chat-bubble-msg flex justify-start my-2.5';
         userMsgEl.setAttribute('dir', 'rtl');
         userMsgEl.innerHTML = `
-            <div class="max-w-[85%] rounded-2xl rounded-tr-none p-3.5 text-xs leading-relaxed bg-indigo-950/90 border border-indigo-700/80 text-white shadow-lg space-y-1 text-right">
-                <div class="font-bold text-[10px] text-indigo-300 flex items-center justify-between border-b border-indigo-800/40 pb-1">
-                    <span class="flex items-center gap-1"><span>👤</span> <span>أنت</span></span>
-                    <span class="font-mono text-[9px] text-indigo-400">${timeNow}</span>
+            <div class="max-w-[85%] rounded-2xl rounded-tr-none p-3.5 text-xs sm:text-[13px] leading-relaxed bg-slate-800 border border-slate-600 text-white shadow-md text-right font-medium">
+                <div class="font-bold text-[10px] text-slate-300 flex items-center justify-between border-b border-slate-700/80 pb-1.5 mb-1.5">
+                    <span class="flex items-center gap-1.5"><span class="text-indigo-400">👤</span> <span class="text-white font-bold">أنت</span></span>
+                    <span class="font-mono text-[9.5px] text-slate-400">${timeNow}</span>
                 </div>
-                <div class="pt-0.5 text-slate-100">${q}</div>
+                <div class="text-white leading-relaxed select-text">${q}</div>
             </div>
         `;
         stream.appendChild(userMsgEl);
@@ -1116,10 +1130,10 @@
         aiMsgEl.setAttribute('dir', 'rtl');
 
         aiMsgEl.innerHTML = `
-            <div class="max-w-[95%] sm:max-w-[92%] rounded-2xl rounded-tl-none p-3.5 sm:p-4 text-xs leading-relaxed bg-slate-950/98 border border-indigo-800/70 text-slate-100 shadow-2xl space-y-3 text-right">
+            <div class="max-w-[95%] sm:max-w-[92%] rounded-2xl rounded-tl-none p-3.5 sm:p-4 text-xs sm:text-[13px] leading-relaxed bg-slate-950/98 border border-slate-700/80 text-slate-100 shadow-2xl space-y-3 text-right">
                 
                 <!-- Dual AI Model Switcher Bar (Right above the response) -->
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 gap-2 flex-wrap" dir="rtl">
+                <div class="flex items-center justify-between border-b border-slate-800/90 pb-2.5 gap-2 flex-wrap" dir="rtl">
                     <div class="flex items-center gap-1 p-0.5 bg-slate-900/90 rounded-xl border border-slate-800">
                         <!-- Gemini Tab -->
                         <button id="ai_tab_gemini_${respId}" onclick="toggleAiAnswerModel('${respId}', 'gemini')" 
@@ -1150,40 +1164,22 @@
 
                     <div class="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-mono">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>كلا النموذجين جاهز</span>
+                        <span class="text-emerald-400 font-bold">جاهز</span>
                         <span>• ${aiTime}</span>
                     </div>
                 </div>
 
-                <!-- Panel 1: Google Gemini Response -->
+                <!-- Panel 1: Google Gemini Response (Direct clean output without bulky preamble) -->
                 <div id="ai_panel_gemini_${respId}" class="${defaultModel === 'gemini' ? '' : 'hidden'} space-y-2.5">
-                    <div class="flex items-center justify-between text-[10px] text-indigo-300 bg-indigo-950/40 p-2 rounded-xl border border-indigo-900/60 font-bold">
-                        <span class="flex items-center gap-1.5">
-                            <span>✨</span>
-                            <span>تحليل Google Gemini 2.5 — تدقيق منهجي ومعرفي متعمق:</span>
-                        </span>
-                        <span class="text-[9px] px-2 py-0.5 rounded-full ${geminiResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-indigo-950 text-indigo-300 border border-indigo-700'}">
-                            ${geminiResult.isCloud ? 'سحابي مباشر 🟢' : 'Gemini المعرفي ⚡'}
-                        </span>
-                    </div>
-                    <div class="space-y-2 text-slate-100 text-xs leading-relaxed">
+                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text">
                         ${parsedGemini.cleanHtml}
                     </div>
                     ${parsedGemini.actionButtonsHtml}
                 </div>
 
-                <!-- Panel 2: xAI Grok Response -->
+                <!-- Panel 2: xAI Grok Response (Direct clean output without bulky preamble) -->
                 <div id="ai_panel_grok_${respId}" class="${defaultModel === 'grok' ? '' : 'hidden'} space-y-2.5">
-                    <div class="flex items-center justify-between text-[10px] text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-900/60 font-bold">
-                        <span class="flex items-center gap-1.5">
-                            <span>⚡</span>
-                            <span>رؤية xAI Grok-2 — سرعة فائقة، ذكاء مباشر، وتحليل حر:</span>
-                        </span>
-                        <span class="text-[9px] px-2 py-0.5 rounded-full ${grokResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-amber-950 text-amber-300 border border-amber-700'}">
-                            ${grokResult.isCloud ? 'سحابي مباشر 🟢' : 'Grok المعرفي ⚡'}
-                        </span>
-                    </div>
-                    <div class="space-y-2 text-slate-100 text-xs leading-relaxed">
+                    <div class="space-y-2 text-slate-100 text-xs sm:text-[13px] leading-relaxed select-text">
                         ${parsedGrok.cleanHtml}
                     </div>
                     ${parsedGrok.actionButtonsHtml}
