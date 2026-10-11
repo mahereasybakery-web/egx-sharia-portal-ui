@@ -1,5 +1,3 @@
-
-
         // 1. Initialize Telegram WebApp SDK & PWA
 
         if (window.Telegram && window.Telegram.WebApp) {
@@ -4556,17 +4554,12 @@ window.addEventListener('load', () => {
 
 
                 let refreshing = false;
-
+                let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
-
-                    if (!refreshing) {
-
+                    if (!refreshing && hadController) {
                         refreshing = true;
-
                         window.location.reload();
-
                     }
-
                 });
 
             });
@@ -7470,7 +7463,105 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
+            // 4.2.1 Individual Assets Breakdown (عرض كل سهم وصندوق منفصلاً ونسبته لإجمالي المحفظة)
+            renderIndividualAssetDistribution(dGrandTotal);
+
         }
+
+        // 4.2.1 Individual Assets Breakdown Renderer
+        function renderIndividualAssetDistribution(grandTotal) {
+            const container = document.getElementById('portfolioIndividualAssetBars');
+            const alertElem = document.getElementById('portfolioIndividualAssetAlert');
+            const badgeElem = document.getElementById('individualAssetsCountBadge');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            const list = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
+            if (list.length === 0) {
+                container.innerHTML = '<div class="text-slate-500 text-center py-2 text-xs">لا توجد أصول مسجلة بالمحفظة</div>';
+                if (alertElem) alertElem.classList.add('hidden');
+                return;
+            }
+
+            const assetBreakdown = list.map(h => {
+                const stock = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === h.ticker) : null;
+                const price = (stock && stock.close > 0) ? stock.close : (parseFloat(h.cur) || parseFloat(h.buy) || 0);
+                const qty = parseFloat(h.qty) || 0;
+                const val = price * qty;
+                const isFund = Boolean(h.isFund || (typeof isFundAsset === 'function' && isFundAsset(h)));
+                const isGold = Boolean(h.isGold || (typeof isGoldAsset === 'function' && isGoldAsset(h)) || h.ticker === 'THNDR_GOLD' || h.ticker === 'AZG');
+                
+                let typeBadge = '📈 سهم شريعي';
+                let badgeClass = 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80';
+                if (isGold) {
+                    typeBadge = '🥇 ذهب خالص';
+                    badgeClass = 'bg-amber-950/80 text-amber-300 border-amber-800/80';
+                } else if (isFund) {
+                    typeBadge = '🏦 صندوق إسلامي';
+                    badgeClass = 'bg-sky-950/80 text-sky-300 border-sky-800/80';
+                }
+
+                return {
+                    ticker: h.ticker,
+                    name: h.name || h.ticker,
+                    qty: qty,
+                    price: price,
+                    val: val,
+                    isFund: isFund,
+                    isGold: isGold,
+                    typeBadge: typeBadge,
+                    badgeClass: badgeClass
+                };
+            }).filter(a => a.val > 0);
+
+            const effectiveTotal = grandTotal > 0 ? grandTotal : assetBreakdown.reduce((sum, a) => sum + a.val, 0);
+
+            assetBreakdown.forEach(a => {
+                a.pct = effectiveTotal > 0 ? (a.val / effectiveTotal) * 100 : 0;
+            });
+            assetBreakdown.sort((a, b) => b.val - a.val);
+
+            if (badgeElem) {
+                badgeElem.innerText = `${assetBreakdown.length} أصول نشطة`;
+            }
+
+            const palette = [
+                '#0284c7', '#059669', '#d97706', '#7c3aed', '#db2777', 
+                '#2563eb', '#16a34a', '#ca8a04', '#9333ea', '#e11d48',
+                '#0891b2', '#4f46e5', '#65a30d'
+            ];
+
+            assetBreakdown.forEach((asset, idx) => {
+                const color = palette[idx % palette.length];
+                const row = document.createElement('div');
+                row.className = "space-y-1";
+                row.innerHTML = `
+                    <div class="flex items-center justify-between text-[11px] gap-2 flex-wrap">
+                        <span class="text-slate-200 font-bold flex items-center gap-1.5 shrink-0">
+                            <span class="w-2 h-2 rounded-full inline-block shrink-0" style="background-color: ${color}"></span>
+                            <span class="font-mono text-xs px-1.5 py-0.2 rounded bg-slate-900 border border-slate-700/80 text-indigo-300">${asset.ticker}</span>
+                            <span class="truncate max-w-[150px] sm:max-w-[220px]">${asset.name}</span>
+                            <span class="text-[9.5px] px-1.5 py-0.2 rounded border ${asset.badgeClass} font-medium">${asset.typeBadge}</span>
+                        </span>
+                        <span class="font-mono text-white font-bold shrink-0">
+                            ${asset.pct.toFixed(1)}% <span class="text-slate-400 font-normal">(${Math.round(asset.val).toLocaleString()} ج)</span>
+                        </span>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500" style="width: ${Math.min(asset.pct, 100)}%; background-color: ${color}"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            if (alertElem && assetBreakdown.length > 0) {
+                const topAsset = assetBreakdown[0];
+                alertElem.className = "p-2.5 rounded-xl text-[11px] leading-relaxed bg-slate-950/80 border border-slate-800 text-slate-300 block";
+                alertElem.innerHTML = `💡 <b>تحليل تمركز الأصول الفردية:</b> يمثل الأصل الأكبر وزنًا <b>«${topAsset.name} (${topAsset.ticker})»</b> نسبة <b>${topAsset.pct.toFixed(1)}%</b> بقيمة ${Math.round(topAsset.val).toLocaleString()} ج، يليه مباشرة <b>«${assetBreakdown[1]?.name || ''}»</b> بنسبة <b>${assetBreakdown[1]?.pct.toFixed(1) || '0.0'}%</b>؛ وتتوزع باقي القيمة على الأصول المتبقية لتعزيز الأمان وتشتيت المخاطر.`;
+            }
+        }
+        window.renderIndividualAssetDistribution = renderIndividualAssetDistribution;
 
 
 
@@ -11802,7 +11893,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 try {
 
-                    const rawR = await fetch('https://raw.githubusercontent.com/mahereasybakery-web/egypt-sharia-stock-report/main/market_data.json?cb=' + cacheBuster, { cache: 'no-store' });
+                    const rawR = await fetch('https://raw.githubusercontent.com/mahereasybakery-web/egx-sharia-portal-ui/main/market_data.json?cb=' + cacheBuster, { cache: 'no-store' });
 
                     if (rawR.ok) return await rawR.json();
 
@@ -20867,111 +20958,122 @@ ${stocksUniverseContext}
         // Live Fund Sync Engine (One-Click Synchronizer)
 
         window.syncLiveFundsEngine = async function(force = true, silent = false) {
-
             if (!silent) {
-
                 triggerHaptic('medium');
-
-                showToast('جاري مزامنة أسعار الصناديق مباشرة من منصة SNDUK الرسمية... ⏳', 'info');
-
+                showToast('جاري الاتصال بالسحابة وسحب أحدث أسعار وإفصاحات الصناديق الرسمية... ⏳', 'info');
             }
 
+            let cloudFundsData = null;
+            const cb = Date.now() + '_' + Math.floor(Math.random() * 1000000);
 
+            // 1. Fetch from local deployment market_data.json
+            try {
+                const res = await fetch('./market_data.json?v=' + cb, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+                });
+                if (res.ok) {
+                    cloudFundsData = await res.json();
+                }
+            } catch (e) {
+                console.warn('[FundsSync] Local fetch failed, trying direct Raw GitHub...', e);
+            }
 
-            // Official SNDUK NAVs as of 5 Oct 2026
+            // 2. Failover to raw GitHub Pages repository
+            if (!cloudFundsData) {
+                try {
+                    const rawRes = await fetch('https://raw.githubusercontent.com/mahereasybakery-web/egx-sharia-portal-ui/main/market_data.json?v=' + cb, {
+                        cache: 'no-store'
+                    });
+                    if (rawRes.ok) {
+                        cloudFundsData = await rawRes.json();
+                    }
+                } catch (err) {
+                    console.error('[FundsSync] Raw GitHub fetch failed:', err);
+                }
+            }
 
-            const latestNavs = {
-
-                CMS: 22.6467,
-
-                AZG: 23.5374,
-
-                BWA: 2.2004,
-
-                NMF: 50.2400,
-
+            // Fallback dictionary only if network is completely offline
+            const fallbackNavs = {
+                CMS: 22.4805,
+                AZG: 23.5686,
+                BWA: 2.1827,
+                NMF: 49.5200,
                 THNDR_GOLD: 7015.00
-
             };
 
+            const liveNavs = {};
+            const liveChanges = {};
 
+            if (cloudFundsData && cloudFundsData.funds) {
+                Object.keys(cloudFundsData.funds).forEach(ticker => {
+                    const f = cloudFundsData.funds[ticker];
+                    if (f && f.close > 0) {
+                        liveNavs[ticker] = f.close;
+                        if (f.chg !== undefined) liveChanges[ticker] = f.chg;
+                    }
+                });
+            }
 
-            // Update userHoldings in-place with strict adherence to Section 14.4
+            // If any fund is missing from cloud data, fill from fallback
+            Object.keys(fallbackNavs).forEach(k => {
+                if (!liveNavs[k]) liveNavs[k] = fallbackNavs[k];
+            });
 
+            // Update userHoldings in-place
             if (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) {
-
                 userHoldings.forEach(item => {
-
-                    if (latestNavs[item.ticker]) {
-
-                        item.market_quote = latestNavs[item.ticker];
-
-                        item.marketPrice = latestNavs[item.ticker];
-
-                        // If user chose manual valuation, do NOT overwrite their valuation price!
-
+                    if (liveNavs[item.ticker]) {
+                        const newPrice = liveNavs[item.ticker];
+                        item.market_quote = newPrice;
+                        item.marketPrice = newPrice;
                         if (item.valuation_mode === 'manual' && item.manual_valuation_price && item.manual_valuation_price > 0) {
-
                             item.cur = item.manual_valuation_price;
-
                         } else {
-
-                            item.cur = latestNavs[item.ticker];
-
+                            item.cur = newPrice;
                         }
-
-                        // NEVER overwrite item.qty or item.buy / avg_unit_cost!
-
                     }
-
                 });
-
                 if (typeof saveUserPortfolio === 'function') {
-
                     saveUserPortfolio();
-
                 }
-
             }
 
-
-
-            // Re-render holdings and calculations
-
-            if (typeof renderHoldingsTable === 'function') renderHoldingsTable();
-
-            if (typeof updatePortfolioTotals === 'function') updatePortfolioTotals();
-
-            if (typeof renderFundsSubtabView === 'function') renderFundsSubtabView();
-
-
-
-            // Also ensure STOCKS_DATA has latest navs
-
+            // Update STOCKS_DATA in-place
             if (typeof STOCKS_DATA !== 'undefined' && Array.isArray(STOCKS_DATA)) {
-
                 STOCKS_DATA.forEach(s => {
-
-                    if (latestNavs[s.ticker]) {
-
-                        s.close = latestNavs[s.ticker];
-
-                        s.cur = latestNavs[s.ticker];
-
+                    if (liveNavs[s.ticker]) {
+                        s.close = liveNavs[s.ticker];
+                        s.cur = liveNavs[s.ticker];
+                        if (liveChanges[s.ticker] !== undefined) s.chg = liveChanges[s.ticker];
                     }
-
                 });
-
             }
 
+            // Update DOM matrix prices
+            Object.keys(liveNavs).forEach(sym => {
+                const el = document.getElementById(`matrix-price-${sym}`);
+                if (el) el.textContent = `${liveNavs[sym].toFixed(4)} ج`;
+            });
 
+            // Re-render all views
+            if (typeof renderHoldingsTable === 'function') renderHoldingsTable();
+            if (typeof updatePortfolioTotals === 'function') updatePortfolioTotals();
+            if (typeof renderFundsCards === 'function') renderFundsCards();
+            if (typeof renderFundsSubtabView === 'function') renderFundsSubtabView();
+            if (typeof renderSectorDistribution === 'function') {
+                const totalMarketVal = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) 
+                    ? userHoldings.reduce((sum, h) => sum + ((h.cur || h.buy || 0) * (h.qty || 0)), 0) 
+                    : 0;
+                renderSectorDistribution({}, totalMarketVal);
+            }
 
             if (!silent) {
-
-                showToast('تم تحديث أسعار الصناديق بنجاح: CMS (22.6467 ج)، BWA (2.2004 ج)، NMF (50.24 ج) ✅', 'success');
-
+                const cmsP = liveNavs.CMS ? liveNavs.CMS.toFixed(4) : '22.4805';
+                const azgP = liveNavs.AZG ? liveNavs.AZG.toFixed(4) : '23.5686';
+                const bwaP = liveNavs.BWA ? liveNavs.BWA.toFixed(4) : '2.1827';
+                showToast(`✓ تم سحب أسعار الصناديق الحية وتحديثها: CMS (${cmsP} ج) | AZG (${azgP} ج) | BWA (${bwaP} ج) بنجاح!`, 'success');
             }
-
         };
 
 
@@ -29188,7 +29290,7 @@ ${stocksUniverseContext}
 
                 findings.push('⚠️ تنبيه التشغيل السحابي: التطبيق مفتوح محلياً من جهازك (Localhost/File). إذا أغلقت الكمبيوتر سيتوقف!');
 
-                autoFixes.push('لضمان استمرار عمل البرنامج وتحليلات الذكاء الاصطناعي 24/7 بعد إغلاق الكمبيوتر، افتح الرابط السحابي الرسمي: https://mahereasybakery-web.github.io/egypt-sharia-stock-report/');
+                autoFixes.push('لضمان استمرار عمل البرنامج وتحليلات الذكاء الاصطناعي 24/7 بعد إغلاق الكمبيوتر، افتح الرابط السحابي الرسمي: https://mahereasybakery-web.github.io/egx-sharia-portal-ui/');
 
                 setStepState('dom_code', 'warn', 'يعمل محلياً (يحتاج فتح الرابط السحابي) ⚠️');
 
