@@ -4519,7 +4519,7 @@
 
 window.addEventListener('load', () => {
 
-                navigator.serviceWorker.register('sw.js?v=18.3')
+                navigator.serviceWorker.register('sw.js?v=20261011_v4')
 
                     .then(reg => {
 

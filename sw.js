@@ -1,16 +1,16 @@
-// EGX Sharia Portal - Clean Modular PWA Service Worker
-const CACHE_NAME = 'egx-sharia-portal-v3.0';
+// EGX Sharia Portal - Network-First Ultra-Fresh Service Worker
+const CACHE_NAME = 'egx-sharia-portal-v4.1';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
-  './js/data-reports.js',
-  './js/data-news.js',
-  './js/data-valuation.js',
-  './js/data-ai-prompts.js',
-  './js/app.js',
-  './js/universal-export.js',
+  './js/data-reports.js?v=20261011_v4',
+  './js/data-news.js?v=20261011_v4',
+  './js/data-valuation.js?v=20261011_v4',
+  './js/data-ai-prompts.js?v=20261011_v4',
+  './js/app.js?v=20261011_v4',
+  './js/universal-export.js?v=20261011_v4',
   './market_data.json',
   './icon-192.png',
   './icon-512.png',
@@ -32,6 +32,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log('[SW] Purging outdated cache:', key);
             return caches.delete(key);
           }
         })
@@ -40,22 +41,40 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// NETWORK-FIRST STRATEGY: Always fetch fresh code from server first, fall back to cache only when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+        return networkResponse;
+      })
+      .catch(() => {
+        // Fallback to cache when offline or network fails
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
         });
-        return response;
-      });
-    }).catch(() => {
-      return caches.match('./index.html');
-    })
+      })
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+  if (event.data && event.data.action === 'clearCache') {
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((k) => caches.delete(k)));
+    });
+  }
 });

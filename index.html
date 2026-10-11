@@ -225,6 +225,16 @@
     
 
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Force refresh cached service worker and clear stale PWA caches
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (var i = 0; i < registrations.length; i++) {
+                    registrations[i].update();
+                }
+            });
+        }
+    </script>
 </head>
 
 <body class="bg-[#080c14] text-slate-100 min-h-screen selection:bg-emerald-500 font-sans selection:text-white pb-24">
@@ -9741,12 +9751,12 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js"></script>
-    <script src="js/data-news.js"></script>
-    <script src="js/data-valuation.js"></script>
-    <script src="js/data-ai-prompts.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/universal-export.js"></script>
+    <script src="js/data-reports.js?v=20261011_v4"></script>
+    <script src="js/data-news.js?v=20261011_v4"></script>
+    <script src="js/data-valuation.js?v=20261011_v4"></script>
+    <script src="js/data-ai-prompts.js?v=20261011_v4"></script>
+    <script src="js/app.js?v=20261011_v4"></script>
+    <script src="js/universal-export.js?v=20261011_v4"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار Gemini العائم)
