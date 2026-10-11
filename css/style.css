@@ -1,168 +1,941 @@
-/* =========================================================================
-   EGX Sharia Portal - Master Clean Stylesheet (css/style.css)
-   Pure Modular Architecture | Full RTL Support | FinTech Glassmorphism
-   ========================================================================= */
+/* ===== STYLE BLOCK 1 ===== */
+/* ── Enforce RTL globally ── */
 
-/* ── 1. RTL & Global Reset ── */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+        *, *::before, *::after { box-sizing: border-box; }
 
-html, body {
-    direction: rtl;
-    text-align: right;
-    font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    letter-spacing: -0.012em;
-    background-color: #080c14;
-    color: #f8fafc;
-    min-height: 100vh;
-}
+        html, body { direction: rtl; text-align: right; }
 
-input, textarea, select, button {
-    font-family: inherit;
-    direction: rtl;
-    text-align: right;
-}
+        input, textarea, select, button { direction: rtl; text-align: right; }
 
-.force-ltr {
-    direction: ltr !important;
-    text-align: left !important;
-}
+        /* Numbers stay LTR inside RTL context naturally */
 
-/* ── 2. Numeric & Monospace Typography ── */
-.font-mono, .tabular-nums, .num-font {
-    font-family: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
-    font-feature-settings: 'tnum' on, 'lnum' on;
-}
+        .force-ltr { direction: ltr !important; text-align: left !important; }
 
-/* ── 3. FinTech Glassmorphism Components ── */
-.glass-card {
-    background: rgba(14, 22, 38, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-}
 
-.glass-card:hover {
-    border-color: rgba(255, 255, 255, 0.14);
-}
 
-/* ── 4. Scrollbars & Utilities ── */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
+        body {
 
-/* ── 5. Animations & Indicators ── */
-@keyframes pulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.35); opacity: 0.55; }
-}
-.pulse-dot {
-    animation: pulseDot 2s infinite ease-in-out;
-}
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-@keyframes flashUp {
-    0%   { background-color: rgba(16, 185, 129, 0.4); color: #fff; }
-    100% { background-color: transparent; }
-}
-@keyframes flashDown {
-    0%   { background-color: rgba(244, 63, 94, 0.4); color: #fff; }
-    100% { background-color: transparent; }
-}
-.price-flash-up   { animation: flashUp 1.2s ease-out forwards; border-radius: 4px; }
-.price-flash-down { animation: flashDown 1.2s ease-out forwards; border-radius: 4px; }
+            -webkit-tap-highlight-color: transparent;
 
-/* ── 6. Bottom Navigation Active State ── */
-.tab-btn {
-    position: relative;
-    transition: color 0.2s ease;
-}
-.tab-btn.active {
-    color: #34d399 !important;
-}
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 2.5px;
-    background: #10b981;
-    border-radius: 2px;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
+            user-select: none;
 
-/* ── 7. Privacy Mode (Sensitive Numbers Blur) ── */
-body.privacy-mode .sensitive-num {
-    filter: blur(8px);
-    user-select: none;
-    transition: filter 0.2s ease;
-}
+            letter-spacing: -0.012em;
 
-/* ── 8. Advanced Light Theme Overrides ── */
-html:not(.dark) body {
-    background-color: #f8fafc !important;
-    color: #0f172a !important;
-}
+            background-color: #080c14;
 
-html:not(.dark) .glass-card {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.05) !important;
-}
+        }
 
-html:not(.dark) header,
-html:not(.dark) #topTickerBar,
-html:not(.dark) #bottomNav {
-    background-color: rgba(255, 255, 255, 0.98) !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
-}
+        .font-mono, .tabular-nums, .num-font {
 
-html:not(.dark) .text-slate-400 { color: #64748b !important; }
-html:not(.dark) .text-slate-300 { color: #334155 !important; }
-html:not(.dark) .text-slate-500 { color: #94a3b8 !important; }
-html:not(.dark) .text-white { color: #0f172a !important; }
+            font-family: 'JetBrains Mono', 'IBM Plex Sans Arabic', monospace;
 
-html:not(.dark) .bg-slate-900,
-html:not(.dark) .bg-slate-950,
-html:not(.dark) [class*="bg-slate-900"],
-html:not(.dark) [class*="bg-slate-950"] {
-    background-color: #ffffff !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03) !important;
-}
+            font-feature-settings: 'tnum' on, 'lnum' on;
 
-html:not(.dark) [class*="from-slate-900"] {
-    background: #ffffff !important;
-    border-color: #e2e8f0 !important;
-}
+        }
 
-html:not(.dark) .border-slate-800,
-html:not(.dark) .border-slate-700 {
-    border-color: #e2e8f0 !important;
-}
+        .glass-card {
 
-/* ── 9. Print Optimization ── */
-@media print {
-    body {
-        background: white !important;
-        color: black !important;
-    }
-    header, nav, .no-print, button, #bottomNav, .floating-ai-btn {
-        display: none !important;
-    }
-    .glass-card {
-        background: white !important;
-        border: 1px solid #ccc !important;
-        box-shadow: none !important;
-    }
-}
+            background: rgba(14, 22, 38, 0.92);
+
+            backdrop-filter: blur(16px);
+
+            border: 1px solid rgba(255, 255, 255, 0.075);
+
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+
+            display: none;
+
+        }
+
+        .no-scrollbar {
+
+            -ms-overflow-style: none;
+
+            scrollbar-width: none;
+
+        }
+
+        @keyframes pulse-slow {
+
+            0%, 100% { opacity: 1; }
+
+            50% { opacity: 0.5; }
+
+        }
+
+        .pulse-live {
+
+            animation: pulse-slow 2s infinite ease-in-out;
+
+        }
+
+        @media print {
+
+            body {
+
+                background: white !important;
+
+                color: black !important;
+
+            }
+
+            header, nav, #pwaInstallBanner, .no-print, button {
+
+                display: none !important;
+
+            }
+
+            .glass-card {
+
+                background: white !important;
+
+                border: 1px solid #ccc !important;
+
+                box-shadow: none !important;
+
+            }
+
+            #printStatementView {
+
+                display: block !important;
+
+            }
+
+        }
+
+
+
+
+
+        /* ── Real-time price flash animations ── */
+
+        @keyframes flashUp {
+
+            0%   { background: rgba(16,185,129,0.45); color:#fff; }
+
+            100% { background: transparent; }
+
+        }
+
+        @keyframes flashDown {
+
+            0%   { background: rgba(244,63,94,0.45); color:#fff; }
+
+            100% { background: transparent; }
+
+        }
+
+        .price-flash-up   { animation: flashUp   1.2s ease-out forwards; border-radius:4px; }
+
+        .price-flash-down { animation: flashDown 1.2s ease-out forwards; border-radius:4px; }
+
+
+
+        /* v11: Modern bottom nav active state */
+
+        .tab-btn { position: relative; }
+
+        .tab-btn.text-emerald-400::after {
+
+            content: '';
+
+            position: absolute;
+
+            bottom: -2px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 20px;
+
+            height: 2px;
+
+            background: #34d399;
+
+            border-radius: 2px;
+
+        }
+
+        /* Card hover effects */
+
+        .glass-card { transition: border-color 0.2s ease; }
+
+
+
+        /* v11: Compact view mode switcher label */
+
+        #portfolioViewLabel { font-size: 11px; }
+
+
+
+        /* v11: Sort arrows */
+
+        .sort-arrow { font-size: 10px; transition: color 0.2s; }
+
+        th { user-select: none; }
+
+        th:hover .sort-arrow { opacity: 1 !important; }
+
+
+
+        /* Sortable table row hover */
+
+        #stocksHoldingsSmartBody tr:hover,
+
+        #fundsHoldingsSmartBody tr:hover { background: rgba(255,255,255,0.035); }
+
+
+
+        /* Live pulse dot */
+
+        @keyframes livePulse {
+
+            0%,100% { transform:scale(1); opacity:1; }
+
+            50%      { transform:scale(1.6); opacity:0.6; }
+
+        }
+
+        .pulse-live { animation: livePulse 1.2s ease-in-out infinite; }
+
+
+
+        /* =========================================================================
+
+           ADVANCED LIGHT & DARK THEME SYSTEM (معايير التباين والجمالية الفائقة)
+
+           ========================================================================= */
+
+        html.dark {
+
+            color-scheme: dark;
+
+        }
+
+        html:not(.dark) {
+
+            color-scheme: light;
+
+        }
+
+
+
+        /* Light Mode Base */
+
+        html:not(.dark) body {
+
+            background-color: #f8fafc !important;
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Header in Light Mode */
+
+        html:not(.dark) header {
+
+            background-color: rgba(255, 255, 255, 0.95) !important;
+
+            border-color: #e2e8f0 !important;
+
+            box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.05) !important;
+
+        }
+
+        html:not(.dark) header h1 {
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Top Ticker Bar in Light Mode */
+
+        html:not(.dark) #liveTickerBar > div {
+
+            background-color: #ffffff !important;
+
+            border-color: #e2e8f0 !important;
+
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+
+        }
+
+        html:not(.dark) #liveTickerBar .text-slate-400 {
+
+            color: #64748b !important;
+
+        }
+
+        html:not(.dark) #liveTickerBar .text-white {
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Bottom Floating Dock in Light Mode */
+
+        html:not(.dark) nav {
+
+            background-color: rgba(255, 255, 255, 0.96) !important;
+
+            border-color: #e2e8f0 !important;
+
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+
+        }
+
+        html:not(.dark) nav .tab-btn.text-slate-400 {
+
+            color: #64748b !important;
+
+        }
+
+        html:not(.dark) nav .tab-btn.text-slate-400:hover {
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Glass Cards in Light Mode */
+
+        html:not(.dark) .glass-card {
+
+            background: #ffffff !important;
+
+            border: 1px solid #e2e8f0 !important;
+
+            box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04) !important;
+
+        }
+
+
+
+        /* Fast-access Chart Card & Emerald Banners in Light Mode */
+
+        html:not(.dark) [class*="from-emerald-950"],
+
+        html:not(.dark) [class*="to-teal-950"],
+
+        html:not(.dark) [class*="to-emerald-950"] {
+
+            background-image: none !important;
+
+            background-color: #f0fdf4 !important;
+
+            border: 1px solid #86efac !important;
+
+        }
+
+        html:not(.dark) [class*="from-emerald-950"] *,
+
+        html:not(.dark) [class*="to-teal-950"] *,
+
+        html:not(.dark) [class*="to-emerald-950"] * {
+
+            color: #14532d !important;
+
+        }
+
+        html:not(.dark) [class*="from-emerald-950"] [class*="bg-emerald-900"] {
+
+            background-color: #dcfce7 !important;
+
+            color: #15803d !important;
+
+            border-color: #86efac !important;
+
+        }
+
+        html:not(.dark) [class*="from-emerald-950"] select {
+
+            background-color: #ffffff !important;
+
+            color: #14532d !important;
+
+            border-color: #22c55e !important;
+
+        }
+
+
+
+        /* Slate-900 / Slate-950 containers to Crisp White in Light Mode */
+
+        html:not(.dark) .bg-slate-900,
+
+        html:not(.dark) [class*="bg-slate-900/"],
+
+        html:not(.dark) .bg-slate-950,
+
+        html:not(.dark) [class*="bg-slate-950/"],
+
+        html:not(.dark) .bg-slate-800,
+
+        html:not(.dark) [class*="bg-slate-800/"],
+
+        html:not(.dark) .bg-\[\#080c14\],
+
+        html:not(.dark) .bg-\[\#0e1626\],
+
+        html:not(.dark) .bg-\[\#141e33\] {
+
+            background-color: #ffffff !important;
+
+        }
+
+
+
+        /* Secondary subtle backgrounds (inner pill boxes, secondary panels) */
+
+        html:not(.dark) [class*="bg-slate-950/60"],
+
+        html:not(.dark) [class*="bg-slate-950/70"],
+
+        html:not(.dark) [class*="bg-slate-950/80"],
+
+        html:not(.dark) [class*="bg-slate-950/40"],
+
+        html:not(.dark) [class*="bg-slate-900/40"],
+
+        html:not(.dark) [class*="bg-slate-800/50"],
+
+        html:not(.dark) [class*="bg-slate-800/40"],
+
+        html:not(.dark) .bg-slate-850 {
+
+            background-color: #f1f5f9 !important;
+
+        }
+
+
+
+        /* Neutralize dark gradients in Light Mode */
+
+        html:not(.dark) [class*="bg-gradient-to-br from-slate-900"],
+
+        html:not(.dark) [class*="bg-gradient-to-b from-slate-900"] {
+
+            background-image: none !important;
+
+            background-color: #ffffff !important;
+
+        }
+
+
+
+        /* Borders in Light Mode */
+
+        html:not(.dark) .border-slate-800,
+
+        html:not(.dark) .border-slate-700,
+
+        html:not(.dark) [class*="border-slate-800/"],
+
+        html:not(.dark) [class*="border-slate-700/"] {
+
+            border-color: #e2e8f0 !important;
+
+        }
+
+
+
+        /* Inputs, Selects & Textareas */
+
+        html:not(.dark) input:not([type="checkbox"]):not([type="radio"]),
+
+        html:not(.dark) select,
+
+        html:not(.dark) textarea {
+
+            background-color: #ffffff !important;
+
+            border-color: #cbd5e1 !important;
+
+            color: #0f172a !important;
+
+        }
+
+        html:not(.dark) input::placeholder,
+
+        html:not(.dark) textarea::placeholder {
+
+            color: #94a3b8 !important;
+
+        }
+
+        html:not(.dark) select option {
+
+            background-color: #ffffff !important;
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Typography & Contrast in Light Mode */
+
+        html:not(.dark) .text-white {
+
+            color: #0f172a !important;
+
+        }
+
+        html:not(.dark) .text-slate-100 {
+
+            color: #0f172a !important;
+
+        }
+
+        html:not(.dark) .text-slate-200 {
+
+            color: #1e293b !important;
+
+        }
+
+        html:not(.dark) .text-slate-300 {
+
+            color: #334155 !important;
+
+        }
+
+        html:not(.dark) .text-slate-400 {
+
+            color: #64748b !important;
+
+        }
+
+        html:not(.dark) .text-slate-500 {
+
+            color: #64748b !important;
+
+        }
+
+
+
+        /* Preserve bright white text on colored CTA buttons & active badges */
+
+        html:not(.dark) button.bg-emerald-600,
+
+        html:not(.dark) button.bg-emerald-500,
+
+        html:not(.dark) button.bg-rose-600,
+
+        html:not(.dark) button.bg-rose-500,
+
+        html:not(.dark) button.bg-sky-600,
+
+        html:not(.dark) button.bg-amber-600,
+
+        html:not(.dark) .chart-tf-btn.bg-emerald-600,
+
+        html:not(.dark) .btn-keep-white,
+
+        html:not(.dark) [class*="bg-emerald-600"] > span.text-white,
+
+        html:not(.dark) button[class*="bg-emerald-600"],
+
+        html:not(.dark) button[class*="bg-rose-600"],
+
+        html:not(.dark) button[class*="bg-sky-600"],
+
+        html:not(.dark) button[class*="bg-amber-600"],
+
+        html:not(.dark) button[class*="bg-emerald-500"],
+
+        html:not(.dark) [class*="from-emerald-600"] {
+
+            color: #ffffff !important;
+
+        }
+
+
+
+        /* Badges styling in Light Mode */
+
+        html:not(.dark) [class*="bg-emerald-950"] {
+
+            background-color: #ecfdf5 !important;
+
+            border-color: #a7f3d0 !important;
+
+            color: #065f46 !important;
+
+        }
+
+        html:not(.dark) [class*="bg-emerald-950"] * {
+
+            color: #065f46 !important;
+
+        }
+
+
+
+        html:not(.dark) [class*="bg-amber-950"] {
+
+            background-color: #fffbeb !important;
+
+            border-color: #fde68a !important;
+
+            color: #92400e !important;
+
+        }
+
+        html:not(.dark) [class*="bg-amber-950"] * {
+
+            color: #92400e !important;
+
+        }
+
+
+
+        html:not(.dark) [class*="bg-rose-950"] {
+
+            background-color: #fff1f2 !important;
+
+            border-color: #fecdd3 !important;
+
+            color: #9f1239 !important;
+
+        }
+
+        html:not(.dark) [class*="bg-rose-950"] * {
+
+            color: #9f1239 !important;
+
+        }
+
+
+
+        html:not(.dark) [class*="bg-sky-950"] {
+
+            background-color: #f0f9ff !important;
+
+            border-color: #bae6fd !important;
+
+            color: #0369a1 !important;
+
+        }
+
+        html:not(.dark) [class*="bg-sky-950"] * {
+
+            color: #0369a1 !important;
+
+        }
+
+
+
+        /* Tables in Light Mode */
+
+        html:not(.dark) table {
+
+            color: #0f172a !important;
+
+        }
+
+        html:not(.dark) table thead,
+
+        html:not(.dark) table th {
+
+            background-color: #f8fafc !important;
+
+            color: #475569 !important;
+
+            border-color: #e2e8f0 !important;
+
+        }
+
+        html:not(.dark) table td {
+
+            border-color: #f1f5f9 !important;
+
+            color: #1e293b !important;
+
+        }
+
+        html:not(.dark) tbody tr:hover,
+
+        html:not(.dark) [class*="hover:bg-slate-800"]:hover,
+
+        html:not(.dark) [class*="hover:bg-slate-850"]:hover {
+
+            background-color: #f8fafc !important;
+
+        }
+
+
+
+        /* Modal Overlays & Windows in Light Mode */
+
+        html:not(.dark) #stockChartModal,
+
+        html:not(.dark) #holdingModal,
+
+        html:not(.dark) #installModal {
+
+            background-color: rgba(15, 23, 42, 0.6) !important;
+
+        }
+
+        html:not(.dark) #stockChartModal > div,
+
+        html:not(.dark) #holdingModal > div,
+
+        html:not(.dark) #installModal > div {
+
+            background-color: #ffffff !important;
+
+            border-color: #e2e8f0 !important;
+
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18) !important;
+
+            color: #0f172a !important;
+
+        }
+
+
+
+        /* Canvas Chart container in Light Mode */
+
+        html:not(.dark) #candlestickCanvas {
+
+            background-color: #ffffff !important;
+
+        }
+
+        html:not(.dark) #stockChartModal .bg-slate-950\/90,
+
+        html:not(.dark) #stockChartModal [class*="bg-slate-950/"] {
+
+            background-color: #f8fafc !important;
+
+            border-color: #e2e8f0 !important;
+
+        }
+
+
+
+        /* Theme Toggle Button Styling */
+
+        #themeToggleBtn {
+
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        }
+
+        html:not(.dark) #themeToggleBtn {
+
+            background-color: #f1f5f9 !important;
+
+            border-color: #cbd5e1 !important;
+
+            color: #0f172a !important;
+
+        }
+
+        html:not(.dark) #thndrBenchmarkBar {
+
+            background-color: #f1f5f9 !important;
+
+            border-color: #e2e8f0 !important;
+
+        }
+
+
+
+        /* =========================================================================
+
+           CONTINUOUS RIGHT-TO-LEFT TICKER ANIMATION (حركة شريط التيكر من اليمين لليسار)
+
+           ========================================================================= */
+
+        /* ── Continuous Left-to-Right Ticker (من اليسار لليمين) ── */
+
+        @keyframes tickerScrollLTR {
+
+            0% {
+
+                transform: translateX(-50%);
+
+            }
+
+            100% {
+
+                transform: translateX(0%);
+
+            }
+
+        }
+
+        .ticker-marquee-track {
+
+            display: inline-flex;
+
+            width: max-content;
+
+            animation: tickerScrollLTR 68s linear infinite;
+
+            will-change: transform;
+
+        }
+
+        .ticker-marquee-track:hover,
+
+        .ticker-marquee-track:active {
+
+            animation-play-state: paused;
+
+        }
+
+        .ticker-marquee-track:hover,
+
+        .ticker-marquee-track:active,
+
+        .ticker-marquee-track:focus-within {
+
+            animation-play-state: paused !important;
+
+        }
+
+
+
+    
+
+        /* Custom smooth horizontal table scrollbar */
+
+        #stocksHoldingsTableContainer::-webkit-scrollbar,
+
+        #fundsHoldingsTableContainer::-webkit-scrollbar {
+
+            height: 6px;
+
+        }
+
+        #stocksHoldingsTableContainer::-webkit-scrollbar-track,
+
+        #fundsHoldingsTableContainer::-webkit-scrollbar-track {
+
+            background: #080c14;
+
+            border-radius: 4px;
+
+        }
+
+        #stocksHoldingsTableContainer::-webkit-scrollbar-thumb,
+
+        #fundsHoldingsTableContainer::-webkit-scrollbar-thumb {
+
+            background: #1e293b;
+
+            border-radius: 4px;
+
+        }
+
+        #stocksHoldingsTableContainer::-webkit-scrollbar-thumb:hover,
+
+        #fundsHoldingsTableContainer::-webkit-scrollbar-thumb:hover {
+
+            background: #10b981;
+
+        }
+
+
+
+        /* Master Security Lock & PIN Keypad Styles */
+
+        .pin-dot.active {
+
+            background-color: #10b981 !important;
+
+            border-color: #10b981 !important;
+
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6) !important;
+
+            transform: scale(1.15);
+
+        }
+
+        @keyframes pinShake {
+
+            0%, 100% { transform: translateX(0); }
+
+            20%, 60% { transform: translateX(-8px); }
+
+            40%, 80% { transform: translateX(8px); }
+
+        }
+
+        .pin-shake {
+
+            animation: pinShake 0.4s ease-in-out;
+
+        }
+
+        .app-locked-blur {
+
+            filter: blur(16px) !important;
+
+            pointer-events: none !important;
+
+            user-select: none !important;
+
+        }
+
+/* ===== STYLE BLOCK 2 ===== */
+.tab-btn.text-emerald-400 { color:#34d399 !important; }
+
+            .tab-btn.text-emerald-400 span:first-child { filter: drop-shadow(0 0 6px rgba(52,211,153,0.5)); }
+
+        
+
+        /* Master Security Lock & PIN Keypad Styles */
+
+        .pin-dot.active {
+
+            background-color: #10b981 !important;
+
+            border-color: #10b981 !important;
+
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6) !important;
+
+            transform: scale(1.15);
+
+        }
+
+        @keyframes pinShake {
+
+            0%, 100% { transform: translateX(0); }
+
+            20%, 60% { transform: translateX(-8px); }
+
+            40%, 80% { transform: translateX(8px); }
+
+        }
+
+        .pin-shake {
+
+            animation: pinShake 0.4s ease-in-out;
+
+        }
+
+        .app-locked-blur {
+
+            filter: blur(16px) !important;
+
+            pointer-events: none !important;
+
+            user-select: none !important;
+
+        }
