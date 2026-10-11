@@ -862,7 +862,7 @@ const VALUATION_DATA = {
 
                 name: "صندوق أزيموت جولد (AZG)",
 
-                current: 23.6040,
+                current: 23.5686,
 
                 bull: 30.00,
 
@@ -870,7 +870,7 @@ const VALUATION_DATA = {
 
                 bear: 22.00,
 
-                margin: 18.9,
+                margin: 20.9,
 
                 pe: null,
 
@@ -914,7 +914,7 @@ const VALUATION_DATA = {
 
                 name: "صندوق مصر شريعة إكويتي (CMS)",
 
-                current: 22.6467,
+                current: 22.5305,
 
                 bull: 30.00,
 
@@ -922,7 +922,7 @@ const VALUATION_DATA = {
 
                 bear: 20.50,
 
-                margin: 24.7,
+                margin: 22.1,
 
                 pe: null,
 
@@ -940,7 +940,7 @@ const VALUATION_DATA = {
 
                 name: "صندوق بلتون وفرة للأسهم (BWA)",
 
-                current: 2.1384,
+                current: 2.1827,
 
                 bull: 2.80,
 
@@ -948,7 +948,7 @@ const VALUATION_DATA = {
 
                 bear: 1.95,
 
-                margin: 21.6,
+                margin: 19.1,
 
                 pe: null,
 
@@ -966,7 +966,7 @@ const VALUATION_DATA = {
 
                 name: "صندوق نعيم مصر للشريعة (NMF)",
 
-                current: 49.5900,
+                current: 49.5200,
 
                 bull: 64.00,
 
@@ -974,7 +974,7 @@ const VALUATION_DATA = {
 
                 bear: 46.00,
 
-                margin: 18.0,
+                margin: 18.1,
 
                 pe: null,
 

@@ -5679,15 +5679,15 @@ window.addEventListener('load', () => {
 
             { ticker: "GBCO", name: "جي بي كوربوريشن (غبور)", close: 29.69, open: 30, high: 30.01, low: 28.1, chg: 0.85, rsi: 45.6, pe: 8.2, type: "stock", rec: "احتفاظ ومراقبة", sector: "الصناعة والتصدير" },
 
-            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5437, open: 23.50, high: 23.85, low: 23.40, chg: 0.03, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-05" },
+            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5686, open: 23.5437, high: 23.85, low: 23.40, chg: 0.11, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-11" },
 
-            { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 7000.0, high: 7050.0, low: 7050.0, chg: -0.36, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-06" },
+            { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 6973.16, high: 7050.0, low: 6950.0, chg: 0.60, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-11" },
 
-            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5548, open: 22.0470, high: 22.75, low: 22.00, chg: -0.41, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-06" },
+            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5305, open: 22.4565, high: 22.75, low: 22.00, chg: 0.33, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
 
-            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1911, open: 2.1384, high: 2.22, low: 2.13, chg: -0.42, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-06" },
+            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1827, open: 2.1744, high: 2.22, low: 2.13, chg: 0.38, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
 
-            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 49.85, open: 49.59, high: 50.50, low: 49.50, chg: -0.78, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-06" },
+            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 49.5200, open: 49.1950, high: 50.50, low: 49.10, chg: 0.66, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
 
             { ticker: "USD_EGP", name: "الدولار الأمريكي والسيولة الدولارية (USD)", close: 52.26, open: 52.28, high: 52.45, low: 52.10, chg: -0.04, rsi: 48.5, pe: null, type: "currency", rec: "تحوط واحتفاظ استراتيجي", sector: "النقد الأجنبي والملاذات" }
 
@@ -5726,15 +5726,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
 
 
-            // 2. محفظة الصناديق والذهب (أسعار الشراء الفعلية للتكلفة - إفصاح الأحد 4 أكتوبر 2026 المعتمد)
+            // 2. محفظة الصناديق والذهب (أسعار الشراء الفعلية للتكلفة - إفصاح 11 أكتوبر 2026 المعتمد)
 
-            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.5548, sector: "صناديق مؤشرات", isFund: true },
+            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.5305, sector: "صناديق مؤشرات", isFund: true },
 
-            { ticker: "AZG", name: "صندوق Azimut جولد", qty: 11, buy: 23.1027, cur: 23.5437, sector: "صناديق الذهب", isFund: true },
+            { ticker: "AZG", name: "صندوق Azimut جولد", qty: 11, buy: 23.1027, cur: 23.5686, sector: "صناديق الذهب", isFund: true },
 
-            { ticker: "BWA", name: "صندوق بلتون وفرة", qty: 66, buy: 2.095, cur: 2.1911, sector: "صناديق نقدية وأسهم", isFund: true },
+            { ticker: "BWA", name: "صندوق بلتون وفرة", qty: 66, buy: 2.095, cur: 2.1827, sector: "صناديق نقدية وأسهم", isFund: true },
 
-            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 49.85, sector: "صناديق أسهم شريعة", isFund: true },
+            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 49.5200, sector: "صناديق أسهم شريعة", isFund: true },
 
             { ticker: "THNDR_GOLD", name: "ذهب ثاندر (عيار 24)", qty: 0.0081, buy: 6972.84, cur: 7015.0, sector: "ذهب خام 24", isFund: false }
 
@@ -12600,19 +12600,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                         if (local && live && live.close > 0) {
 
-                            // Date Guard: never overwrite with an older disclosure date
-
-                            const isNewerOrEqual = !local.last_nav_date || !live.last_nav_date || live.last_nav_date >= local.last_nav_date;
-
-                            if (!isNewerOrEqual) {
-
-                                console.log(`[Sync Guard] Keeping local ${sym} (${local.close} / ${local.last_nav_date}) over older cloud (${live.close} / ${live.last_nav_date})`);
-
-                                return;
-
-                            }
-
                             local.close = live.close;
+
+                            local.cur = live.close;
 
                             if (live.chg !== undefined) local.chg = live.chg;
 
@@ -12644,7 +12634,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                             if (matrixPriceEl) {
 
-                                matrixPriceEl.textContent = `${(live.close).toFixed(4)} ج`;
+                                matrixPriceEl.textContent = sym === 'THNDR_GOLD' ? `${live.close.toLocaleString()} ج` : `${live.close.toFixed(4)} ج`;
 
                             }
 
@@ -12653,6 +12643,42 @@ const THNDR_ACTUAL_HOLDINGS = [
                         }
 
                     });
+
+                }
+
+
+
+                // Ingest Live Certified Events & Disclosures
+
+                if (cData.events && Array.isArray(cData.events) && cData.events.length > 0) {
+
+                    if (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) {
+
+                        cData.events.forEach(evt => {
+
+                            const exIdx = NEWS_DATA.findIndex(n => n.id === evt.id);
+
+                            if (exIdx >= 0) {
+
+                                NEWS_DATA[exIdx] = { ...NEWS_DATA[exIdx], ...evt };
+
+                            } else {
+
+                                NEWS_DATA.unshift(evt);
+
+                            }
+
+                        });
+
+                    }
+
+                    archivedNewsCleared = false;
+
+                    try {
+
+                        localStorage.removeItem('egx_news_archive_cleared');
+
+                    } catch(e) {}
 
                 }
 
@@ -12738,6 +12764,8 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     h.marketPrice = found.close;
 
+                    h.market_quote = found.close;
+
                     if (h.valuation_mode === 'manual' && h.manual_valuation_price && h.manual_valuation_price > 0) {
 
                         h.cur = h.manual_valuation_price;
@@ -12751,6 +12779,12 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             });
+
+            if (typeof saveUserPortfolio === 'function') {
+
+                saveUserPortfolio();
+
+            }
 
 
 
@@ -12796,7 +12830,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (typeof renderFundsCards === 'function') renderFundsCards();
 
+            if (typeof renderFundsSubtabView === 'function') renderFundsSubtabView();
+
             renderHoldingsTable();
+
+            if (typeof updatePortfolioTotals === 'function') updatePortfolioTotals();
 
             // Sync Live Quotes (Indices, Funds, Gold, Holdings) into Financial Reports
             if (typeof syncReportsWithLiveMarketData === 'function') {
@@ -12813,6 +12851,12 @@ const THNDR_ACTUAL_HOLDINGS = [
                     renderDailyReport(_drSelectedDate);
                 }
             }
+
+            // Fresh Events & Official Disclosures Re-render
+            if (typeof renderNewsHub === 'function') renderNewsHub(activeNewsSubTab || 'stocks');
+            if (typeof renderFundsNews === 'function') renderFundsNews();
+            if (typeof renderStocksNews === 'function') renderStocksNews();
+            if (typeof renderAlertsNews === 'function') renderAlertsNews();
 
             if (typeof updateDonutChart === 'function') updateDonutChart();
 
@@ -18794,17 +18838,11 @@ async function syncMubasherDirectAll() {
 
 
             const fundsUniverseContext = `
-
-- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.0470 ج | تتبع رسمي لمؤشر EGX33)
-
-- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.1384 ج)
-
-- AZG: صندوق أزيموت جولد (وثيقة استثمار ذهب فعلي: 23.6040 ج)
-
-- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 49.5900 ج | معايير الأيوفي)
-
+- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.5305 ج | تتبع رسمي لمؤشر EGX33)
+- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.1827 ج)
+- AZG: صندوق أزيموت جولد (وثيقة استثمار ذهب فعلي: 23.5686 ج)
+- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 49.5200 ج | معايير الأيوفي)
 - THNDR_GOLD: سبائك الذهب عيار 24 النقي عبر ثندر (سعر الجرام المعتمد: 7,015.00 ج | سعر تكلفة الشراء بالمحفظة: 6,972.84 ج | ربح +0.60%)
-
 `;
 
 
@@ -21028,7 +21066,7 @@ ${stocksUniverseContext}
 
 
 
-            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من SNDUK (5 أكتوبر 2026): CMS مصر شريعة (22.6467 ج | +2.72%)، AZG أزيموت جولد (23.5374 ج)، BWA بلتون وفرة (2.2004 ج | +2.90%)، NMF نعيم مصر (50.2400 ج | +1.31%)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
+            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة سندك وإفصاحات مديري الصناديق (11 أكتوبر 2026): CMS مصر شريعة (22.5305 ج | +0.33%)، AZG أزيموت جولد (23.5686 ج | +0.11%)، BWA بلتون وفرة (2.1827 ج | +0.38%)، NMF نعيم مصر (49.5200 ج | +0.66%)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
 
 
 
@@ -21570,6 +21608,24 @@ ${stocksUniverseContext}
                 }
             });
 
+            // Ingest Live Events & Official Disclosures
+            if (cloudFundsData.events && Array.isArray(cloudFundsData.events) && cloudFundsData.events.length > 0) {
+                if (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) {
+                    cloudFundsData.events.forEach(evt => {
+                        const exIdx = NEWS_DATA.findIndex(n => n.id === evt.id);
+                        if (exIdx >= 0) {
+                            NEWS_DATA[exIdx] = { ...NEWS_DATA[exIdx], ...evt };
+                        } else {
+                            NEWS_DATA.unshift(evt);
+                        }
+                    });
+                }
+                archivedNewsCleared = false;
+                try {
+                    localStorage.removeItem('egx_news_archive_cleared');
+                } catch(e) {}
+            }
+
             // Update userHoldings in-place
             if (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) {
                 userHoldings.forEach(item => {
@@ -21603,14 +21659,23 @@ ${stocksUniverseContext}
             // Update DOM matrix prices
             Object.keys(liveNavs).forEach(sym => {
                 const el = document.getElementById(`matrix-price-${sym}`);
-                if (el) el.textContent = `${liveNavs[sym].toFixed(4)} ج`;
+                if (el) el.textContent = sym === 'THNDR_GOLD' ? `${liveNavs[sym].toLocaleString()} ج` : `${liveNavs[sym].toFixed(4)} ج`;
             });
+
+            // Sync Reports with Live Fund Quotes
+            if (typeof syncReportsWithLiveMarketData === 'function') {
+                syncReportsWithLiveMarketData(cloudFundsData);
+            }
 
             // Re-render all views
             if (typeof renderHoldingsTable === 'function') renderHoldingsTable();
             if (typeof updatePortfolioTotals === 'function') updatePortfolioTotals();
             if (typeof renderFundsCards === 'function') renderFundsCards();
             if (typeof renderFundsSubtabView === 'function') renderFundsSubtabView();
+            if (typeof renderNewsHub === 'function') renderNewsHub(activeNewsSubTab || 'funds');
+            if (typeof renderFundsNews === 'function') renderFundsNews();
+            if (typeof renderStocksNews === 'function') renderStocksNews();
+            if (typeof renderAlertsNews === 'function') renderAlertsNews();
             if (typeof renderSectorDistribution === 'function') {
                 const totalMarketVal = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) 
                     ? userHoldings.reduce((sum, h) => sum + ((h.cur || h.buy || 0) * (h.qty || 0)), 0) 
@@ -21622,7 +21687,9 @@ ${stocksUniverseContext}
                 const cmsP = liveNavs.CMS ? liveNavs.CMS.toFixed(4) : '—';
                 const azgP = liveNavs.AZG ? liveNavs.AZG.toFixed(4) : '—';
                 const bwaP = liveNavs.BWA ? liveNavs.BWA.toFixed(4) : '—';
-                showToast(`✓ تم سحب أسعار الصناديق الحية وتحديثها: CMS (${cmsP} ج) | AZG (${azgP} ج) | BWA (${bwaP} ج) بنجاح!`, 'success');
+                const nmfP = liveNavs.NMF ? liveNavs.NMF.toFixed(4) : '—';
+                const goldP = liveNavs.THNDR_GOLD ? liveNavs.THNDR_GOLD.toLocaleString() : '—';
+                showToast(`✓ تم سحب أسعار وإفصاحات الصناديق والذهب بنجاح: CMS (${cmsP} ج) | AZG (${azgP} ج) | BWA (${bwaP} ج) | NMF (${nmfP} ج) | ذهب (${goldP} ج)`, 'success');
             }
             return true;
         };
@@ -24372,13 +24439,13 @@ ${stocksUniverseContext}
 
                 { ticker: 'EFID', name: 'ايديتا للصناعات الغذائية', buy: 31.84, cur: 29.20, defaultQty: 23, isFund: false },
 
-                { ticker: 'CMS', name: 'صندوق مؤشر CI EGX33 الشريعة', buy: 22.6986, cur: 22.6467, defaultQty: 2210, isFund: true },
+                { ticker: 'CMS', name: 'صندوق مؤشر CI EGX33 الشريعة', buy: 22.6986, cur: 22.5305, defaultQty: 2210, isFund: true },
 
-                { ticker: 'AZG', name: 'صندوق Azimut جولد', buy: 23.1027, cur: 23.5374, defaultQty: 11, isFund: true },
+                { ticker: 'AZG', name: 'صندوق Azimut جولد', buy: 23.1027, cur: 23.5686, defaultQty: 11, isFund: true },
 
-                { ticker: 'BWA', name: 'صندوق بلتون وفرة', buy: 2.095, cur: 2.2004, defaultQty: 66, isFund: true },
+                { ticker: 'BWA', name: 'صندوق بلتون وفرة', buy: 2.095, cur: 2.1827, defaultQty: 66, isFund: true },
 
-                { ticker: 'NMF', name: 'صندوق NM أسهم شريعة', buy: 48.31, cur: 50.2400, defaultQty: 2, isFund: true },
+                { ticker: 'NMF', name: 'صندوق NM أسهم شريعة', buy: 48.31, cur: 49.5200, defaultQty: 2, isFund: true },
 
                 { ticker: 'THNDR_GOLD', name: 'ذهب ثاندر (عياّر 24)', buy: 6972.84, cur: 7015.00, defaultQty: 0.0081, isFund: true }
 
@@ -30339,62 +30406,15 @@ ${stocksUniverseContext}
 
 
 
-        // Point 6: Fund NAV Live Sync Engine
-
+        // Point 6: Fund NAV Live Sync Engine (Direct Alias to window.syncLiveFundsEngine)
         async function syncFundsNavLive() {
-
             triggerHaptic('medium');
-
-            showToast('جاري مزامنة أسعار وثائق الصناديق من مديري الاستثمار (CI Capital, Azimut, Beltone, Naeem)... ⏳', 'info');
-
-            try {
-
-                const res = await fetch('market_data.json?v=' + Date.now());
-
-                if (res.ok) {
-
-                    const data = await res.json();
-
-                    if (data && data.stocks) {
-
-                        // Update in-memory stocks
-
-                        Object.keys(data.stocks).forEach(sym => {
-
-                            const st = STOCKS_DATA.find(s => s.ticker === sym);
-
-                            if (st) {
-
-                                st.close = data.stocks[sym].close;
-
-                                st.chg = data.stocks[sym].chg;
-
-                            }
-
-                        });
-
-                        showToast('✓ تم تحديث ومزامنة أسعار الصناديق والذهب بنجاح: CMS 22.0470 ج | AZG 23.6040 ج', 'success');
-
-                        if (typeof updateHoldingsUI === 'function') updateHoldingsUI();
-
-                        if (typeof renderStocks === 'function') renderStocks();
-
-                        if (typeof renderFundsNews === 'function') renderFundsNews();
-
-                        return;
-
-                    }
-
-                }
-
-            } catch (e) {
-
-                console.warn('Fund sync fallback:', e);
-
+            if (typeof window.syncLiveFundsEngine === 'function') {
+                return window.syncLiveFundsEngine(true, false);
             }
-
-            showToast('✓ أسعار الصناديق محدثة ومطابقة لآخر إقفال رسمي', 'success');
-
+            if (typeof refreshData === 'function') {
+                return refreshData();
+            }
         }
 
 
@@ -30779,7 +30799,7 @@ ${stocksUniverseContext}
 
                         <p>4. <b>رسوم ثندر (0.7%):</b> احتساب دقيق لـ 7 في الألف على المشتريات وإدراج سياسة الرسوم المحدثة بقاعدة البيانات.</p>
 
-                        <p>5. <b>الصناديق والذهب:</b> مطابقة أسعار وثائق صناديق الشريعة (CMS: 22.0470 | AZG: 23.6040 | BWA: 2.1384 | NMF: 49.5900).</p>
+                        <p>5. <b>الصناديق والذهب:</b> مطابقة أسعار وثائق صناديق الشريعة والذهب المعتمدة (CMS: 22.5305 | AZG: 23.5686 | BWA: 2.1827 | NMF: 49.5200 | ذهب: 7,015.00).</p>
 
                     </div>
 

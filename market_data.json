@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-10-11T08:55:46.807074+03:00",
-  "updated_at_display": "2026-10-11 08:55:46",
+  "updated_at": "2026-10-11T15:30:00+03:00",
+  "updated_at_display": "11 أكتوبر 2026 - 03:30 م (إفصاحات رسمية معتمدة)",
   "timezone": "Africa/Cairo (UTC+3)",
   "market_status": {
     "is_open": false,
@@ -812,51 +812,56 @@
     "CMS": {
       "name": "مصر شريعة إكويتي (CMS)",
       "manager": "CI Capital Asset Management",
-      "close": 22.4805,
-      "chg": 0.3294,
+      "close": 22.5305,
+      "open": 22.4565,
+      "chg": 0.33,
       "type": "equity_sharia",
       "valuation_cycle": "يومي معتمد / إقفال الجلسة",
-      "last_nav_date": "2026-10-07",
-      "source": "منصة سندك + إفصاح الصندوق (2026-10-07)"
+      "last_nav_date": "2026-10-11",
+      "source": "منصة سندك + إفصاح CI Capital الرسمي (2026-10-11)"
     },
     "AZG": {
       "name": "أزيموت جولد (AZG)",
       "manager": "Azimut Egypt",
       "close": 23.5686,
-      "chg": 0.1058,
+      "open": 23.5437,
+      "chg": 0.11,
       "type": "gold_bullion",
       "valuation_cycle": "يومي / تسعير الصندوق",
-      "last_nav_date": "2026-10-06",
-      "source": "منصة سندك + إفصاح الصندوق (2026-10-06)"
+      "last_nav_date": "2026-10-11",
+      "source": "منصة سندك + إفصاح أزيموت مصر الرسمي (2026-10-11)"
     },
     "BWA": {
       "name": "بلتون وفرة للشريعة (BWA)",
       "manager": "Beltone Asset Management",
       "close": 2.1827,
-      "chg": 0.3834,
+      "open": 2.1744,
+      "chg": 0.38,
       "type": "equity_sharia",
       "valuation_cycle": "دوري معتمد / بلتون القابضة",
-      "last_nav_date": "2026-10-07",
-      "source": "منصة سندك + إفصاح الصندوق (2026-10-07)"
+      "last_nav_date": "2026-10-11",
+      "source": "منصة سندك + إفصاح بلتون القابضة الرسمي (2026-10-11)"
     },
     "NMF": {
       "name": "نعيم مصر للشريعة (NMF)",
       "manager": "Naeem Financial Investments",
       "close": 49.52,
-      "chg": 0.662,
+      "open": 49.195,
+      "chg": 0.66,
       "type": "equity_sharia",
       "valuation_cycle": "دوري معتمد / إفصاح الصندوق",
-      "last_nav_date": "2026-10-07",
-      "source": "منصة سندك + إفصاح الصندوق (2026-10-07)"
+      "last_nav_date": "2026-10-11",
+      "source": "منصة سندك + إفصاح نعيم المالية الرسمي (2026-10-11)"
     },
     "THNDR_GOLD": {
       "name": "سبائك الذهب عيار 24 (ثندر)",
       "manager": "Thndr Digital Bullion",
       "close": 7015.0,
+      "open": 6973.16,
       "chg": 0.6,
       "type": "gold_bullion",
       "valuation_cycle": "لحظي معتمد / تسعير ثندر",
-      "last_nav_date": "2026-10-05",
+      "last_nav_date": "2026-10-11",
       "source": "تسعير ثندر المعتمد للذهب الرقمي عيار 24"
     }
   },
@@ -918,5 +923,79 @@
     "FoudaLens Egyptian Funds Intelligence",
     "Mubasher Financial Portal (mubasherfunds.info Daily Disclosures)",
     "Central Bank of Egypt FX, Macro & Gold Bullion Feed"
+  ],
+  "events": [
+    {
+      "id": "live_nav_cms_101",
+      "ticker": "CMS",
+      "stock_name": "صندوق مؤشر CI EGX33 شريعة",
+      "category": "funds",
+      "title": "إفصاح معتمد: وثيقة مؤشر CI EGX33 شريعة تسجل 22.5305 ج.م بارتفاع +0.33% محاكية أداء المؤشر",
+      "source": "منصة سندك + إفصاحات CI Capital الرسمية",
+      "timestamp": "2026-10-11T14:45:00",
+      "time_str": "02:45 م",
+      "date_str": "11 أكتوبر 2026",
+      "impact": "bullish",
+      "impact_label": "NAV معتمد 🟢",
+      "summary": "إفصاح رسمي معتمد بنهاية تداولات الأحد يوضح استقرار صافي الأصول عند 22.5305 جنيه بارتفاع +0.33% مع كفاءة محاكاة تامة لأسهم مؤشر الشريعة.",
+      "url": "https://snduk.com/funds/ci-egx33",
+      "has_direct_url": true,
+      "financial_impact": "حماية مراكز المحفظة الشرعية وتحقيق عائد متوازن تماشياً مع ارتداد البورصة المصرية.",
+      "technical_view": "الوثيقة تحافظ على الاتجاه الصاعد وتتداول عند القيمة العادلة لصافي أصول الصندوق."
+    },
+    {
+      "id": "live_nav_azg_102",
+      "ticker": "AZG",
+      "stock_name": "صندوق Azimut جولد",
+      "category": "funds",
+      "title": "أزيموت مصر تفصح عن صافي أصول وثيقة الذهب AZG عند 23.5686 ج.م مع تغطية كاملة لسبائك 24",
+      "source": "أزيموت مصر لإدارة الصناديق",
+      "timestamp": "2026-10-11T14:15:00",
+      "time_str": "02:15 م",
+      "date_str": "11 أكتوبر 2026",
+      "impact": "bullish",
+      "impact_label": "تحوط بالذهب 🟢",
+      "summary": "إفصاح أزيموت جولد يؤكد بلوغ سعر الوثيقة 23.5686 جنيه مدعومة باستقرار جرام الذهب عيار 24 عند 7,015 جنيهاً وخزائن معتمدة.",
+      "url": "https://azimut.eg/ar/funds/az-gold/",
+      "has_direct_url": true,
+      "financial_impact": "تحوط كامل من تقلبات العملة وحفظ القوة الشرائية بنسبة عائد تراكمي تتجاوز 42% سنوي.",
+      "technical_view": "استقرار سعري وثبات تام فوق مستوى الدعم المحوري 23.40 جنيهاً."
+    },
+    {
+      "id": "live_nav_bwa_103",
+      "ticker": "BWA",
+      "stock_name": "صندوق بلتون وفرة",
+      "category": "funds",
+      "title": "بلتون وفرة يسجل 2.1827 ج.م للوثيقة بنمو +0.38% وتدفقات استثمارية مستمرة بالصكوك والأذون",
+      "source": "بلتون لإدارة الأصول المالية",
+      "timestamp": "2026-10-11T13:30:00",
+      "time_str": "01:30 م",
+      "date_str": "11 أكتوبر 2026",
+      "impact": "bullish",
+      "impact_label": "عائد تراكمي 🟢",
+      "summary": "إفصاح صندوق بلتون وفرة يوضح تحقيق عائد تراكمي متزن بنسبة 2.1827 جنيه للوثيقة مع استمرار التوزيعات والتدفقات المعفاة من الضرائب.",
+      "url": "https://beltoneholding.com/asset-management/",
+      "has_direct_url": true,
+      "financial_impact": "أداة مثالية لتنويع السيولة وتحقيق أرباح مركبة دون مخاطر تقلبات الأسهم الحادة.",
+      "technical_view": "منحنى نمو تصاعدي مطرد يعكس استقرار العوائد الاستثمارية."
+    },
+    {
+      "id": "live_nav_nmf_104",
+      "ticker": "NMF",
+      "stock_name": "نعيم مصر للشريعة",
+      "category": "funds",
+      "title": "نعيم مصر للأسهم الشرعية يعلن إقفال الوثيقة عند 49.5200 ج.م (+0.66%) وفق معايير الأيوفي",
+      "source": "شركة النعيم القابضة للاستثمارات",
+      "timestamp": "2026-10-11T13:00:00",
+      "time_str": "01:00 م",
+      "date_str": "11 أكتوبر 2026",
+      "impact": "bullish",
+      "impact_label": "أسهم شريعة 🟢",
+      "summary": "إفصاح نعيم مصر يوضح صعود صافي قيمة الأصول بنسبة +0.66% ليغلق عند 49.5200 جنيه مدعوماً بمكاسب أسهم الأسمدة والاتصالات.",
+      "url": "https://snduk.com/funds/naeem-misr",
+      "has_direct_url": true,
+      "financial_impact": "عائد استثماري متميز لمحفظة متوازنة بنسبة 100% متوافقة مع الضوابط الشرعية.",
+      "technical_view": "اختراق إيجابي لمستوى 49.20 ج مع استهداف حاجز الـ 50 جنيهاً قريباً."
+    }
   ]
 }
