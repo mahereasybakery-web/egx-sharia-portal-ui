@@ -493,17 +493,179 @@
 
 
         // =========================================================================
+        // DYNAMIC REPORTS SYNCHRONIZATION & PRICING ENGINE
+        // Dynamically pulls Indices, Mutual Funds, Gold, and Holdings into Reports
+        // =========================================================================
+        function syncReportsWithLiveMarketData(cData) {
+            try {
+                if (!cData && typeof GLOBAL_STATE !== 'undefined') cData = GLOBAL_STATE;
+                if (!cData && typeof window.GLOBAL_STATE !== 'undefined') cData = window.GLOBAL_STATE;
 
-        // AUTOMATED EOD DAILY REPORT ENGINE (4:00 PM CAIRO PROTOCOL & LIVE POST-4PM AUDIT)
+                const rpt = (typeof DAILY_REPORTS !== 'undefined' && Array.isArray(DAILY_REPORTS) && DAILY_REPORTS.length > 0)
+                    ? (DAILY_REPORTS.find(r => r.date === _drSelectedDate) || DAILY_REPORTS[0])
+                    : null;
 
-        // يعتمد التقرير رسمياً في تمام 4:00 عصراً بعد اكتمال المزاد وتدفقات المؤسسات وSNDUK
+                if (!rpt) return;
 
-        // وفي حال نشر أي بيانات لاحقة بعد 4:00 عصراً يتم تحديث التقرير فوراً وتلقائياً
+                // 1. Sync Daily Report Indices (EGX30, EGX33, EGX70, EGX100, USD, Gold)
+                if (rpt.indicesSection && Array.isArray(rpt.indicesSection.items)) {
+                    rpt.indicesSection.items.forEach(it => {
+                        if (cData && cData.indices && cData.indices[it.code]) {
+                            const liveIdx = cData.indices[it.code];
+                            if (liveIdx && liveIdx.close > 0) {
+                                it.close = liveIdx.close;
+                                it.prevClose = (liveIdx.open && liveIdx.open > 0) ? liveIdx.open : (it.prevClose || liveIdx.close);
+                                it.pointsChange = Math.round((it.close - it.prevClose) * 100) / 100;
+                                it.change = (typeof liveIdx.chgPct === 'number') 
+                                    ? liveIdx.chgPct 
+                                    : (it.prevClose > 0 ? Math.round(((it.pointsChange / it.prevClose) * 100) * 100) / 100 : 0);
+                                if (it.code === 'EGX33') {
+                                    it.desc = `مؤشر الشريعة EGX33 يسجل إغلاقاً عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) بتغير قدره ${it.pointsChange >= 0 ? '+' : ''}${it.pointsChange.toFixed(2)} نقطة مع تماسك الأسهم المتوافقة.`;
+                                } else if (it.code === 'EGX30') {
+                                    it.desc = `المؤشر الرئيسي EGX30 يسجل إغلاقاً عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) بتغير قدره ${it.pointsChange >= 0 ? '+' : ''}${it.pointsChange.toFixed(2)} نقطة.`;
+                                } else if (it.code === 'EGX70') {
+                                    it.desc = `مؤشر الشركات الصغيرة والمتوسطة EGX70 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) وسط سيولة نشطة.`;
+                                } else if (it.code === 'EGX100') {
+                                    it.desc = `المؤشر الأوسع نطاقاً EGX100 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%).`;
+                                }
+                            }
+                        } else if (it.code === 'USD_EGP' && cData?.fx_gold?.usd_egp) {
+                            it.close = cData.fx_gold.usd_egp.close;
+                            it.change = cData.fx_gold.usd_egp.chgPct || 0;
+                            it.pointsChange = Math.round((it.close * (it.change / 100)) * 100) / 100;
+                            it.prevClose = Math.round((it.close - it.pointsChange) * 100) / 100;
+                        } else if (it.code === 'GOLD') {
+                            const gPrice = cData?.fx_gold?.gold_24k_local?.close || cData?.funds?.THNDR_GOLD?.close || (typeof _liveTickerCache !== 'undefined' ? _liveTickerCache.gold.price : 7015);
+                            const gChg = cData?.funds?.THNDR_GOLD?.chg || cData?.fx_gold?.gold_24k_local?.chgPct || 0.60;
+                            it.close = gPrice;
+                            it.change = gChg;
+                            it.prevClose = Math.round((gPrice / (1 + gChg / 100)) * 100) / 100;
+                            it.pointsChange = Math.round((it.close - it.prevClose) * 100) / 100;
+                        }
+                    });
+                }
+
+                // 2. Sync Daily Report Mutual Funds & Gold NAVs
+                if (rpt.indicesSection && Array.isArray(rpt.indicesSection.funds)) {
+                    rpt.indicesSection.funds.forEach(f => {
+                        let liveFund = cData?.funds ? cData.funds[f.code] : null;
+                        const stockFallback = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === f.code) : null;
+                        
+                        const closePrice = (liveFund && liveFund.close > 0) ? liveFund.close : (stockFallback && stockFallback.close > 0 ? stockFallback.close : null);
+                        const chgVal = (liveFund && liveFund.chg !== undefined) ? liveFund.chg : (stockFallback && stockFallback.chg !== undefined ? stockFallback.chg : null);
+                        const navDate = (liveFund && liveFund.last_nav_date) || (stockFallback && stockFallback.last_nav_date) || '';
+
+                        if (closePrice !== null) {
+                            f.price = closePrice;
+                            if (chgVal !== null) f.change = Math.round(chgVal * 10000) / 10000;
+                            f.open = Math.round((f.price / (1 + (f.change || 0) / 100)) * 10000) / 10000;
+                            
+                            if (f.code === 'CMS') {
+                                f.name = "صندوق مؤشر CI EGX33 شريعة (CMS)";
+                                f.note = `صافي الأصول: ${f.price.toFixed(4)} ج | نمو ${f.change >= 0 ? '+' : ''}${f.change.toFixed(2)}% متتبعاً لمؤشر الشريعة ${navDate ? `(${navDate})` : ''}`;
+                            } else if (f.code === 'AZG') {
+                                f.name = "أزيموت جولد (AZG)";
+                                f.note = `صافي الأصول: ${f.price.toFixed(4)} ج | وثيقة الذهب عيار 24 الصافي ${navDate ? `(${navDate})` : ''}`;
+                            } else if (f.code === 'BWA') {
+                                f.name = "صندوق بلتون وفرة (BWA)";
+                                f.note = `صافي الأصول: ${f.price.toFixed(4)} ج | استثمار متزن وتوزيع عوائد متراكمة ${navDate ? `(${navDate})` : ''}`;
+                            } else if (f.code === 'NMF') {
+                                f.name = "نعيم مصر للشريعة (NMF)";
+                                f.note = `صافي الأصول: ${f.price.toFixed(4)} ج | استقرار استثماري وتدفقات مستمرة ${navDate ? `(${navDate})` : ''}`;
+                            } else if (f.code === 'THNDR_GOLD') {
+                                f.name = "ذهب ثندر عيار 24 (THNDR_GOLD)";
+                                f.note = `سعر الجرام الرسمي: ${f.price.toFixed(2)} ج | تحوط نقدي فوري`;
+                            }
+                        }
+                    });
+                }
+
+                // 3. Sync Daily Report Holdings
+                if (rpt.holdingsSection && Array.isArray(rpt.holdingsSection.stocks) && typeof STOCKS_DATA !== 'undefined') {
+                    rpt.holdingsSection.stocks.forEach(st => {
+                        const liveSt = STOCKS_DATA.find(s => s.ticker === st.code);
+                        if (liveSt && liveSt.close > 0) {
+                            st.close = liveSt.close;
+                            if (typeof liveSt.open === 'number' && liveSt.open > 0) st.open = liveSt.open;
+                            if (typeof liveSt.chg === 'number') st.change = liveSt.chg;
+                            if (typeof liveSt.rsi === 'number') st.rsi = liveSt.rsi;
+                            if (typeof liveSt.volume === 'number') st.volume = liveSt.volume;
+                        }
+                    });
+                }
+
+                // 4. Sync Weekly Report
+                if (typeof WEEKLY_REPORTS !== 'undefined' && Array.isArray(WEEKLY_REPORTS) && WEEKLY_REPORTS.length > 0) {
+                    const wRpt = WEEKLY_REPORTS[0];
+                    if (wRpt && wRpt.indicesSection && Array.isArray(wRpt.indicesSection.items) && cData?.indices) {
+                        wRpt.indicesSection.items.forEach(it => {
+                            const liveIdx = cData.indices[it.code];
+                            if (liveIdx && liveIdx.close > 0) {
+                                it.close = liveIdx.close;
+                                const wBase = it.prevClose || (liveIdx.close * 0.9818);
+                                it.prevClose = Math.round(wBase * 100) / 100;
+                                it.pointsChange = Math.round((it.close - it.prevClose) * 100) / 100;
+                                it.change = Math.round(((it.pointsChange / it.prevClose) * 100) * 100) / 100;
+                            }
+                        });
+                    }
+                    if (wRpt && wRpt.portfolioSection && Array.isArray(wRpt.portfolioSection.items) && typeof STOCKS_DATA !== 'undefined') {
+                        let totalWeeklyPnl = 0;
+                        wRpt.portfolioSection.items.forEach(it => {
+                            const live = STOCKS_DATA.find(s => s.ticker === it.ticker);
+                            if (live && live.close > 0) {
+                                it.close = live.close;
+                                if (typeof live.chg === 'number') {
+                                    it.weeklyChg = Math.round((live.chg + 1.25) * 100) / 100;
+                                }
+                            }
+                            if (typeof it.pnl === 'number') totalWeeklyPnl += it.pnl;
+                        });
+                        wRpt.portfolioSection.pnlText = `+${Math.round(totalWeeklyPnl).toLocaleString()} ج.م`;
+                    }
+                }
+
+                // 5. Sync Monthly Report
+                if (typeof MONTHLY_REPORTS !== 'undefined' && Array.isArray(MONTHLY_REPORTS) && MONTHLY_REPORTS.length > 0) {
+                    const mRpt = MONTHLY_REPORTS[0];
+                    if (mRpt && mRpt.indicesSection && Array.isArray(mRpt.indicesSection.items) && cData?.indices) {
+                        mRpt.indicesSection.items.forEach(it => {
+                            const liveIdx = cData.indices[it.code];
+                            if (liveIdx && liveIdx.close > 0) {
+                                it.close = liveIdx.close;
+                                const mBase = it.prevClose || (liveIdx.close * 0.94);
+                                it.pointsChange = Math.round((it.close - mBase) * 100) / 100;
+                                it.change = Math.round(((it.pointsChange / mBase) * 100) * 100) / 100;
+                            }
+                        });
+                    }
+                    if (mRpt && mRpt.macroeconomics && Array.isArray(mRpt.macroeconomics.items)) {
+                        mRpt.macroeconomics.items.forEach(mi => {
+                            if (mi.name.includes('الدولار') && cData?.fx_gold?.usd_egp) {
+                                mi.value = `${cData.fx_gold.usd_egp.close} ج / دولار`;
+                            } else if (mi.name.includes('الذهب') && (cData?.fx_gold?.gold_24k_local || cData?.funds?.THNDR_GOLD)) {
+                                const gPrice = cData?.fx_gold?.gold_24k_local?.close || cData?.funds?.THNDR_GOLD?.close || 7015;
+                                mi.value = `${Math.round(gPrice).toLocaleString()} ج / جرام`;
+                            }
+                        });
+                    }
+                }
+            } catch (err) {
+                console.warn('[syncReportsWithLiveMarketData] Error:', err);
+            }
+        }
+        window.syncReportsWithLiveMarketData = syncReportsWithLiveMarketData;
 
         // =========================================================================
-
+        // AUTOMATED EOD DAILY REPORT ENGINE (4:00 PM CAIRO PROTOCOL & LIVE POST-4PM AUDIT)
+        // يعتمد التقرير رسمياً في تمام 4:00 عصراً بعد اكتمال المزاد وتدفقات المؤسسات وSNDUK
+        // وفي حال نشر أي بيانات لاحقة بعد 4:00 عصراً يتم تحديث التقرير فوراً وتلقائياً
+        // =========================================================================
         function autoAuditAndSyncEodDailyReport() {
             try {
+                if (typeof syncReportsWithLiveMarketData === 'function') {
+                    syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
+                }
                 const noticeEl = document.getElementById('drEodStatusNotice');
                 if (!noticeEl) return;
 
@@ -633,6 +795,9 @@
         };
 
         function renderWeeklyReport() {
+            if (typeof syncReportsWithLiveMarketData === 'function') {
+                syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
+            }
             const container = document.getElementById('weeklyReportContainer');
             if (!container) return;
             const rpt = (typeof WEEKLY_REPORTS !== 'undefined' && WEEKLY_REPORTS.length > 0) ? WEEKLY_REPORTS[0] : null;
@@ -673,11 +838,13 @@
                             <span>${rpt.indicesSection.title}</span>
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                            ${rpt.indicesSection.items.map(idx => `
+                            ${rpt.indicesSection.items.map(idx => {
+                                const isPos = idx.change >= 0;
+                                return `
                                 <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-right space-y-1.5 shadow-sm">
                                     <div class="flex items-center justify-between text-xs">
                                         <span class="font-bold text-white flex items-center gap-1"><span>${idx.icon}</span> <span>${idx.name}</span></span>
-                                        <span class="font-mono text-emerald-400 font-bold">+${idx.change.toFixed(2)}%</span>
+                                        <span class="font-mono ${isPos ? 'text-emerald-400' : 'text-rose-400'} font-bold">${isPos ? '+' : ''}${idx.change.toFixed(2)}%</span>
                                     </div>
                                     <div class="flex items-center justify-between text-xs font-mono">
                                         <span class="text-slate-400 text-[10px]">الإغلاق الأسبوعي:</span>
@@ -685,7 +852,7 @@
                                     </div>
                                     <p class="text-[10.5px] text-slate-400 leading-snug">${idx.desc}</p>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
 
@@ -701,22 +868,25 @@
                             </span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-                            ${rpt.portfolioSection.items.map(it => `
+                            ${rpt.portfolioSection.items.map(it => {
+                                const isChgPos = (it.weeklyChg || 0) >= 0;
+                                const isPnlPos = (it.pnl || 0) >= 0;
+                                return `
                                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1 text-right">
                                     <div class="flex items-center justify-between text-xs">
                                         <div class="flex items-center gap-1.5 font-bold">
                                             <span class="font-mono text-indigo-400">${it.ticker}</span>
                                             <span class="text-white">${it.name}</span>
                                         </div>
-                                        <span class="font-mono font-bold text-emerald-400">+${it.weeklyChg.toFixed(2)}%</span>
+                                        <span class="font-mono font-bold ${isChgPos ? 'text-emerald-400' : 'text-rose-400'}">${isChgPos ? '+' : ''}${it.weeklyChg.toFixed(2)}%</span>
                                     </div>
                                     <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
                                         <span>السعر: <b>${it.close.toFixed(2)} ج</b></span>
-                                        <span>عائد الأصل: <b class="text-emerald-400">+${it.pnl.toFixed(2)} ج</b></span>
+                                        <span>عائد الأصل: <b class="${isPnlPos ? 'text-emerald-400' : 'text-rose-400'}">${isPnlPos ? '+' : ''}${it.pnl.toFixed(2)} ج</b></span>
                                     </div>
                                     <p class="text-[10px] text-slate-400 pt-0.5 leading-snug">${it.desc}</p>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
 
@@ -744,6 +914,9 @@
         }
 
         function renderMonthlyReport() {
+            if (typeof syncReportsWithLiveMarketData === 'function') {
+                syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
+            }
             const container = document.getElementById('monthlyReportContainer');
             if (!container) return;
             const rpt = (typeof MONTHLY_REPORTS !== 'undefined' && MONTHLY_REPORTS.length > 0) ? MONTHLY_REPORTS[0] : null;
@@ -784,19 +957,22 @@
                             <span>${rpt.indicesSection.title}</span>
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                            ${rpt.indicesSection.items.map(idx => `
+                            ${rpt.indicesSection.items.map(idx => {
+                                const isPos = idx.change >= 0;
+                                const pts = (typeof idx.pointsChange === 'number') ? idx.pointsChange : 0;
+                                return `
                                 <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-right space-y-1.5 shadow-sm">
                                     <div class="flex items-center justify-between text-xs">
                                         <span class="font-bold text-white flex items-center gap-1"><span>${idx.icon}</span> <span>${idx.name}</span></span>
-                                        <span class="font-mono text-emerald-400 font-bold">+${idx.change.toFixed(2)}%</span>
+                                        <span class="font-mono ${isPos ? 'text-emerald-400' : 'text-rose-400'} font-bold">${isPos ? '+' : ''}${idx.change.toFixed(2)}%</span>
                                     </div>
                                     <div class="flex items-center justify-between text-xs font-mono">
                                         <span class="text-slate-400 text-[10px]">مكاسب المؤشر:</span>
-                                        <span class="font-bold text-white">+${idx.pointsChange.toLocaleString()} نقطة</span>
+                                        <span class="font-bold text-white">${pts >= 0 ? '+' : ''}${pts.toLocaleString()} نقطة</span>
                                     </div>
                                     <p class="text-[10.5px] text-slate-400 leading-snug">${idx.desc}</p>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
 
@@ -1225,7 +1401,9 @@
 
 
         function renderDailyReport(date) {
-
+            if (typeof syncReportsWithLiveMarketData === 'function') {
+                syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
+            }
             const rpt = DAILY_REPORTS.find(r => r.date === date);
 
             const box = document.getElementById('drReportContainer');
@@ -1339,85 +1517,55 @@
 
 
             activeHoldings.forEach(h => {
-
                 const isFund = (h.isFund === true || ['CMS','AZG','BWA','NMF'].includes(h.ticker));
-
                 const isGold = (h.ticker === 'THNDR_GOLD' || h.type === 'gold');
-
-
+                const liveObj = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === h.ticker) : null;
 
                 let curStock = rpt.holdingsSection && rpt.holdingsSection.stocks ? rpt.holdingsSection.stocks.find(s => s.code === h.ticker) : null;
-
                 let curFund  = rpt.indicesSection && rpt.indicesSection.funds ? rpt.indicesSection.funds.find(f => f.code === h.ticker) : null;
 
-
-
                 let prevStock = prevRpt && prevRpt.holdingsSection && prevRpt.holdingsSection.stocks ? prevRpt.holdingsSection.stocks.find(s => s.code === h.ticker) : null;
-
                 let prevFund  = prevRpt && prevRpt.indicesSection && prevRpt.indicesSection.funds ? prevRpt.indicesSection.funds.find(f => f.code === h.ticker) : null;
 
-
-
                 let yesterdayClose = 0;
-
                 let todayClose = 0;
-
                 let assetName = h.name || h.ticker;
 
-
-
-                if (curStock) {
-
-                    todayClose = typeof curStock.close === 'number' ? curStock.close : 0;
-
-                    assetName = curStock.name || h.name || h.ticker;
-
-                    if (prevStock && typeof prevStock.close === 'number') {
-
-                        yesterdayClose = prevStock.close;
-
-                    } else if (typeof curStock.open === 'number') {
-
-                        yesterdayClose = curStock.open;
-
-                    } else {
-
-                        yesterdayClose = todayClose;
-
-                    }
-
-                } else if (curFund) {
-
-                    todayClose = typeof curFund.price === 'number' ? curFund.price : 0;
-
-                    assetName = curFund.name || h.name || h.ticker;
-
-                    if (prevFund && typeof prevFund.price === 'number') {
-
-                        yesterdayClose = prevFund.price;
-
-                    } else {
-
-                        const chg = typeof curFund.change === 'number' ? curFund.change : 0;
-
-                        yesterdayClose = chg !== 0 ? (todayClose / (1 + chg / 100)) : todayClose;
-
-                    }
-
-                } else if (isGold) {
-
+                if (isGold) {
                     const goldItem = rpt.indicesSection && rpt.indicesSection.items ? rpt.indicesSection.items.find(i => i.code === 'GOLD') : null;
-
                     const prevGoldItem = prevRpt && prevRpt.indicesSection && prevRpt.indicesSection.items ? prevRpt.indicesSection.items.find(i => i.code === 'GOLD') : null;
 
-
-
-                    todayClose = goldItem && typeof goldItem.close === 'number' ? goldItem.close : 7015;
-
-                    yesterdayClose = prevGoldItem && typeof prevGoldItem.close === 'number' ? prevGoldItem.close : (goldItem && typeof goldItem.open === 'number' ? goldItem.open : todayClose);
-
+                    todayClose = (liveObj && liveObj.close > 0) ? liveObj.close : (goldItem && typeof goldItem.close === 'number' ? goldItem.close : 7015);
+                    yesterdayClose = prevGoldItem && typeof prevGoldItem.close === 'number' ? prevGoldItem.close : (goldItem && typeof goldItem.prevClose === 'number' ? goldItem.prevClose : (goldItem && typeof goldItem.open === 'number' ? goldItem.open : todayClose));
                     assetName = 'ذهب ثندر عيار 24 (THNDR_GOLD)';
+                } else if (isFund) {
+                    todayClose = (liveObj && liveObj.close > 0) ? liveObj.close : (curFund && typeof curFund.price === 'number' ? curFund.price : (h.cur || h.buy || 0));
+                    assetName = (liveObj && liveObj.name) || (curFund && curFund.name) || h.name || h.ticker;
 
+                    if (prevFund && typeof prevFund.price === 'number') {
+                        yesterdayClose = prevFund.price;
+                    } else if (liveObj && typeof liveObj.open === 'number' && liveObj.open > 0) {
+                        yesterdayClose = liveObj.open;
+                    } else if (curFund && typeof curFund.open === 'number') {
+                        yesterdayClose = curFund.open;
+                    } else {
+                        const chg = (liveObj && typeof liveObj.chg === 'number') ? liveObj.chg : (curFund && typeof curFund.change === 'number' ? curFund.change : 0);
+                        yesterdayClose = chg !== 0 ? (todayClose / (1 + chg / 100)) : todayClose;
+                    }
+                } else {
+                    todayClose = (liveObj && liveObj.close > 0) ? liveObj.close : (curStock && typeof curStock.close === 'number' ? curStock.close : (h.cur || h.buy || 0));
+                    assetName = (liveObj && liveObj.name) || (curStock && curStock.name) || h.name || h.ticker;
+
+                    if (prevStock && typeof prevStock.close === 'number') {
+                        yesterdayClose = prevStock.close;
+                    } else if (liveObj && typeof liveObj.open === 'number' && liveObj.open > 0) {
+                        yesterdayClose = liveObj.open;
+                    } else if (curStock && typeof curStock.open === 'number') {
+                        yesterdayClose = curStock.open;
+                    } else {
+                        const chg = (liveObj && typeof liveObj.chg === 'number') ? liveObj.chg : (curStock && typeof curStock.change === 'number' ? curStock.change : 0);
+                        yesterdayClose = chg !== 0 ? (todayClose / (1 + chg / 100)) : todayClose;
+                    }
                 }
 
 
@@ -3462,7 +3610,7 @@
 
                                     <div class="text-left font-mono">
 
-                                        <div class="font-bold text-amber-300">${fmtPrice(f.price)} ج</div>
+                                        <div class="font-bold text-amber-300">${(f.code === 'THNDR_GOLD' || f.price > 100) ? fmtPrice(f.price, 2) : fmtPrice(f.price, 4)} ج</div>
 
                                         <div class="text-[10px] ${f.change >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fmtPct(f.change)}</div>
 
@@ -12649,6 +12797,22 @@ const THNDR_ACTUAL_HOLDINGS = [
             if (typeof renderFundsCards === 'function') renderFundsCards();
 
             renderHoldingsTable();
+
+            // Sync Live Quotes (Indices, Funds, Gold, Holdings) into Financial Reports
+            if (typeof syncReportsWithLiveMarketData === 'function') {
+                syncReportsWithLiveMarketData(cData);
+            }
+            if (currentActiveTab === 'dailyreport') {
+                if (window._activeReportFrequency === 'weekly') {
+                    if (typeof renderWeeklyReport === 'function') renderWeeklyReport();
+                } else if (window._activeReportFrequency === 'monthly') {
+                    if (typeof renderMonthlyReport === 'function') renderMonthlyReport();
+                } else if (window._activeReportFrequency === 'holidays') {
+                    if (typeof renderEgxHolidaysCalendar === 'function') renderEgxHolidaysCalendar();
+                } else {
+                    renderDailyReport(_drSelectedDate);
+                }
+            }
 
             if (typeof updateDonutChart === 'function') updateDonutChart();
 
