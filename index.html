@@ -6497,7 +6497,7 @@
 
         <!-- ================= TAB: أداء المحفظة الاستثمارية (Performance View) ================= -->
 
-        <section id="view-performance" class="tab-content space-y-3.5 hidden">
+        <section id="view-performance" class="tab-content space-y-3.5 hidden pb-32">
 
             <!-- Portfolio Top Segment Switcher (Performance Active) -->
 
@@ -6575,90 +6575,69 @@
 
 
 
-                <!-- 4 KPI Metrics Grid -->
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center">
-
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[10px] text-slate-400 mb-0.5">القيمة الحالية الإجمالية</div>
-
-                        <div id="perf_kpi_current_val" class="font-bold text-white font-mono text-sm sm:text-base">--</div>
-
+                <!-- 4 Distinct KPI Financial Metrics Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-center" dir="rtl">
+                    <div class="bg-slate-950/85 p-3 rounded-xl border border-indigo-900/40 shadow-sm">
+                        <div class="text-[10px] text-slate-400 mb-1 flex items-center justify-center gap-1">
+                            <span>💼</span><span>القيمة السوقية العادلة</span>
+                        </div>
+                        <div id="perf_kpi_current_val" class="font-bold text-white font-mono text-base sm:text-lg">--</div>
+                        <div class="text-[9px] text-indigo-300/80 mt-0.5 font-medium">تقييم لحظي شامل لكافة الأصول</div>
                     </div>
 
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[10px] text-slate-400 mb-0.5" title="تشمل تكلفة الشراء الأساسية مضافاً إليها الرسوم والعمولات المسددة">إجمالي التكلفة (شاملة الرسوم)</div>
-
-                        <div id="perf_kpi_total_cost" class="font-bold text-slate-300 font-mono text-sm sm:text-base">--</div>
-
+                    <div class="bg-slate-950/85 p-3 rounded-xl border border-slate-800 shadow-sm">
+                        <div class="text-[10px] text-slate-400 mb-1 flex items-center justify-center gap-1">
+                            <span>🏷️</span><span>إجمالي التكلفة الاستثمارية</span>
+                        </div>
+                        <div id="perf_kpi_total_cost" class="font-bold text-slate-200 font-mono text-base sm:text-lg">--</div>
+                        <div id="perf_kpi_cost_subtext" class="text-[9px] text-slate-400 mt-0.5 font-mono">تكلفة الشراء + الرسوم المسددة</div>
                     </div>
 
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[10px] text-slate-400 mb-0.5" title="صافي الأرباح الفعلية بعد خصم كافة الرسوم والعمولات المسددة">صافي الربح / الخسارة (بعد الرسوم)</div>
-
-                        <div id="perf_kpi_pnl_egp" class="font-bold font-mono text-sm sm:text-base text-emerald-400">--</div>
-
+                    <div class="bg-slate-950/85 p-3 rounded-xl border border-emerald-900/50 shadow-sm bg-emerald-950/15">
+                        <div class="text-[10px] text-emerald-400 font-bold mb-1 flex items-center justify-center gap-1">
+                            <span>📈</span><span>صافي الربح المحاسبي</span>
+                        </div>
+                        <div id="perf_kpi_pnl_egp" class="font-bold font-mono text-base sm:text-lg text-emerald-400">--</div>
+                        <div id="perf_kpi_pnl_subtext" class="text-[9px] text-emerald-300/80 mt-0.5 font-mono">صافي الأرباح بعد خصم الرسوم</div>
                     </div>
 
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[10px] text-slate-400 mb-0.5">معدل العائد (ROI)</div>
-
-                        <div id="perf_kpi_return_pct" class="font-bold font-mono text-sm sm:text-base text-emerald-400">--</div>
-
+                    <div class="bg-slate-950/85 p-3 rounded-xl border border-indigo-900/40 shadow-sm">
+                        <div class="text-[10px] text-slate-400 mb-1 flex items-center justify-center gap-1">
+                            <span>🎯</span><span>صافي العائد (ROI)</span>
+                        </div>
+                        <div id="perf_kpi_return_pct" class="font-bold font-mono text-base sm:text-lg text-emerald-400">--</div>
+                        <div class="text-[9px] text-slate-400 mt-0.5 font-mono">معدل العائد الصافي الفعلي</div>
                     </div>
-
                 </div>
 
-
-
-                <!-- R33 SOCPA Audited: Net Profit & Broker Fees Ledger (مطالب تقرير الفحص R33) -->
-
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-center" dir="rtl">
-
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[9.5px] text-slate-400 mb-0.5">الربح قبل الرسوم</div>
-
-                        <div id="perf_gross_pnl" class="font-bold font-mono text-xs sm:text-sm text-emerald-400">0.00 ج</div>
-
+                <!-- SOCPA / IFRS Audited Reconciliation & Ledger Strip (مطابقة حسابية دقيقة بلا تكرار) -->
+                <div class="bg-slate-950/90 rounded-xl p-3 border border-slate-800 space-y-2" dir="rtl">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5 text-xs">
+                        <span class="font-bold text-slate-200 flex items-center gap-1.5">
+                            <span>⚖️</span><span>كشف التسوية المحاسبية والرسوم (SOCPA Ledger)</span>
+                        </span>
+                        <span class="text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded font-mono">مطابقة دقيقة حتى 0.00 ج</span>
                     </div>
 
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-rose-900/50">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-xs pt-0.5">
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800">
+                            <span class="text-[10px] text-slate-400 block mb-0.5">ربح التقييم قبل الرسوم</span>
+                            <span id="perf_gross_pnl" class="font-mono font-bold text-emerald-400 text-sm">0.00 ج</span>
+                            <span class="text-[9px] text-slate-500 block mt-0.5">(فارق سعر السوق عن سعر الشراء)</span>
+                        </div>
 
-                        <div class="text-[9.5px] text-slate-400 mb-0.5">الرسوم المدفوعة فعلاً</div>
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-rose-900/50 bg-rose-950/10">
+                            <span class="text-[10px] text-rose-300 block mb-0.5">عمولات ورسوم التداول المسددة (-)</span>
+                            <span id="perf_paid_fees" class="font-mono font-bold text-rose-400 text-sm">-0.00 ج</span>
+                            <span class="text-[9px] text-rose-300/60 block mt-0.5 font-mono">عمولة الوساطة ورسوم البورصة</span>
+                        </div>
 
-                        <div id="perf_paid_fees" class="font-bold font-mono text-xs sm:text-sm text-rose-400">0.00 ج</div>
-
+                        <div class="bg-slate-900/90 p-2.5 rounded-lg border border-emerald-800/60 bg-emerald-950/25">
+                            <span class="text-[10px] text-emerald-300 font-bold block mb-0.5">صافي الأرباح المحاسبية (=)</span>
+                            <span id="perf_net_pnl" class="font-mono font-bold text-emerald-300 text-sm">0.00 ج</span>
+                            <span class="text-[9px] text-emerald-400/80 block mt-0.5 font-mono">دفترية غير محققة: <b id="perf_unrealized_pnl">0.00 ج</b> • بيع محقق: <b id="perf_realized_pnl">0.00 ج</b></span>
+                        </div>
                     </div>
-
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-emerald-900/60 bg-emerald-950/20">
-
-                        <div class="text-[9.5px] text-emerald-300 font-bold mb-0.5">الربح الصافي (بعد الرسوم)</div>
-
-                        <div id="perf_net_pnl" class="font-bold font-mono text-xs sm:text-sm text-emerald-300">0.00 ج</div>
-
-                    </div>
-
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[9.5px] text-slate-400 mb-0.5">الأرباح المحققة (بيع)</div>
-
-                        <div id="perf_realized_pnl" class="font-bold font-mono text-xs sm:text-sm text-slate-200">0.00 ج</div>
-
-                    </div>
-
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-
-                        <div class="text-[9.5px] text-slate-400 mb-0.5">أرباح غير محققة (حالية)</div>
-
-                        <div id="perf_unrealized_pnl" class="font-bold font-mono text-xs sm:text-sm text-slate-200">0.00 ج</div>
-
-                    </div>
-
                 </div>
 
             </div>
@@ -6666,151 +6645,85 @@
 
 
             <!-- Benchmark & Alpha Comparison Card (المقارنة المعيارية) -->
-
-            <div class="glass-card rounded-2xl p-3.5 border border-indigo-900/40 bg-gradient-to-r from-slate-900 via-indigo-950/15 to-slate-950 space-y-2.5">
-
+            <div class="glass-card rounded-2xl p-3.5 border border-indigo-900/40 bg-gradient-to-r from-slate-900 via-indigo-950/15 to-slate-950 space-y-2.5" dir="rtl">
                 <div class="flex items-center justify-between">
-
                     <div class="flex items-center gap-2">
-
                         <span class="text-base">🏆</span>
-
-                        <h3 class="text-xs font-bold text-white">المقارنة المعيارية للأداء (Benchmarking)</h3>
-
+                        <div>
+                            <h3 class="text-xs font-bold text-white">المقارنة المعيارية للأداء المالي (Benchmarking)</h3>
+                            <p id="perfBenchPeriodSubtext" class="text-[9px] text-slate-400">مقارنة العائد المحقق بالفترة المحددة مع المؤشر الشرعي وعائد البنك المركزي المعدل</p>
+                        </div>
                     </div>
-
-                    <span id="perfAlphaBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">ألفا إيجابية: +5.2%</span>
-
+                    <span id="perfAlphaBadge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800" dir="ltr">+0.00%</span>
                 </div>
-
-                
 
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
-
-                    <div class="bg-slate-950/70 p-2 rounded-xl border border-slate-800">
-
+                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
                         <span class="text-[10px] text-slate-400 block mb-0.5">عائد محفظتك</span>
-
                         <span id="perfBenchPortfolio" class="font-mono font-bold text-emerald-400 text-sm">--%</span>
-
                     </div>
 
-                    <div class="bg-slate-950/70 p-2 rounded-xl border border-slate-800">
-
+                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
                         <span class="text-[10px] text-slate-400 block mb-0.5">مؤشر EGX33 للشريعة</span>
-
-                        <span id="perfBenchEgx33" class="font-mono font-bold text-sky-400 text-sm">+1.15%</span>
-
+                        <span id="perfBenchEgx33" class="font-mono font-bold text-sky-400 text-sm">+0.51%</span>
                     </div>
 
-                    <div class="bg-slate-950/70 p-2 rounded-xl border border-slate-800">
-
-                        <span class="text-[10px] text-slate-400 block mb-0.5">فائدة المركزي (CBE)</span>
-
-                        <span id="perfBenchCbe" class="font-mono font-bold text-amber-300 text-sm">19.00%</span>
-
+                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800">
+                        <span id="perfBenchCbeTitle" class="text-[10px] text-slate-400 block mb-0.5">مكافئ المركزي (CBE)</span>
+                        <span id="perfBenchCbe" class="font-mono font-bold text-amber-300 text-sm">1.58% شهرياً</span>
                     </div>
-
                 </div>
-
             </div>
 
-
-
             <!-- Asset Breakdown Performance -->
-
-            <div class="glass-card rounded-2xl p-3.5 border border-slate-800 space-y-3">
-
+            <div class="glass-card rounded-2xl p-3.5 border border-slate-800 space-y-3" dir="rtl">
                 <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-
                     <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-
                         <span>📊</span>
-
-                        <span>تفصيل العائد حسب فئة الأصول</span>
-
+                        <span>تفصيل العائد المالي حسب فئات الأصول</span>
                     </h3>
-
-                    <span class="text-[10px] text-slate-400 font-mono">3 أصول رئيسية</span>
-
+                    <span class="text-[10px] text-slate-400 font-mono">3 فئات أصول رئيسية</span>
                 </div>
-
-
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-
                     <!-- Stocks Perf -->
-
                     <div class="bg-slate-950/60 p-3 rounded-xl border border-emerald-900/40 space-y-1.5">
-
                         <div class="flex items-center justify-between text-xs">
-
-                            <span class="font-bold text-emerald-400 flex items-center gap-1"><span>📈</span><span>الأسهم (8 أسهم)</span></span>
-
+                            <span class="font-bold text-emerald-400 flex items-center gap-1"><span>📈</span><span>الأسهم الشرعية (8 أسهم)</span></span>
                             <span id="perf_stocks_pnl_egp" class="font-mono font-bold text-emerald-400">--</span>
-
                         </div>
-
                         <div class="flex items-center justify-between text-[11px] text-slate-400">
-
                             <span>القيمة: <b id="perf_stocks_val" class="text-white font-mono">--</b></span>
-
                             <span id="perf_stocks_return_pct" class="font-mono font-bold text-emerald-400">--</span>
-
                         </div>
-
                     </div>
-
-
 
                     <!-- Funds Perf -->
-
                     <div class="bg-slate-950/60 p-3 rounded-xl border border-amber-900/40 space-y-1.5">
-
                         <div class="flex items-center justify-between text-xs">
-
-                            <span class="font-bold text-amber-400 flex items-center gap-1"><span>🏦</span><span>الصناديق (4 صناديق)</span></span>
-
-                            <span id="perf_funds_pnl_egp" class="font-mono font-bold text-rose-400">--</span>
-
+                            <span class="font-bold text-amber-400 flex items-center gap-1"><span>🏦</span><span>الصناديق المالية (3 صناديق)</span></span>
+                            <span id="perf_funds_pnl_egp" class="font-mono font-bold text-emerald-400">--</span>
                         </div>
-
                         <div class="flex items-center justify-between text-[11px] text-slate-400">
-
                             <span>القيمة: <b id="perf_funds_val" class="text-white font-mono">--</b></span>
-
-                            <span id="perf_funds_return_pct" class="font-mono font-bold text-rose-400">--</span>
-
+                            <span id="perf_funds_return_pct" class="font-mono font-bold text-emerald-400">--</span>
                         </div>
-
+                        <div class="text-[9.5px] text-slate-500 font-mono">صندوق المؤشر CMS + وفرة + نعيم</div>
                     </div>
 
-
-
-                    <!-- Gold Perf -->
-
+                    <!-- Gold Perf (Unified Physical + Azimut Gold) -->
                     <div class="bg-slate-950/60 p-3 rounded-xl border border-amber-500/30 space-y-1.5">
-
                         <div class="flex items-center justify-between text-xs">
-
-                            <span class="font-bold text-amber-300 flex items-center gap-1"><span>🥇</span><span>الذهب الخالص</span></span>
-
+                            <span class="font-bold text-amber-300 flex items-center gap-1"><span>🥇</span><span>استثمارات الذهب (سبائك وصناديق)</span></span>
                             <span id="perf_gold_pnl_egp" class="font-mono font-bold text-emerald-400">--</span>
-
                         </div>
-
                         <div class="flex items-center justify-between text-[11px] text-slate-400">
-
                             <span>القيمة: <b id="perf_gold_val" class="text-white font-mono">--</b></span>
-
                             <span id="perf_gold_return_pct" class="font-mono font-bold text-emerald-400">--</span>
-
                         </div>
-
+                        <div id="perf_gold_subtext" class="text-[9.5px] text-amber-400/80 font-mono">أزيموت جولد: 259.25 ج • سبائك ثندر: 56.82 ج</div>
                     </div>
-
                 </div>
-
             </div>
 
 
@@ -6942,6 +6855,17 @@
                             <span>🗑️</span>
                             <span>مسح الأرشيف</span>
                         </button>
+                    </div>
+                </div>
+
+                <!-- Live Sync Status Indicator Banner -->
+                <div id="newsLiveSyncStatusBanner" class="p-2.5 rounded-xl bg-slate-900/90 border border-emerald-900/60 flex items-center justify-between text-xs flex-wrap gap-2 shadow-sm" dir="rtl">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="newsSyncStatusText" class="text-emerald-300 font-bold text-[11px]">🟢 سحب لحظي نشط • تم تحديث الإفصاحات رسمياً: 04:15 م (الأحد 11 أكتوبر 2026)</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[10px] text-slate-400">
+                        <span>المصادر: إفصاحات EGX • مباشر • سندوك • الرقابة المالية FRA</span>
                     </div>
                 </div>
 
@@ -9821,7 +9745,7 @@
                 سيتم إفراغ الأرشيف الحالي، ويمكنك استعادة الأخبار الرسمية المحدثة في أي وقت بالضغط على زر "تحديث".
             </p>
             <div class="flex items-center justify-end gap-2 pt-2">
-                <button onclick="closeModal('clearArchiveModal')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">إلغاء</button>
+                <button onclick="document.getElementById('clearArchiveModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold active:scale-95">إلغاء</button>
                 <button onclick="executeClearNewsArchive()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold">نعم، مسح الأرشيف</button>
             </div>
         </div>
