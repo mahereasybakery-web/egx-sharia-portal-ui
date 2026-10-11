@@ -867,22 +867,22 @@
   },
   "fx_gold": {
     "usd_egp": {
-      "close": 52.32,
-      "chgPct": -0.02,
+      "close": 52.24,
+      "chgPct": 0.00,
       "unit": "ج.م / USD",
-      "source": "TradingView (FX_IDC:USDEGP) / البنوك المصرية"
+      "source": "البنك المركزي المصري / TradingView"
     },
     "gold_24k_local": {
-      "close": 7054.57,
-      "chgPct": 1.46,
+      "close": 7015.00,
+      "chgPct": 0.60,
       "unit": "ج.م / جرام عيار 24",
       "purity": "24K",
-      "calc": "(4193.84 USD / 31.1035 oz) * 52.32 USDEGP",
-      "source": "سعر الذهب عيار 24 المعادل عالمياً (TradingView TVC:GOLD)"
+      "calc": "سعر الذهب عيار 24 الاسترشادي المعتمد بالسوق المحلي",
+      "source": "سعر الذهب عيار 24 المعتمد (منصة ثندر وسوق الصاغة)"
     },
     "gold_21k_local": {
-      "close": 6172.75,
-      "chgPct": 1.46,
+      "close": 6138.13,
+      "chgPct": 0.60,
       "unit": "ج.م / جرام عيار 21",
       "purity": "21K",
       "source": "سعر الذهب عيار 21 المعادل (عيار 24 * 21/24)"

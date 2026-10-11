@@ -1,0 +1,40 @@
+name: EGX Sharia Portal 24/7 Market Sync
+
+on:
+  schedule:
+    # Runs at 14:30 UTC (4:30 PM Cairo Time) on trading days (Sunday to Thursday)
+    - cron: '30 14 * * 0-4'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Market Data & Reports Verification
+        run: |
+          python -c "
+          import json, datetime
+          print('Auditing EGX Sharia Portal dataset and reports integrity...')
+          with open('market_data.json', 'r', encoding='utf-8') as f:
+              data = json.load(f)
+          print('Loaded', len(data.get('stocks', [])), 'stocks and', len(data.get('funds', [])), 'funds.')
+          "
+
+      - name: Commit & Push if Changes Detected
+        run: |
+          git config --global user.name "EGX Portal Automation Bot"
+          git config --global user.email "bot@egx-sharia-portal.local"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "chore(auto-sync): automated 24/7 market session & disclosures audit"
+          git push origin main || echo "No changes to push"

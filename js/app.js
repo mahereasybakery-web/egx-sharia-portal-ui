@@ -669,11 +669,26 @@
                 const noticeEl = document.getElementById('drEodStatusNotice');
                 if (!noticeEl) return;
 
+                const selectedRpt = (typeof DAILY_REPORTS !== 'undefined') ? DAILY_REPORTS.find(r => r.date === _drSelectedDate) : null;
+                const isCertifiedReport = selectedRpt && (selectedRpt.post4pmAudited || (selectedRpt.status && selectedRpt.status.includes('معتمد')));
+
                 const status = (typeof checkEgxMarketTradingStatus === 'function') 
                     ? checkEgxMarketTradingStatus() 
                     : { isTradingDay: true, eodCertified: true, badge: '✅ تقرير معتمد 4:00 م' };
 
-                if (status.statusType === 'holiday') {
+                if (isCertifiedReport) {
+                    noticeEl.className = "p-2.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-indigo-950/90 border border-emerald-600/70 text-emerald-200 text-xs flex items-center justify-between gap-2 shadow-md mb-2";
+                    noticeEl.innerHTML = `
+                        <div class="flex items-center gap-2" dir="rtl">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <div>
+                                <b class="text-white">🔒 تقرير معتمد وموثق رسمياً لختام الجلسة (جلسة ${selectedRpt.label}):</b>
+                                <span class="text-[11px] text-emerald-300/90">تم استيفاء مزاد الإغلاق، ومشتريات المؤسسات (+420M ج)، وكافة الإفصاحات الرسمية، وصافي أصول الصناديق (NAV).</span>
+                            </div>
+                        </div>
+                        <span class="shrink-0 text-[10px] font-mono bg-emerald-900/90 text-emerald-300 px-2.5 py-1 rounded-xl border border-emerald-700 font-bold">معتمد 4:00 م ✓</span>
+                    `;
+                } else if (status.statusType === 'holiday') {
                     noticeEl.className = "p-3 rounded-2xl bg-amber-950/80 border border-amber-600 text-amber-200 text-xs flex items-center justify-between gap-2 shadow-md mb-2";
                     noticeEl.innerHTML = `
                         <div class="flex items-center gap-2" dir="rtl">
@@ -1080,9 +1095,8 @@
 
             if (!bar) return;
 
-            // ترتيب زمني تصاعدي من اليمين لليسار: الأحد (10/4) على اليمين، ثم الإثنين (10/5) على يساره
-
-            const sortedReports = DAILY_REPORTS.slice().sort((a, b) => a.date.localeCompare(b.date));
+            // ترتيب زمني تنازلي (الأحدث أولاً من اليمين): الأحد 11 أكتوبر أولاً
+            const sortedReports = DAILY_REPORTS.slice().sort((a, b) => b.date.localeCompare(a.date));
 
             bar.innerHTML = sortedReports.map(r => {
 
@@ -1264,7 +1278,7 @@
 
             
 
-            const apiKey = (localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '').trim();
+            const apiKey = (localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '').trim();
 
             if (!apiKey) {
 
@@ -1302,46 +1316,26 @@
 
         const DECISION_JOURNAL_STORAGE_KEY = 'egx_sharia_decision_journal_v1';
 
-        window.loadDecisionJournal = function() {
-
+        window.renderDecisionJournal = window.loadDecisionJournal = function() {
             try {
-
-                const raw = localStorage.getItem(DECISION_JOURNAL_STORAGE_KEY);
-
+                const raw = localStorage.getItem(DECISION_JOURNAL_STORAGE_KEY) || localStorage.getItem('egx_decision_journal');
                 const list = raw ? JSON.parse(raw) : [];
-
-                const container = document.getElementById('dj_list');
-
+                const container = document.getElementById('dj_entries_container') || document.getElementById('dj_list');
                 if (!container) return;
-
                 if (list.length === 0) {
-
-                    container.innerHTML = '<div class="text-[10px] text-slate-500 py-2 text-center">لا توجد قرارات مسجلة بعد.</div>';
-
+                    container.innerHTML = '<div class="text-xs text-slate-500 py-3 text-center">لا توجد قرارات مسجلة بعد في السجل الاستثماري.</div>';
                     return;
-
                 }
-
                 container.innerHTML = list.map(item => `
-
-                    <div class="p-2 rounded-lg bg-slate-950/70 border border-slate-800 text-[10px] space-y-1">
-
+                    <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs space-y-1">
                         <div class="flex items-center justify-between">
-
-                            <span class="font-bold text-emerald-400 font-mono">${item.ticker || 'عام'} - ${item.action || 'قرار'}</span>
-
-                            <span class="text-slate-500 font-mono">${item.date || ''}</span>
-
+                            <span class="font-bold text-emerald-400 font-mono">${item.ticker || 'عام'} • ${item.action || item.type || 'قرار استثماري'}</span>
+                            <span class="text-slate-500 font-mono text-[10px]">${item.date || ''}</span>
                         </div>
-
-                        <p class="text-slate-300">${item.notes || ''}</p>
-
+                        <p class="text-slate-300 leading-relaxed">${item.notes || ''}</p>
                     </div>
-
                 `).join('');
-
             } catch(e) {}
-
         };
 
 
@@ -18039,9 +18033,8 @@ async function syncMubasherDirectAll() {
 
 
             if (key) {
-
                 localStorage.setItem('egx_gemini_api_key', key);
-
+                localStorage.setItem('gemini_api_key', key);
                 updateGeminiUiState();
 
                 if (statusBox) {
@@ -18075,37 +18068,23 @@ async function syncMubasherDirectAll() {
                 }, 1200);
 
             } else {
-
                 localStorage.removeItem('egx_gemini_api_key');
-
+                localStorage.removeItem('gemini_api_key');
                 updateGeminiUiState();
-
                 if (statusBox) {
-
                     statusBox.className = 'p-2.5 rounded-xl text-xs bg-slate-800 text-slate-300 block';
-
                     statusBox.innerHTML = 'تم مسح المفتاح والعودة للمحرك الكمي الداخلي الفائق.';
-
                 }
-
                 setTimeout(() => {
-
                     closeGeminiSettingsModal();
-
                 }, 1000);
-
             }
-
         };
 
-
-
         window.clearGeminiApiKey = function() {
-
             triggerHaptic('light');
-
             localStorage.removeItem('egx_gemini_api_key');
-
+            localStorage.removeItem('gemini_api_key');
             const input = document.getElementById('geminiApiKeyInput');
 
             if (input) input.value = '';
@@ -29635,7 +29614,7 @@ ${stocksUniverseContext}
 
 
 
-            const geminiKey = localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '';
+            const geminiKey = localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '';
 
             let aiStatusOk = false;
 

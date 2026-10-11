@@ -6,3 +6,7 @@ Thumbs.db
 *.log
 *.tmp
 ui_preview.png
+verified_*.png
+v15_*.png
+deep_scan_portal.py
+verify_all_tools_and_buttons.py
