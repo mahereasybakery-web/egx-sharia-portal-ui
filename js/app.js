@@ -28430,21 +28430,15 @@ ${stocksUniverseContext}
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
                         <div class="flex items-center gap-2">
                             ${item.has_direct_url && item.url ? `
-                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
+                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition active:scale-95">
                                     <span>🌐</span>
                                     <span>قراءة التغطية بالصحف الاقتصادية (Google News) ↗</span>
                                 </a>
                             ` : `
-                                <span class="text-xs text-amber-300/90 font-bold px-3 py-1.5 bg-amber-950/60 rounded-xl border border-amber-800/60">
-                                    (لا يوجد رابط خارجي مباشر — إفصاح داخلي معتمد من قاعة التداول)
+                                <span class="text-xs text-amber-300 font-bold px-3 py-1.5 bg-amber-950/70 rounded-xl border border-amber-800/80">
+                                    ${item.no_link_note || '(لا يوجد رابط خارجي مباشر — بيان وإفصاح داخلي معتمد من قاعة التداول)'}
                                 </span>
                             `}
-                            ${item.portal_url ? `
-                                <a href="${item.portal_url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition active:scale-95">
-                                    <span>🏛️</span>
-                                    <span>بوابة الإفصاحات الرسمية ↗</span>
-                                </a>
-                            ` : ''}
                         </div>
                         <button onclick="closeFullDisclosureModal(); openFloatingAiCopilot('حلل لي الأثر المالي والشرعي المتوقع بعد هذا الإفصاح: ' + '${item.title}')" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
                             <span>🤖</span>
@@ -28843,12 +28837,12 @@ ${stocksUniverseContext}
                                     <span>📑 نص البيان المعتمد</span>
                                 </button>
                                 ${n.has_direct_url && n.url ? `
-                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 hover:text-white font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="فتح الرابط الرسمي للبيان">
-                                        <span>🌐 الموقع الرسمي ↗</span>
+                                    <a href="${n.url}" target="_blank" onclick="event.stopPropagation()" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-sky-950/90 border border-sky-800 text-sky-300 hover:bg-sky-900 font-bold flex items-center gap-1 text-[10px] shadow-sm transition active:scale-95" title="قراءة التغطية بالصحف الاقتصادية (Google News)">
+                                        <span>🌐 قراءة بالصحف ↗</span>
                                     </a>
                                 ` : `
-                                    <span class="text-[10px] text-amber-300/90 font-bold px-2 py-0.5 bg-amber-950/60 rounded-lg border border-amber-800/60">
-                                        (لا يوجد رابط مباشر متاح لهذا البند)
+                                    <span class="text-[10px] text-amber-300 font-bold px-2 py-0.5 bg-amber-950/60 rounded-lg border border-amber-800/60">
+                                        ${n.no_link_note || '(لا يوجد رابط مباشر متاح لهذا التنبيه)'}
                                     </span>
                                 `}
                             </div>

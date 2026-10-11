@@ -563,7 +563,49 @@
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 7. MASTER SUBMITTER & INTERFACE CONTROLLER
+    // 7. DUAL-AI INTERACTIVE MODEL SWITCHER ON EVERY MESSAGE CARD
+    // ─────────────────────────────────────────────────────────────────────────
+    window.toggleAiAnswerModel = function(respId, targetModel) {
+        if (typeof triggerHaptic === 'function') triggerHaptic('selection');
+        const pGemini = document.getElementById(`ai_panel_gemini_${respId}`);
+        const pGrok = document.getElementById(`ai_panel_grok_${respId}`);
+        const pBoth = document.getElementById(`ai_panel_both_${respId}`);
+
+        const btnGemini = document.getElementById(`ai_tab_gemini_${respId}`);
+        const btnGrok = document.getElementById(`ai_tab_grok_${respId}`);
+        const btnBoth = document.getElementById(`ai_tab_both_${respId}`);
+
+        if (!pGemini || !pGrok) return;
+
+        if (targetModel === 'gemini') {
+            pGemini.classList.remove('hidden');
+            pGrok.classList.add('hidden');
+            if (pBoth) pBoth.classList.add('hidden');
+
+            if (btnGemini) btnGemini.className = 'px-3 py-1.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-md flex items-center gap-1.5 transition active:scale-95';
+            if (btnGrok) btnGrok.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition active:scale-95';
+            if (btnBoth) btnBoth.className = 'px-2 py-1.5 rounded-lg text-[10.5px] font-bold text-slate-400 hover:text-emerald-300 hover:bg-slate-800/80 flex items-center gap-1 transition active:scale-95';
+        } else if (targetModel === 'grok') {
+            pGemini.classList.add('hidden');
+            pGrok.classList.remove('hidden');
+            if (pBoth) pBoth.classList.add('hidden');
+
+            if (btnGemini) btnGemini.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition active:scale-95';
+            if (btnGrok) btnGrok.className = 'px-3 py-1.5 rounded-lg text-xs font-black bg-amber-600 text-white shadow-md flex items-center gap-1.5 transition active:scale-95';
+            if (btnBoth) btnBoth.className = 'px-2 py-1.5 rounded-lg text-[10.5px] font-bold text-slate-400 hover:text-emerald-300 hover:bg-slate-800/80 flex items-center gap-1 transition active:scale-95';
+        } else if (targetModel === 'both') {
+            pGemini.classList.add('hidden');
+            pGrok.classList.add('hidden');
+            if (pBoth) pBoth.classList.remove('hidden');
+
+            if (btnGemini) btnGemini.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition active:scale-95';
+            if (btnGrok) btnGrok.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80 flex items-center gap-1.5 transition active:scale-95';
+            if (btnBoth) btnBoth.className = 'px-2 py-1.5 rounded-lg text-[10.5px] font-black bg-emerald-600 text-white shadow-md flex items-center gap-1 transition active:scale-95';
+        }
+    };
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 8. MASTER SUBMITTER: CONCURRENT DUAL GENERATION FOR BOTH GEMINI & GROK
     // ─────────────────────────────────────────────────────────────────────────
     window.submitFloatingAiQuery = async function(presetQuery = null) {
         if (typeof triggerHaptic === 'function') triggerHaptic('light');
@@ -580,8 +622,8 @@
 
         if (welcome) welcome.classList.add('hidden');
 
-        const activeModel = window.ACTIVE_AI_MODEL || 'gemini';
-        const isGrok = (activeModel === 'grok');
+        // Preferred model determining which tab opens by default
+        const defaultModel = window.ACTIVE_AI_MODEL || 'gemini';
 
         // 1. Append User Message Bubble
         const timeNow = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
@@ -600,71 +642,179 @@
         stream.appendChild(userMsgEl);
         stream.scrollTop = stream.scrollHeight;
 
-        // 2. Append Loading Indicator
+        // 2. Append Dual Loading Indicator
         const loadingId = 'ai_loading_' + Date.now();
         const loadingMsgEl = document.createElement('div');
         loadingMsgEl.id = loadingId;
         loadingMsgEl.className = 'chat-bubble-msg flex justify-end my-2.5';
         loadingMsgEl.setAttribute('dir', 'rtl');
         loadingMsgEl.innerHTML = `
-            <div class="max-w-[85%] rounded-2xl rounded-tl-none p-3 text-xs leading-relaxed bg-slate-950 border ${isGrok ? 'border-amber-700/60' : 'border-indigo-900/60'} text-slate-300 shadow-md">
-                <div class="font-bold text-[10px] ${isGrok ? 'text-amber-400' : 'text-purple-400'} mb-1 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full ${isGrok ? 'bg-amber-400' : 'bg-purple-400'} animate-pulse"></span>
-                    <span>${isGrok ? '⚡ مستشار xAI Grok يفكر ويحلل...' : '🤖 مستشار Google Gemini يبحث ويدقق...'}</span>
+            <div class="max-w-[90%] rounded-2xl rounded-tl-none p-3 text-xs leading-relaxed bg-slate-950 border border-indigo-800/60 text-slate-300 shadow-md">
+                <div class="font-bold text-[10.5px] text-white mb-1 flex items-center justify-between border-b border-slate-800/80 pb-1.5">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span class="text-emerald-400 font-extrabold">توليد متزامن لكلا النموذجين (Dual-AI):</span>
+                    </div>
+                    <span class="text-[9.5px] font-mono text-slate-400">Gemini 2.5 + Grok-2</span>
                 </div>
-                <div class="text-[11px] text-slate-400 animate-pulse">جارٍ استحضار الإجابة المعرفية الشاملة والتدقيق اللحظي...</div>
+                <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400 flex-wrap">
+                    <span class="flex items-center gap-1 text-indigo-300 animate-pulse">
+                        <span>✨</span>
+                        <span>Google Gemini يبحث ويدقق...</span>
+                    </span>
+                    <span class="text-slate-600">•</span>
+                    <span class="flex items-center gap-1 text-amber-300 animate-pulse">
+                        <span>⚡</span>
+                        <span>xAI Grok يحلل ويصيغ الرؤية...</span>
+                    </span>
+                </div>
             </div>
         `;
         stream.appendChild(loadingMsgEl);
         stream.scrollTop = stream.scrollHeight;
 
-        // 3. Generate Response (Cloud with Fallback to Universal Knowledge)
-        let rawResponseText = '';
-        let isCloudModel = false;
+        // 3. Concurrently Generate Responses for BOTH Models
+        const [geminiResult, grokResult] = await Promise.all([
+            (async () => {
+                try {
+                    const text = await callCloudGeminiApi(q);
+                    return { text, isCloud: true };
+                } catch (e) {
+                    const text = await generateUniversalAiAnswer(q, 'gemini');
+                    return { text, isCloud: false };
+                }
+            })(),
+            (async () => {
+                try {
+                    const text = await callCloudGrokApi(q);
+                    return { text, isCloud: true };
+                } catch (e) {
+                    const text = await generateUniversalAiAnswer(q, 'grok');
+                    return { text, isCloud: false };
+                }
+            })()
+        ]);
 
-        try {
-            if (isGrok) {
-                rawResponseText = await callCloudGrokApi(q);
-            } else {
-                rawResponseText = await callCloudGeminiApi(q);
-            }
-            isCloudModel = true;
-        } catch (e) {
-            rawResponseText = await generateUniversalAiAnswer(q, activeModel);
-            isCloudModel = false;
-        }
-
-        // 4. Parse & Clean Response
-        const parsed = parseAndCleanAiResponse(rawResponseText);
+        // 4. Parse & Clean Both Responses
+        const parsedGemini = parseAndCleanAiResponse(geminiResult.text);
+        const parsedGrok = parseAndCleanAiResponse(grokResult.text);
 
         const loader = document.getElementById(loadingId);
         if (loader) loader.remove();
 
-        // 5. Append AI Message Bubble
+        // 5. Append Interactive AI Message Bubble with Dual-Model Switcher Tabs
+        const respId = 'resp_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
         const aiTime = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
         const aiMsgEl = document.createElement('div');
         aiMsgEl.className = 'chat-bubble-msg flex justify-end my-2.5';
         aiMsgEl.setAttribute('dir', 'rtl');
+
         aiMsgEl.innerHTML = `
-            <div class="max-w-[92%] rounded-2xl rounded-tl-none p-4 text-xs leading-relaxed bg-slate-950/95 border ${isGrok ? 'border-amber-700/70' : 'border-purple-800/60'} text-slate-100 shadow-xl space-y-2.5 text-right">
-                <div class="font-bold text-[10px] ${isGrok ? 'text-amber-300 border-amber-900/50' : 'text-purple-300 border-purple-900/50'} flex items-center justify-between border-b pb-2">
-                    <span class="flex items-center gap-1.5">
-                        <span class="text-sm">${isGrok ? '⚡' : '✨'}</span>
-                        <span class="font-extrabold text-white">${isGrok ? 'مستشار xAI Grok' : 'مستشار Google Gemini'}</span>
-                        <span class="text-[9px] px-2 py-0.2 rounded-full ${isCloudModel ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : (isGrok ? 'bg-amber-950 text-amber-300 border border-amber-700' : 'bg-indigo-950 text-indigo-300 border border-indigo-700')} font-mono">
-                            ${isCloudModel ? 'سحابي مباشر 🟢' : (isGrok ? 'Grok المعرفي ⚡' : 'Gemini المعرفي ⚡')}
-                        </span>
-                    </span>
-                    <span class="text-[9px] font-mono text-slate-400">${aiTime}</span>
-                </div>
+            <div class="max-w-[95%] sm:max-w-[92%] rounded-2xl rounded-tl-none p-3.5 sm:p-4 text-xs leading-relaxed bg-slate-950/98 border border-indigo-800/70 text-slate-100 shadow-2xl space-y-3 text-right">
                 
-                <div class="space-y-2 text-slate-100 text-xs leading-relaxed">
-                    ${parsed.cleanHtml}
+                <!-- Dual AI Model Switcher Bar (Right above the response) -->
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 gap-2 flex-wrap" dir="rtl">
+                    <div class="flex items-center gap-1 p-0.5 bg-slate-900/90 rounded-xl border border-slate-800">
+                        <!-- Gemini Tab -->
+                        <button id="ai_tab_gemini_${respId}" onclick="toggleAiAnswerModel('${respId}', 'gemini')" 
+                            class="${defaultModel === 'gemini' ? 'px-3 py-1.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-md' : 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80'} flex items-center gap-1.5 transition active:scale-95" 
+                            title="عرض إجابة Google Gemini">
+                            <span>✨</span>
+                            <span>Google Gemini</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded font-mono ${geminiResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-indigo-950 text-indigo-300 border border-indigo-700'}">2.5</span>
+                        </button>
+
+                        <!-- Grok Tab -->
+                        <button id="ai_tab_grok_${respId}" onclick="toggleAiAnswerModel('${respId}', 'grok')" 
+                            class="${defaultModel === 'grok' ? 'px-3 py-1.5 rounded-lg text-xs font-black bg-amber-600 text-white shadow-md' : 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800/80'} flex items-center gap-1.5 transition active:scale-95" 
+                            title="عرض إجابة xAI Grok">
+                            <span>⚡</span>
+                            <span>xAI Grok</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded font-mono ${grokResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-amber-950 text-amber-300 border border-amber-700'}">Grok-2</span>
+                        </button>
+
+                        <!-- Compare Both Tab -->
+                        <button id="ai_tab_both_${respId}" onclick="toggleAiAnswerModel('${respId}', 'both')" 
+                            class="px-2 py-1.5 rounded-lg text-[10.5px] font-bold text-slate-400 hover:text-emerald-300 hover:bg-slate-800/80 flex items-center gap-1 transition active:scale-95" 
+                            title="عرض كلا النموذجين جنباً إلى جنب للمقارنة">
+                            <span>🔄</span>
+                            <span class="hidden sm:inline">مقارنة كلاهما</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-mono">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>كلا النموذجين جاهز</span>
+                        <span>• ${aiTime}</span>
+                    </div>
                 </div>
 
-                ${parsed.actionButtonsHtml}
+                <!-- Panel 1: Google Gemini Response -->
+                <div id="ai_panel_gemini_${respId}" class="${defaultModel === 'gemini' ? '' : 'hidden'} space-y-2.5">
+                    <div class="flex items-center justify-between text-[10px] text-indigo-300 bg-indigo-950/40 p-2 rounded-xl border border-indigo-900/60 font-bold">
+                        <span class="flex items-center gap-1.5">
+                            <span>✨</span>
+                            <span>تحليل Google Gemini 2.5 — تدقيق منهجي ومعرفي متعمق:</span>
+                        </span>
+                        <span class="text-[9px] px-2 py-0.5 rounded-full ${geminiResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-indigo-950 text-indigo-300 border border-indigo-700'}">
+                            ${geminiResult.isCloud ? 'سحابي مباشر 🟢' : 'Gemini المعرفي ⚡'}
+                        </span>
+                    </div>
+                    <div class="space-y-2 text-slate-100 text-xs leading-relaxed">
+                        ${parsedGemini.cleanHtml}
+                    </div>
+                    ${parsedGemini.actionButtonsHtml}
+                </div>
+
+                <!-- Panel 2: xAI Grok Response -->
+                <div id="ai_panel_grok_${respId}" class="${defaultModel === 'grok' ? '' : 'hidden'} space-y-2.5">
+                    <div class="flex items-center justify-between text-[10px] text-amber-300 bg-amber-950/40 p-2 rounded-xl border border-amber-900/60 font-bold">
+                        <span class="flex items-center gap-1.5">
+                            <span>⚡</span>
+                            <span>رؤية xAI Grok-2 — سرعة فائقة، ذكاء مباشر، وتحليل حر:</span>
+                        </span>
+                        <span class="text-[9px] px-2 py-0.5 rounded-full ${grokResult.isCloud ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-amber-950 text-amber-300 border border-amber-700'}">
+                            ${grokResult.isCloud ? 'سحابي مباشر 🟢' : 'Grok المعرفي ⚡'}
+                        </span>
+                    </div>
+                    <div class="space-y-2 text-slate-100 text-xs leading-relaxed">
+                        ${parsedGrok.cleanHtml}
+                    </div>
+                    ${parsedGrok.actionButtonsHtml}
+                </div>
+
+                <!-- Panel 3: Side-by-Side Comparison of Both -->
+                <div id="ai_panel_both_${respId}" class="hidden space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <!-- Col 1: Gemini -->
+                        <div class="p-3 rounded-xl bg-slate-950/80 border border-indigo-900/80 space-y-2 text-right">
+                            <div class="font-bold text-xs text-indigo-300 flex items-center justify-between border-b border-indigo-950 pb-1.5">
+                                <span class="flex items-center gap-1"><span>✨</span> <span>Google Gemini 2.5</span></span>
+                                <span class="text-[9.5px] text-indigo-400 font-mono">التحليل المؤسسي</span>
+                            </div>
+                            <div class="text-[11px] text-slate-200 leading-relaxed space-y-2">
+                                ${parsedGemini.cleanHtml}
+                            </div>
+                            ${parsedGemini.actionButtonsHtml}
+                        </div>
+
+                        <!-- Col 2: Grok -->
+                        <div class="p-3 rounded-xl bg-slate-950/80 border border-amber-900/80 space-y-2 text-right">
+                            <div class="font-bold text-xs text-amber-300 flex items-center justify-between border-b border-amber-950 pb-1.5">
+                                <span class="flex items-center gap-1"><span>⚡</span> <span>xAI Grok-2</span></span>
+                                <span class="text-[9.5px] text-amber-400 font-mono">الذكاء المباشر</span>
+                            </div>
+                            <div class="text-[11px] text-slate-200 leading-relaxed space-y-2">
+                                ${parsedGrok.cleanHtml}
+                            </div>
+                            ${parsedGrok.actionButtonsHtml}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         `;
+
         stream.appendChild(aiMsgEl);
         stream.scrollTop = stream.scrollHeight;
     };

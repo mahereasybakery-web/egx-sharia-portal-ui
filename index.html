@@ -9751,13 +9751,13 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js?v=20261011_v7"></script>
-    <script src="js/data-news.js?v=20261011_v7"></script>
-    <script src="js/data-valuation.js?v=20261011_v7"></script>
-    <script src="js/data-ai-prompts.js?v=20261011_v7"></script>
-    <script src="js/app.js?v=20261011_v7"></script>
-    <script src="js/gemini-ai.js?v=20261011_v7"></script>
-    <script src="js/universal-export.js?v=20261011_v7"></script>
+    <script src="js/data-reports.js?v=20261011_v8"></script>
+    <script src="js/data-news.js?v=20261011_v8"></script>
+    <script src="js/data-valuation.js?v=20261011_v8"></script>
+    <script src="js/data-ai-prompts.js?v=20261011_v8"></script>
+    <script src="js/app.js?v=20261011_v8"></script>
+    <script src="js/gemini-ai.js?v=20261011_v8"></script>
+    <script src="js/universal-export.js?v=20261011_v8"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار Gemini العائم)
@@ -9822,18 +9822,21 @@
 
             <!-- Dual AI Model Selector Bar (Gemini 2.5 vs xAI Grok-2) -->
             <div class="px-3 sm:px-4 py-2 border-b border-slate-800 bg-slate-950 flex items-center justify-between gap-2 shrink-0 flex-wrap" dir="rtl">
-                <div class="flex items-center gap-1.5">
-                    <span class="text-[11px] text-slate-400 font-bold ml-1">المحرك:</span>
-                    <button id="aiModelToggleGemini" onclick="switchActiveAiModel('gemini')" class="px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-indigo-900/90 text-white border border-indigo-500 shadow-sm active:scale-95">
-                        <span>✨</span>
-                        <span>Google Gemini</span>
-                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 font-mono">2.5</span>
-                    </button>
-                    <button id="aiModelToggleGrok" onclick="switchActiveAiModel('grok')" class="px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800 active:scale-95">
-                        <span>⚡</span>
-                        <span>xAI Grok</span>
-                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-slate-900 text-amber-300 font-mono">Grok-2</span>
-                    </button>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[11px] text-emerald-400 font-extrabold flex items-center gap-1 bg-emerald-950/70 border border-emerald-800/80 px-2.5 py-1 rounded-lg">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>⚡ نظام الذكاء المزدوج نشط:</span>
+                        <span class="text-white font-normal text-[10.5px]">توليد متزامن لإجابتي Gemini و Grok معاً</span>
+                    </span>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400">
+                        <span class="font-bold">العرض الافتراضي:</span>
+                        <button id="aiModelToggleGemini" onclick="switchActiveAiModel('gemini')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-indigo-900/90 text-white border border-indigo-500 shadow-sm active:scale-95">
+                            <span>✨ Gemini</span>
+                        </button>
+                        <button id="aiModelToggleGrok" onclick="switchActiveAiModel('grok')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800 active:scale-95">
+                            <span>⚡ Grok</span>
+                        </button>
+                    </div>
                 </div>
                 <button onclick="openAiApiSettingsModal()" title="إعدادات مفاتيح API السحابية (Gemini و Grok)" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-[11px] font-bold border border-slate-700/80 flex items-center gap-1 transition active:scale-95 shadow-sm">
                     <span>🔑</span>
@@ -9848,8 +9851,8 @@
                     <div class="flex items-center gap-2.5">
                         <span class="text-2xl">🤖</span>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">مرحباً بك! أنا مستشارك الذكي Google Gemini التنفيذي</h4>
-                            <p class="text-[11px] text-slate-400">يمكنك محادثتي باستمرار، طرح أسئلة متعاقبة، تحليل أي سهم أو خبر أو تقرير، وتدقيق حسابات محفظتك بدقة متناهية.</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">مرحباً بك! مستشار الذكاء المزدوج المباشر (Google Gemini & xAI Grok)</h4>
+                            <p class="text-[11px] text-slate-400">عند طرح أي سؤال، يتم توليد إجابة النموذجين معاً وإتاحة التبديل الفوري بينهما بنقرة واحدة أو مقارنتهما جنباً إلى جنب!</p>
                         </div>
                     </div>
                     
