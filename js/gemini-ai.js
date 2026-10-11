@@ -821,7 +821,7 @@ ${holdingQty > 0 ? `4. **موقف محفظتك:** مسجل لديك **${holdingQ
         const apiKey = (localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '').trim();
         if (!apiKey || apiKey.length < 15) throw new Error('No Gemini API key');
 
-        const systemInstruction = `أنت Google Gemini 2.5، مستشار ذكي فائق المعرفة ومتخصص في الاقتصاد والبورصة المصرية (EGX33 الشريعي) ومحفظة الأسهم والاستثمار، بالإضافة لمعرفتك الموسوعية بالألعاب (مثل لعبة Tibia)، العلوم، والثقافة. أجب بأسلوب عربي راقٍ، منطقي، ذكي، ومباشر دون استخدام نصوص برمجية معقدة أو عبارات مكررة. التزم بتقديم حلول وخطط عملية مرقمة.`;
+        const systemInstruction = `أنت Google Gemini، مستشار ذكي فائق المعرفة ومتخصص في الاقتصاد والبورصة المصرية (EGX33 الشريعي) ومحفظة الأسهم والاستثمار، بالإضافة لمعرفتك الموسوعية بالألعاب (مثل لعبة Tibia)، العلوم، والثقافة. أجب بأسلوب عربي راقٍ، منطقي، ذكي، ومباشر دون استخدام نصوص برمجية معقدة أو عبارات مكررة. التزم بتقديم حلول وخطط عملية مرقمة.`;
         
         // Build multi-turn contents array
         const contents = [];
@@ -836,7 +836,7 @@ ${holdingQty > 0 ? `4. **موقف محفظتك:** مسجل لديك **${holdingQ
         }
         contents.push({ role: 'user', parts: [{ text: `${systemInstruction}\n\nسؤال المستخدم: ${userPrompt}` }] });
 
-        const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-flash-latest'];
+        const models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3-flash-preview'];
 
         for (const model of models) {
             try {

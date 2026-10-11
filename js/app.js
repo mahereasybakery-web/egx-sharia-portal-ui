@@ -17757,7 +17757,6 @@ async function syncMubasherDirectAll() {
 
 
         // Modal & Inline Helpers for Gemini API Key & Generative AI (SEC-01 Fix: Zero embedded keys in public source)
-
         const DEFAULT_GEMINI_API_KEY = "";
 
 
@@ -18188,7 +18187,7 @@ async function syncMubasherDirectAll() {
 
                 const testPrompt = "أجب في جملة واحدة باللغة العربية: هل الاتصال السحابي يعمل بنجاح للبورصة المصرية؟";
 
-                const modelsToTry = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
+                const modelsToTry = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3-flash-preview'];
 
                 let success = false;
 
@@ -18902,7 +18901,7 @@ ${stocksUniverseContext}
 
 
 
-            const modelsToTry = ['gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-pro-latest'];
+            const modelsToTry = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3-flash-preview'];
 
             let lastError = null;
 
