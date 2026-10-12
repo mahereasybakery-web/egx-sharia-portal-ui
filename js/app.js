@@ -16,10 +16,6 @@
 
         }
 
-
-
-        
-
         // =========================================================================
         // NETWORK LIVENESS & STRICT OFFLINE STATE CONTROLLER (v10.0)
         // Rule: Never serve stale/fake cached data when offline. Explicit alerts always.
@@ -117,8 +113,6 @@
 
         }
 
-
-
         function applyThemeMode(isDark, notify = false) {
 
             // Update visible theme toggle button
@@ -141,8 +135,6 @@
 
             }
 
-
-
             // Update Meta Theme Color
 
             const metaThemeColor = document.getElementById('metaThemeColor') || document.querySelector('meta[name="theme-color"]');
@@ -152,8 +144,6 @@
                 metaThemeColor.setAttribute('content', isDark ? '#080c14' : '#f8fafc');
 
             }
-
-
 
             // Update Telegram WebApp Theme
 
@@ -166,8 +156,6 @@
                 if (tg.setBackgroundColor) tg.setBackgroundColor(isDark ? '#080c14' : '#f8fafc');
 
             }
-
-
 
             // Update Toggle Button UI
 
@@ -199,8 +187,6 @@
 
             }
 
-
-
             // Update Chart.js Doughnut Legend if active
 
             if (typeof donutChartInstance !== 'undefined' && donutChartInstance && donutChartInstance.options) {
@@ -214,8 +200,6 @@
                 } catch(e) {}
 
             }
-
-
 
             // Redraw Advanced Canvas Chart if open
 
@@ -231,8 +215,6 @@
 
             }
 
-
-
             if (notify) {
 
                 showToast(isDark ? 'تم التبديل إلى الوضع الليلي 🌙' : 'تم التبديل إلى الوضع النهاري ☀️', 'info');
@@ -240,8 +222,6 @@
             }
 
         }
-
-
 
         function toggleThemeMode() {
 
@@ -256,8 +236,6 @@
             applyThemeMode(newDark, true);
 
         }
-
-
 
         // Force Cache Purge and Reload
 
@@ -301,13 +279,9 @@
 
         }
 
-
-
         // PWA Service Worker Registration & Automatic Background Update Detection
 
         if ('serviceWorker' in navigator) {
-
-            
 
     // =========================================================================
 
@@ -319,23 +293,17 @@
 
     const DEFAULT_MASTER_PIN = "3601896";
 
-
-
     function getMasterPin() {
 
         return localStorage.getItem('egx_security_pin') || DEFAULT_MASTER_PIN;
 
     }
 
-
-
     function isAppUnlocked() {
 
         return localStorage.getItem('egx_auth_unlocked') === 'true' || sessionStorage.getItem('egx_auth_unlocked') === 'true';
 
     }
-
-
 
     function initMasterSecurityLock() {
 
@@ -355,8 +323,6 @@
 
         }
 
-
-
         // Global Keyboard Handler for PIN Entry
 
         window.addEventListener('keydown', (e) => {
@@ -364,8 +330,6 @@
             const screen = document.getElementById('masterSecurityLockScreen');
 
             if (!screen || screen.classList.contains('hidden')) return;
-
-
 
             if (e.key >= '0' && e.key <= '9') {
 
@@ -389,8 +353,6 @@
 
     }
 
-
-
     function showSecurityLockScreen() {
 
         _pinBuffer = "";
@@ -404,8 +366,6 @@
         const header = document.querySelector('header');
 
         const nav = document.getElementById('bottomNav');
-
-
 
         if (screen) screen.classList.remove('hidden');
 
@@ -429,8 +389,6 @@
 
     }
 
-
-
     function hideSecurityLockScreen() {
 
         const screen = document.getElementById('masterSecurityLockScreen');
@@ -440,8 +398,6 @@
         const header = document.querySelector('header');
 
         const nav = document.getElementById('bottomNav');
-
-
 
         if (screen) screen.classList.add('hidden');
 
@@ -455,10 +411,6 @@
 
     }
 
-
-
-
-
         // ═══════════════════════════════════════════════════════════════
 
         //  DAILY REPORT TAB — Data Store & Rendering Engine
@@ -466,8 +418,6 @@
         //  تقرير اليوم — محرك عرض التقارير اليومية
 
         // ═══════════════════════════════════════════════════════════════
-
-
 
                 // ═══════════════════════════════════════════════════════════════
 
@@ -477,20 +427,13 @@
 
         // ═══════════════════════════════════════════════════════════════
 
-
-
         // DAILY_REPORTS is loaded modularly from js/daily-reports.js
-
 
         var _drSelectedDate = '2026-10-11';
 
         let _drChartsInit = {};
 
         window._drChartsInit = _drChartsInit;
-
-
-
-
 
         // =========================================================================
         // DYNAMIC REPORTS SYNCHRONIZATION & PRICING ENGINE
@@ -1087,8 +1030,6 @@
             }
         }
 
-
-
         function renderDrDateBar() {
 
             const bar = document.getElementById('drDateBar');
@@ -1120,8 +1061,6 @@
 
         }
 
-
-
         function selectDrDate(date) {
 
             _drSelectedDate = date;
@@ -1132,23 +1071,15 @@
 
         }
 
-
-
         // Telegram daily report code eliminated completely
 
-
-
         let _drActiveFilter = 'all';
-
-
 
         function setDailyReportFilter(filter) {
 
             triggerHaptic('selection');
 
             _drActiveFilter = filter;
-
-
 
             // Update slicer buttons styling
 
@@ -1170,13 +1101,9 @@
 
             });
 
-
-
             renderDailyReport(_drSelectedDate);
 
         }
-
-
 
         function filterDrShariaUniverse() {
 
@@ -1210,8 +1137,6 @@
 
         }
 
-
-
         function filterDrWatchlist() {
 
             const query = (document.getElementById('drWatchlistSearchInput')?.value || '').trim().toLowerCase();
@@ -1244,10 +1169,6 @@
 
         }
 
-
-
-        
-
         // =========================================================================
 
         // FIX: AUDITED HELPER FUNCTIONS (openStockChartModal, askGeminiNewsDirect, saveDecisionJournalEntry)
@@ -1264,8 +1185,6 @@
 
         };
 
-
-
         window.askGeminiNewsDirect = async function(category) {
 
             triggerHaptic('medium');
@@ -1275,8 +1194,6 @@
                 ? "حلل أداء صناديق الاستثمار الشرعية (صندوق مصر شريعة CMS، بلتون وفرة BWA، نعيم NMF، وأزيموت جولد AZG) بناءً على أحدث تقارير صافي الأصول وتتبع مؤشر الشريعة EGX33 ومستويات التحوط."
 
                 : "قدم تحليلاً مالياً شاملاً لأحدث إفصاحات وأخبار السوق وتأثيرها على الأسهم القيادية.";
-
-            
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '').trim();
 
@@ -1312,8 +1229,6 @@
 
         };
 
-
-
         const DECISION_JOURNAL_STORAGE_KEY = 'egx_sharia_decision_journal_v1';
 
         window.renderDecisionJournal = window.loadDecisionJournal = function() {
@@ -1337,8 +1252,6 @@
                 `).join('');
             } catch(e) {}
         };
-
-
 
         window.saveDecisionJournalEntry = function() {
 
@@ -1392,8 +1305,6 @@
 
         };
 
-
-
         function renderDailyReport(date) {
             if (typeof syncReportsWithLiveMarketData === 'function') {
                 syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
@@ -1404,13 +1315,9 @@
 
             if (!box || !rpt) return;
 
-
-
             const fmtPrice = (v, d = 2) => (typeof v === 'number' && !isNaN(v)) ? v.toFixed(d) : (v !== undefined && v !== null ? v : '—');
 
             const fmtPct = (v) => (typeof v === 'number' && !isNaN(v)) ? ((v >= 0 ? '+' : '') + v.toFixed(2) + '%') : (v || '0.00%');
-
-
 
             const eodAuditBadgeHtml = rpt.post4pmAudited ? `
 
@@ -1436,8 +1343,6 @@
 
             ` : '';
 
-
-
             const signalBadge = (sig, type) => {
 
                 const cfg = {
@@ -1454,8 +1359,6 @@
 
             };
 
-
-
             const pctBadge = (pct) => {
 
                 const num = (typeof pct === 'number' && !isNaN(pct)) ? pct : 0;
@@ -1465,8 +1368,6 @@
                 return `<span class="text-xs font-bold px-2 py-0.5 rounded-lg ${pos ? 'text-emerald-400 bg-emerald-950/80 border border-emerald-800' : 'text-rose-400 bg-rose-950/80 border border-rose-800'}">${pos ? '+' : ''}${num.toFixed(2)}%</span>`;
 
             };
-
-
 
             // Build portfolio chart data
 
@@ -1480,8 +1381,6 @@
 
             const rsiColors      = holdingRSI.map(r => r >= 70 ? 'rgba(248,113,113,0.9)' : r <= 35 ? 'rgba(52,211,153,0.9)' : 'rgba(56,189,248,0.85)');
 
-
-
             // ── Dynamic Mathematical Engine for Daily Portfolio P&L Impact ──
 
             // Strict Day-over-Day Rule: Today EOD Close - Yesterday EOD Close = Net Daily Profit/Loss!
@@ -1492,23 +1391,17 @@
 
             const prevRpt = currentRptIdx > 0 ? allSortedReports[currentRptIdx - 1] : null;
 
-
-
             const activeHoldings = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings) && userHoldings.length > 0)
 
                 ? userHoldings
 
                 : (typeof THNDR_ACTUAL_HOLDINGS !== 'undefined' ? THNDR_ACTUAL_HOLDINGS : []);
 
-
-
             let totalDayChangeVal = 0;
 
             let totalYesterdayEodVal = 0;
 
             const dailyMoversList = [];
-
-
 
             activeHoldings.forEach(h => {
                 const isFund = (h.isFund === true || ['CMS','AZG','BWA','NMF'].includes(h.ticker));
@@ -1562,8 +1455,6 @@
                     }
                 }
 
-
-
                 if (yesterdayClose > 0 && todayClose > 0) {
 
                     const dayGain = (todayClose - yesterdayClose) * h.qty;
@@ -1572,13 +1463,9 @@
 
                     const changePct = ((todayClose - yesterdayClose) / yesterdayClose) * 100;
 
-
-
                     totalDayChangeVal += dayGain;
 
                     totalYesterdayEodVal += yesterdayBasis;
-
-
 
                     dailyMoversList.push({
 
@@ -1606,8 +1493,6 @@
 
             });
 
-
-
             // Rounding to exact 2 decimal places to eliminate floating point halala residues
 
             totalDayChangeVal = Math.round(totalDayChangeVal * 100) / 100;
@@ -1616,21 +1501,15 @@
 
             const posTotal = totalDayChangeVal >= 0;
 
-
-
             // Separate positive vs declining/neutral movers
 
             const gainersList = dailyMoversList.filter(m => m.dayGain > 0.001).sort((a, b) => b.dayGain - a.dayGain);
 
             const declinersList = dailyMoversList.filter(m => m.dayGain <= 0.001).sort((a, b) => a.dayGain - b.dayGain);
 
-
-
             const gainersCountStocks = gainersList.filter(m => !m.isFund && !m.isGold).length;
 
             const gainersCountFunds = gainersList.filter(m => m.isFund || m.isGold).length;
-
-
 
             // Extract session participants & index data from rpt
 
@@ -1642,13 +1521,9 @@
 
             const usdItem = rpt.indicesSection && rpt.indicesSection.items ? rpt.indicesSection.items.find(i => i.code === 'USD_EGP') : null;
 
-
-
                         const isMonday = rpt.date === '2026-10-05';
 
             const isSunday = rpt.date === '2026-10-04';
-
-
 
             let totalTurnover = '4.82 مليار جنيه';
 
@@ -1671,8 +1546,6 @@
             let marketGainIsPos = false;
 
             let targetTomorrow = 'الأربعاء 7 أكتوبر 2026';
-
-
 
             if (isMonday) {
 
@@ -1724,23 +1597,15 @@
 
             }
 
-
-
             const egx30ChangePts = egx30Item && typeof egx30Item.pointsChange === 'number' ? egx30Item.pointsChange : (egx30Item ? (egx30Item.close - (egx30Item.prevClose || egx30Item.open)) : 0);
 
             const egx30IsPos = egx30Item ? egx30Item.change >= 0 : true;
-
-
 
             const egx33ChangePts = egx33Item && typeof egx33Item.pointsChange === 'number' ? egx33Item.pointsChange : (egx33Item ? (egx33Item.close - (egx33Item.prevClose || egx33Item.open)) : 0);
 
             const egx33IsPos = egx33Item ? egx33Item.change >= 0 : true;
 
-
-
             const goldIsPos = goldItem ? goldItem.change >= 0 : true;
-
-
 
             // ── Top Summary Header & KPI Strip (Universal Across All Views) ──
 
@@ -1798,8 +1663,6 @@
 
                 </div>
 
-
-
                 <!-- ── 1. أثر جلسة اليوم على محفظتك الاستثمارية (Dynamic Portfolio P&L Impact) ── -->
 
                 <div class="rounded-2xl border border-emerald-800/80 p-4 shadow-xl space-y-3" style="background:linear-gradient(135deg,#061a14 0%,#0c251d 100%)">
@@ -1835,8 +1698,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- Daily Movers Breakdown Grid -->
 
@@ -1875,8 +1736,6 @@
                             </div>
 
                         </div>
-
-
 
                         <!-- المتراجعة أو المستقرة -->
 
@@ -1932,8 +1791,6 @@
 
                 </div>
 
-
-
                 <!-- ── 2. خريطة المتعاملين وأحجام التداول (Market Participants & Volume - النقطة 3) ── -->
 
                 <div class="rounded-2xl border border-sky-800/80 p-4 shadow-xl space-y-3" style="background:linear-gradient(135deg,#061324 0%,#091d36 100%)">
@@ -1968,8 +1825,6 @@
 
                     </div>
 
-
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
 
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-emerald-800/60 space-y-1">
@@ -1988,8 +1843,6 @@
 
                         </div>
 
-
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-rose-800/60 space-y-1">
 
                             <div class="flex items-center justify-between">
@@ -2006,8 +1859,6 @@
 
                         </div>
 
-
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-sky-800/60 space-y-1">
 
                             <div class="flex items-center justify-between">
@@ -2023,8 +1874,6 @@
                             <p class="text-[10px] text-slate-300">${egArabNote}</p>
 
                         </div>
-
-
 
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-amber-800/60 space-y-1">
 
@@ -2045,8 +1894,6 @@
                     </div>
 
                 </div>
-
-
 
                 <!-- ── 3. توقعات جلسة الغد وتوصيات التداول المقترحة (Tomorrow's Forecast & Action Plan - النقطة 4) ── -->
 
@@ -2078,8 +1925,6 @@
 
                     </div>
 
-
-
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
 
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-900/60 space-y-1.5">
@@ -2093,8 +1938,6 @@
                             </div>
 
                         </div>
-
-
 
                         ${(_drActiveFilter === 'funds' || _drActiveFilter === 'gold' || _drActiveFilter === 'usd') ? `
 
@@ -2130,8 +1973,6 @@
 
                         </div>`}
 
-
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-900/60 space-y-1.5">
 
                             <span class="font-bold text-amber-300 flex items-center gap-1"><span>🛡️</span><span>إدارة السيولة والمخاطر:</span></span>
@@ -2151,8 +1992,6 @@
                     </div>
 
                 </div>
-
-
 
                 <!-- ── Quick Market KPI Strip (100% Dynamic Audited) ── -->
 
@@ -2234,11 +2073,7 @@
 
             `;
 
-
-
             let mainContentHtml = '';
-
-
 
             // ─────────────────────────────────────────────────────────────────
 
@@ -2257,8 +2092,6 @@
                     ...rpt.marketOpportunities.topLosers.map(s => ({ ...s, isOwned: false }))
 
                 ];
-
-
 
                 mainContentHtml = `
 
@@ -2292,8 +2125,6 @@
 
                         </div>
 
-
-
                         <!-- Live Search Bar -->
 
                         <div class="relative">
@@ -2301,8 +2132,6 @@
                             <input type="text" id="drShariaSearchInput" oninput="filterDrShariaUniverse()" placeholder="🔍 ابحث في أي سهم شرعي بالرمز أو الاسم (مثال: ETEL, أسمنت, فوري, بنك...)" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 shadow-inner">
 
                         </div>
-
-
 
                         <!-- Quick Statistics Strip -->
 
@@ -2335,8 +2164,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- 1. Owned Sharia Stocks Section (10) -->
 
@@ -2375,8 +2202,6 @@
                                 const action = h.tomorrowRec || 'احتفاظ ومتابعة الزخم';
 
                                 const rsiVal = typeof h.rsi === 'number' ? h.rsi : 50;
-
-
 
                                 return `
 
@@ -2439,8 +2264,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- 2. Other Sharia Watchlist Stocks Section (25) -->
 
@@ -2512,8 +2335,6 @@
 
             }
 
-
-
             // ─────────────────────────────────────────────────────────────────
 
             // VIEW MODE: holdings (أسهم محفظتي المملوكة فقط: 10 أسهم)
@@ -2549,8 +2370,6 @@
                             <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-bold">8 أسهم مملوكة نشطة</span>
 
                         </div>
-
-
 
                         <!-- KPI Summary Strip -->
 
@@ -2592,8 +2411,6 @@
 
                     </div>
 
-
-
                     <!-- Visual Charts for Portfolio (Changes & RSI) -->
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -2618,8 +2435,6 @@
 
                         </div>
 
-
-
                         <div class="rounded-2xl border border-slate-800 p-3.5" style="background:rgba(10,15,28,0.96)">
 
                             <div class="flex items-center justify-between mb-2">
@@ -2642,8 +2457,6 @@
 
                     </div>
 
-
-
                     <!-- 8 Full In-Depth Trading Cards (الأسهم المملوكة فقط بعد استبعاد المباعة) -->
 
                     <div class="space-y-3">
@@ -2663,8 +2476,6 @@
                             const note = h.reasons || h.performanceText || '';
 
                             const action = h.tomorrowRec || 'احتفاظ ومتابعة الزخم';
-
-
 
                             return `
 
@@ -2701,8 +2512,6 @@
                                     </div>
 
                                 </div>
-
-
 
                                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono">
 
@@ -2748,8 +2557,6 @@
 
                                 </div>
 
-
-
                                 <div class="space-y-1.5 text-xs text-slate-300">
 
                                     <div><b class="text-slate-400 font-sans">التحليل وسلوك السيولة:</b> ${note}</div>
@@ -2773,8 +2580,6 @@
                 </div>`;
 
             }
-
-
 
             // ─────────────────────────────────────────────────────────────────
 
@@ -2816,8 +2621,6 @@
 
                         </div>
 
-
-
                         <!-- Live Search Input -->
 
                         <div class="relative">
@@ -2827,8 +2630,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- 1. فرسان الصعود والزخم القوي (>4%) -->
 
@@ -2890,8 +2691,6 @@
 
                     </div>
 
-
-
                     <!-- 2. أسهم الزخم الإيجابي وتجاوز المقاومات (2% - 4%) -->
 
                     <div class="space-y-2.5 pt-2">
@@ -2951,8 +2750,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- 3. فرص التجميع والتداول العرضي والارتداد (0% - 2%) -->
 
@@ -3018,8 +2815,6 @@
 
             }
 
-
-
             // ─────────────────────────────────────────────────────────────────
 
             // VIEW MODE: funds (صناديق الاستثمار الإسلامية)
@@ -3057,8 +2852,6 @@
                         </p>
 
                     </div>
-
-
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 
@@ -3098,8 +2891,6 @@
 
                     </div>
 
-
-
                     <!-- Mutual Funds Strategy & Advice -->
 
                     <div class="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2 text-xs text-slate-300 leading-relaxed">
@@ -3121,8 +2912,6 @@
                 </div>`;
 
             }
-
-
 
             // ─────────────────────────────────────────────────────────────────
 
@@ -3162,8 +2951,6 @@
 
                     </div>
 
-
-
                     <!-- Gold Price & Funds Grid -->
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -3191,8 +2978,6 @@
                             <p class="text-[11px] text-slate-400">تراجع طفيف إثر انتقال السيولة للبورصة مع استقرار سعر الصرف الرسمي للدولار.</p>
 
                         </div>
-
-
 
                         ${goldFunds.map(f => `
 
@@ -3222,8 +3007,6 @@
 
                     </div>
 
-
-
                     <!-- Wealth Preservation & Hedging Guidance -->
 
                     <div class="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2 text-xs text-slate-300 leading-relaxed">
@@ -3245,8 +3028,6 @@
                 </div>`;
 
             }
-
-
 
             // ─────────────────────────────────────────────────────────────────
 
@@ -3286,8 +3067,6 @@
 
                     </div>
 
-
-
                     <!-- Macro Cards Grid -->
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -3304,8 +3083,6 @@
 
                         </div>
 
-
-
                         <div class="glass-card rounded-2xl p-4 border border-slate-800 space-y-2">
 
                             <div class="text-[10.5px] text-slate-400">احتياطي النقد الأجنبي</div>
@@ -3317,8 +3094,6 @@
                             <p class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">يغطي أكثر من 8 أشهر من الواردات السلعية للبلاد مما يدعم قوة العملة الوطنية.</p>
 
                         </div>
-
-
 
                         <div class="glass-card rounded-2xl p-4 border border-slate-800 space-y-2">
 
@@ -3333,8 +3108,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- Impact on Listed Corporations -->
 
@@ -3374,8 +3147,6 @@
 
             }
 
-
-
             // ─────────────────────────────────────────────────────────────────
 
             // VIEW MODE: all (الكل: التقرير الشامل بكافة أقسامه كما في تليجرام)
@@ -3387,8 +3158,6 @@
                 mainContentHtml = `
 
                 <div class="space-y-4">
-
-
 
                     <!-- ── 1. قراءة عامة للجلسة وسلوك السيولة ── -->
 
@@ -3482,8 +3251,6 @@
 
                     </div>
 
-
-
                     <!-- ── 2. حركة المؤشرات الرئيسية والعملات ── -->
 
                     <div class="rounded-2xl border border-slate-800 p-4 space-y-3 shadow-lg" style="background:rgba(10,15,28,0.96)">
@@ -3568,8 +3335,6 @@
 
                         </div>
 
-
-
                         <!-- صناديق الاستثمار الإسلامية والذهب (Thndr / Funds) -->
 
                         <div class="pt-2">
@@ -3618,8 +3383,6 @@
 
                     </div>
 
-
-
                     <!-- ── 3. أسهم المحفظة والأسهم الشرعية (التحليل التفصيلي والقرارات) ── -->
 
                     <div class="rounded-2xl border border-slate-800 p-4 space-y-3.5 shadow-lg" style="background:rgba(10,15,28,0.96)">
@@ -3658,8 +3421,6 @@
 
                         </div>
 
-
-
                         <!-- Charts Visual Summary -->
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -3694,8 +3455,6 @@
 
                         </div>
 
-
-
                         <!-- Dynamic Stock Cards Container -->
 
                         <div id="drSec3CardsContainer" class="space-y-3">
@@ -3705,8 +3464,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- ── 4. أبرز الفرص والأسهم النشطة بالسوق ── -->
 
@@ -3725,8 +3482,6 @@
                             <span class="text-[10px] text-slate-400">شراء مؤسسي</span>
 
                         </div>
-
-
 
                         <!-- أعلى الأسهم صعوداً (Top Gainers) -->
 
@@ -3785,8 +3540,6 @@
                             </div>
 
                         </div>
-
-
 
                         <!-- الأسهم الأكثر تراجعاً (Top Decliners / Losers) -->
 
@@ -3848,8 +3601,6 @@
 
                         </div>` : ''}
 
-
-
                         <!-- الأسهم الأكثر نشاطاً بالقيمة -->
 
                         <div class="space-y-2 pt-2 border-t border-slate-800">
@@ -3879,8 +3630,6 @@
                         </div>
 
                     </div>
-
-
 
                     <!-- ── 5. سيناريو حركة المؤشرات وتوقعات جلسة الغد ── -->
 
@@ -3912,8 +3661,6 @@
 
                         };
 
-
-
                         return `
 
                         <div class="rounded-2xl border border-slate-800 p-4 space-y-3.5 shadow-lg" style="background:rgba(10,15,28,0.96)">
@@ -3932,8 +3679,6 @@
 
                             </div>
 
-
-
                             <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1 text-xs">
 
                                 <span class="font-bold text-sky-400">التوقع العام:</span>
@@ -3941,8 +3686,6 @@
                                 <p class="text-slate-300 leading-relaxed">${tmrwOutlook}</p>
 
                             </div>
-
-
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
 
@@ -3967,8 +3710,6 @@
                                     <p class="text-[10.5px] text-slate-400 italic">${egx30Target.note}</p>
 
                                 </div>
-
-
 
                                 <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
 
@@ -3996,8 +3737,6 @@
 
                         </div>
 
-
-
                         <!-- ── 6. نصائح إدارة المخاطر وتوجيهات التداول ── -->
 
                         <div class="rounded-2xl border border-slate-800 p-4 space-y-3.5 shadow-lg" style="background:rgba(10,15,28,0.96)">
@@ -4016,8 +3755,6 @@
 
                             </div>
 
-
-
                             <div class="space-y-2">
 
                                 ${(riskMgmt.tips || []).map((tip, i) => `
@@ -4032,8 +3769,6 @@
 
                             </div>
 
-
-
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[10.5px] text-slate-400 leading-relaxed italic">
 
                                 ${riskMgmt.disclaimer || ''}
@@ -4044,19 +3779,13 @@
 
                     })()}
 
-
-
                 </div>`;
 
             }
 
-
-
             // Put everything into drReportContainer
 
             box.innerHTML = `<div class="space-y-4">${topSummaryHtml}${mainContentHtml}</div>`;
-
-
 
             // If we are in 'all' or 'holdings' view, render Chart.js charts & Section 3 Slicers
 
@@ -4080,11 +3809,7 @@
 
         }
 
-
-
         window._drSec3CurrentMode = 'holdings';
-
-
 
         window.setDrSection3Slicer = function(mode) {
 
@@ -4095,8 +3820,6 @@
             updateDrSection3DOM(mode);
 
         };
-
-
 
         window.updateDrSection3DOM = function(mode) {
 
@@ -4116,8 +3839,6 @@
 
             if (!container) return;
 
-
-
             const rpt = (typeof DAILY_REPORTS !== 'undefined' && Array.isArray(DAILY_REPORTS)) 
 
                 ? (DAILY_REPORTS.find(r => r.date === _drSelectedDate) || DAILY_REPORTS[0]) 
@@ -4125,8 +3846,6 @@
                 : null;
 
             if (!rpt) return;
-
-
 
             const fmtP = (v, d = 2) => (typeof v === 'number' && !isNaN(v)) ? v.toFixed(d) : (v !== undefined && v !== null ? v : '—');
 
@@ -4156,11 +3875,7 @@
 
             };
 
-
-
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
-
-
 
             if (mode === 'all_sharia') {
 
@@ -4178,13 +3893,9 @@
 
                 if (sub2) sub2.innerText = "مناطق الزخم والقوة لكافة أسهم الشريعة";
 
-
-
                 // Build dynamic session universe for ALL Sharia stocks bound directly to active session report (rpt)
 
                 const sessionStockMap = new Map();
-
-
 
                 // 1. Portfolio owned stocks from active report session
 
@@ -4219,8 +3930,6 @@
                     });
 
                 });
-
-
 
                 // 2. Market opportunities top gainers
 
@@ -4260,8 +3969,6 @@
 
                 });
 
-
-
                 // 3. Market opportunities top losers
 
                 (rpt.marketOpportunities?.topLosers || []).forEach(s => {
@@ -4299,8 +4006,6 @@
                     }
 
                 });
-
-
 
                 // 4. Any remaining Sharia stocks from STOCKS_DATA (enriching them)
 
@@ -4356,13 +4061,9 @@
 
                     });
 
-
-
                 // Convert map to array and sort by % change descending
 
                 const allStocks = Array.from(sessionStockMap.values()).sort((a, b) => b.chg - a.chg);
-
-
 
                 const codes = allStocks.map(s => s.ticker);
 
@@ -4374,11 +4075,7 @@
 
                 const rsiColors = rsiVals.map(r => r >= 70 ? 'rgba(248,113,113,0.9)' : r <= 35 ? 'rgba(52,211,153,0.9)' : 'rgba(56,189,248,0.85)');
 
-
-
                 _renderDrCharts(codes, changes, rsiVals, barColors, rsiColors);
-
-
 
                 // Render all Sharia stock cards
 
@@ -4399,8 +4096,6 @@
                     const action = s.rec || (s.chg >= 2 ? 'شراء وتجميع وزخم' : (s.chg <= -2 ? 'مراقبة واقتناص قاع' : 'احتفاظ ومراقبة'));
 
                     const rsiVal = typeof s.rsi === 'number' ? s.rsi : 50;
-
-
 
                     return `
 
@@ -4458,8 +4153,6 @@
 
                 }).join('');
 
-
-
             } else {
 
                 // Holdings mode (default)
@@ -4476,8 +4169,6 @@
 
                 if (sub2) sub2.innerText = "مناطق الزخم لمسار المحفظة";
 
-
-
                 // Build datasets for OWNED holdings
 
                 const holdingStocks = (rpt.holdingsSection && rpt.holdingsSection.stocks) ? rpt.holdingsSection.stocks : [];
@@ -4492,11 +4183,7 @@
 
                 const rsiColors  = rsiVals.map(r => r >= 70 ? 'rgba(248,113,113,0.9)' : r <= 35 ? 'rgba(52,211,153,0.9)' : 'rgba(56,189,248,0.85)');
 
-
-
                 _renderDrCharts(codes, changes, rsiVals, barColors, rsiColors);
-
-
 
                 // Render owned holding stock cards
 
@@ -4517,8 +4204,6 @@
                     const action = h.tomorrowRec || 'احتفاظ ومتابعة الزخم';
 
                     const rsiVal = typeof h.rsi === 'number' ? h.rsi : 50;
-
-
 
                     return `
 
@@ -4579,8 +4264,6 @@
             }
 
         };
-
-
 
         function _renderDrCharts(codes, changes, rsiVals, barColors, rsiColors) {
 
@@ -4768,8 +4451,6 @@
 
         }
 
-
-
         // Auto-init when user navigates to dailyreport tab
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -4785,8 +4466,6 @@
             }, 1500);
 
         });
-
-
 
     function lockApplicationNow() {
 
@@ -4805,8 +4484,6 @@
         }
 
     }
-
-
 
     function updatePinDisplayUI() {
 
@@ -4832,8 +4509,6 @@
 
     }
 
-
-
     function enterPinDigit(digit) {
 
         if (_pinBuffer.length >= 12) return;
@@ -4843,8 +4518,6 @@
         _pinBuffer += digit;
 
         updatePinDisplayUI();
-
-
 
         // Auto-validate when buffer matches target length
 
@@ -4857,8 +4530,6 @@
         }
 
     }
-
-
 
     function backspacePinDigit() {
 
@@ -4874,8 +4545,6 @@
 
     }
 
-
-
     function clearPinInput() {
 
         triggerHaptic('light');
@@ -4885,8 +4554,6 @@
         updatePinDisplayUI();
 
     }
-
-
 
     function validatePinSubmission() {
 
@@ -4946,8 +4613,6 @@
 
     }
 
-
-
     function openChangePinModal() {
 
         triggerHaptic('selection');
@@ -4962,8 +4627,6 @@
 
         const st = document.getElementById('changePinStatus');
 
-
-
         if (cur) cur.value = '';
 
         if (nw) nw.value = '';
@@ -4976,8 +4639,6 @@
 
     }
 
-
-
     function closeChangePinModal() {
 
         triggerHaptic('light');
@@ -4987,8 +4648,6 @@
         if (modal) modal.classList.add('hidden');
 
     }
-
-
 
     function saveNewSecurityPin() {
 
@@ -5002,11 +4661,7 @@
 
         const st = document.getElementById('changePinStatus');
 
-
-
         if (!st) return;
-
-
 
         const expected = getMasterPin();
 
@@ -5020,8 +4675,6 @@
 
         }
 
-
-
         if (nw.length < 4 || nw.length > 12) {
 
             st.className = 'text-xs text-rose-400 font-bold block';
@@ -5031,8 +4684,6 @@
             return;
 
         }
-
-
 
         if (nw !== cnf) {
 
@@ -5044,8 +4695,6 @@
 
         }
 
-
-
         localStorage.setItem('egx_security_pin', nw);
 
         st.className = 'text-xs text-emerald-400 font-bold block';
@@ -5053,8 +4702,6 @@
         st.innerText = '✓ تم حفظ كلمة المرور الجديدة بنجاح!';
 
         triggerHaptic('success');
-
-
 
         setTimeout(() => {
 
@@ -5070,8 +4717,6 @@
 
     }
 
-
-
     // Call init on load
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -5079,8 +4724,6 @@
         setTimeout(initMasterSecurityLock, 50);
 
     });
-
-    
 
 window.addEventListener('load', () => {
 
@@ -5118,8 +4761,6 @@ window.addEventListener('load', () => {
 
                     .catch(err => console.log('[PWA] SW failed:', err));
 
-
-
                 let refreshing = false;
                 let hadController = Boolean(navigator.serviceWorker.controller);
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -5132,8 +4773,6 @@ window.addEventListener('load', () => {
             });
 
         }
-
-
 
         // PWA Install Prompt Handler
 
@@ -5154,8 +4793,6 @@ window.addEventListener('load', () => {
             }
 
         });
-
-
 
         function handlePwaInstallClick() {
 
@@ -5197,8 +4834,6 @@ window.addEventListener('load', () => {
 
         }
 
-
-
         function dismissInstallBanner() {
 
             const banner = document.getElementById('pwaInstallBanner');
@@ -5208,8 +4843,6 @@ window.addEventListener('load', () => {
             localStorage.setItem('pwa_banner_dismissed', 'true');
 
         }
-
-
 
         function openInstallModal(pushHistory = true) {
 
@@ -5222,8 +4855,6 @@ window.addEventListener('load', () => {
             updateBackUI();
 
         }
-
-
 
         function closeInstallModal(syncHistory = true) {
 
@@ -5238,8 +4869,6 @@ window.addEventListener('load', () => {
             }
 
         }
-
-
 
         // =========================================================================
 
@@ -5265,8 +4894,6 @@ window.addEventListener('load', () => {
 
         let currentActiveTab = 'portfolio';
 
-
-
         const ALL_APP_MODALS = [
 
             'periodPerformanceModal', 'thndrScannerModal', 'activityImageZoomModal',
@@ -5276,8 +4903,6 @@ window.addEventListener('load', () => {
             'installModal', 'holdingModal', 'stockChartModal'
 
         ];
-
-
 
         function isAnyModalOpen() {
 
@@ -5290,8 +4915,6 @@ window.addEventListener('load', () => {
             });
 
         }
-
-
 
         function getTopOpenModalId() {
 
@@ -5306,8 +4929,6 @@ window.addEventListener('load', () => {
             return null;
 
         }
-
-
 
         function pushAppState(type, data = {}) {
 
@@ -5329,8 +4950,6 @@ window.addEventListener('load', () => {
 
         }
 
-
-
         function navigateBack() {
 
             triggerHaptic('light');
@@ -5350,8 +4969,6 @@ window.addEventListener('load', () => {
             }
 
         }
-
-
 
         function executeBackAction() {
 
@@ -5405,8 +5022,6 @@ window.addEventListener('load', () => {
 
             }
 
-
-
             // 2. إذا كان المستخدم في تبويب فرعي (الرادار، التقييم، الأخبار، الأدوات)، يرجع لتبويب المحفظة
 
             if (currentActiveTab && currentActiveTab !== 'portfolio') {
@@ -5419,13 +5034,9 @@ window.addEventListener('load', () => {
 
             }
 
-
-
             return false;
 
         }
-
-
 
         // الاستماع لحدث popstate (الناتج عن زر الرجوع في الجوال، أو زر الرجوع بالمتصفح، أو السحب)
 
@@ -5435,15 +5046,11 @@ window.addEventListener('load', () => {
 
         });
 
-
-
         // تحديث حالة أزرار الرجوع في الواجهة وفي تليجرام
 
         function updateBackUI() {
 
             const hasBack = isAnyModalOpen() || (currentActiveTab && currentActiveTab !== 'portfolio');
-
-            
 
             // زر الرجوع في الترويسة الرئيسية
 
@@ -5456,8 +5063,6 @@ window.addEventListener('load', () => {
                 headerBackBtn.classList.add('hidden');
 
             }
-
-
 
             // زر الرجوع في تليجرام ويب آب (Telegram WebApp Native Back Button)
 
@@ -5481,8 +5086,6 @@ window.addEventListener('load', () => {
 
         }
 
-
-
         // دعم زر الرجوع في تليجرام
 
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
@@ -5498,8 +5101,6 @@ window.addEventListener('load', () => {
             } catch(e) {}
 
         }
-
-
 
         // =========================================================================
 
@@ -5527,8 +5128,6 @@ window.addEventListener('load', () => {
 
         });
 
-
-
         // أزرار الماوس الجانبية للرجوع (Mouse Back Button 3 & 4)
 
         window.addEventListener('auxclick', function(e) {
@@ -5543,8 +5142,6 @@ window.addEventListener('load', () => {
 
         });
 
-
-
         // زر Escape في لوحة المفاتيح
 
         window.addEventListener('keydown', function(e) {
@@ -5557,8 +5154,6 @@ window.addEventListener('load', () => {
 
         });
 
-
-
         function triggerHaptic(style = 'light') {
 
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
@@ -5568,8 +5163,6 @@ window.addEventListener('load', () => {
             }
 
         }
-
-
 
         function showToast(msg, type = 'info') {
 
@@ -5600,8 +5193,6 @@ window.addEventListener('load', () => {
             }, 3500);
 
         }
-
-
 
         // 2. Comprehensive Stocks & Funds Database
 
@@ -5687,14 +5278,9 @@ window.addEventListener('load', () => {
 
         ];
 
-
-
                 // 3. Valuation Scenarios Database (100% Comprehensive for all 38 EGX Assets)
 
         // VALUATION_DATA is loaded modularly from js/valuation-data.js
-
-
-
 
         // 4. User Portfolio State Management (Thndr Actual Holdings)
 
@@ -5718,8 +5304,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             { ticker: "EFID", name: "ايديتا للصناعات الغذائية", qty: 23, buy: 31.84, cur: 19.0, sector: "الأغذية والمشروبات", isFund: false },
 
-
-
             // 2. محفظة الصناديق والذهب (أسعار الشراء الفعلية للتكلفة - إفصاح 11 أكتوبر 2026 المعتمد)
 
             { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.5305, sector: "صناديق مؤشرات", isFund: true },
@@ -5734,8 +5318,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         ];
 
-
-
         var userHoldings = JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS));
 
         var THNDR_CASH = { clawdz: 0, cash: 0, clawdzPnl: 0 };
@@ -5744,13 +5326,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         window.userHoldings = userHoldings;
 
-
-
         let donutChartInstance = null;
-
-
-
-        
 
         // =========================================================================
 
@@ -5790,8 +5366,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-            
-
             const h = userHoldings.find(x => x.ticker === ticker);
 
             if (h && isNowVisible && typeof showToast === 'function') {
@@ -5805,8 +5379,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         };
-
-
 
         window.toggleAllBuyPrices = function(event) {
 
@@ -5846,10 +5418,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         };
 
-
-
-
-
         // Live Currency & Commodity Pricing Helpers (Defensive Guards)
 
         function getLiveUsdRate() {
@@ -5870,8 +5438,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function getLiveGoldGramRate() {
 
             // F08 Audit Fix: Consume authentic 24k price without arbitrary clamp
@@ -5891,8 +5457,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             return 4747.50;
 
         }
-
-
 
         // =========================================================================
 
@@ -5918,8 +5482,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         const USER_HOLDINGS_MASTER_KEY   = 'egx_user_holdings_master_v18';
 
-
-
         function getUserHoldingOverrides() {
 
             try {
@@ -5936,8 +5498,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function saveUserHoldingOverrides(overrides) {
 
             try {
@@ -5952,15 +5512,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function loadUserPortfolio() {
 
             // Load overrides layer first
 
             const overrides = getUserHoldingOverrides();
-
-
 
             // Load Master Portfolio or fallback (DATA-02: allow explicit empty array [] to remain empty)
 
@@ -5986,8 +5542,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             } catch(e) {}
 
-
-
             if (loaded === null || !Array.isArray(loaded)) {
 
                 // First time ever visiting (null), load demo holdings
@@ -5995,8 +5549,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 loaded = JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS));
 
             }
-
-
 
             // Standardize and normalize all fields with strict separation
 
@@ -6006,13 +5558,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const stock = STOCKS_DATA.find(s => s.ticker === h.ticker);
 
-
-
                 // Check if user has an immutable override for this asset
 
                 const userOv = overrides[h.ticker];
-
-
 
                 const qty_owned = (userOv && userOv.qty_owned !== undefined)
 
@@ -6020,15 +5568,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     : (h.qty_owned !== undefined ? parseFloat(h.qty_owned) : (h.qty !== undefined ? parseFloat(h.qty) : (actual ? actual.qty : 0)));
 
-
-
                 const avg_unit_cost = (userOv && userOv.avg_unit_cost !== undefined)
 
                     ? parseFloat(userOv.avg_unit_cost)
 
                     : (h.avg_unit_cost !== undefined ? parseFloat(h.avg_unit_cost) : (h.buy !== undefined ? parseFloat(h.buy) : (actual ? actual.buy : 0)));
-
-
 
                 const manual_val = (userOv && userOv.manual_valuation_price !== undefined)
 
@@ -6036,15 +5580,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     : (h.manual_valuation_price !== undefined ? parseFloat(h.manual_valuation_price) : null);
 
-
-
                 const val_mode = (userOv && userOv.valuation_mode)
 
                     ? userOv.valuation_mode
 
                     : (h.valuation_mode || 'auto');
-
-
 
                 // Determine official market quote / NAV
 
@@ -6056,8 +5596,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 // Effective display price
 
                 const cur_val = (val_mode === 'manual' && manual_val && manual_val > 0)
@@ -6065,8 +5603,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     ? manual_val
 
                     : market_quote;
-
-
 
                 return {
 
@@ -6102,8 +5638,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             // Load Cash and Clawdz safely
 
             try {
@@ -6122,15 +5656,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             } catch(e) {}
 
-
-
             window.userHoldings = userHoldings;
 
             renderHoldingsTable();
 
         }
-
-
 
         function saveUserPortfolio() {
 
@@ -6184,8 +5714,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 saveUserHoldingOverrides(overrides);
 
-
-
                 // Save to Master Key & legacy keys for compatibility (DATA-03 unified)
 
                 const serialized = JSON.stringify(userHoldings || []);
@@ -6214,8 +5742,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         // DATA-05: Multi-Tab synchronization via storage event listener
 
         try { loadUserPortfolio(); } catch(e) {}
@@ -6238,8 +5764,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         });
 
-
-
         function resetPortfolioToDefault() {
 
             if (confirm("هل تريد استعادة محفظة الأصول الأصلية (الكميات وأسعار الشراء الفعلية)؟")) {
@@ -6257,10 +5781,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
-
-        
 
         // =========================================================================
 
@@ -6290,8 +5810,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         let _holdingsFilter = { stocks: 'all', funds: 'all' };
 
-
-
         function setPortfolioViewMode(mode) {
 
             triggerHaptic('selection');
@@ -6304,8 +5822,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function updatePortfolioViewModeUI() {
 
             const mode = (portfolioViewMode === 'compact') ? 'compact' : 'cards';
@@ -6313,8 +5829,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const btnCards = document.getElementById('viewModeCardsBtn');
 
             const btnCompact = document.getElementById('viewModeCompactBtn');
-
-
 
             if (btnCards) {
 
@@ -6344,8 +5858,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const sCards = document.getElementById('stocksHoldingsCardsContainer');
 
             const sCompact = document.getElementById('stocksHoldingsSmartContainer');
@@ -6357,8 +5869,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const gCards = document.getElementById('goldHoldingsCardsContainer');
 
             const gCompact = document.getElementById('goldHoldingsSmartContainer');
-
-
 
             if (sCards) sCards.classList.toggle('hidden', mode !== 'cards');
 
@@ -6373,12 +5883,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             if (gCompact) gCompact.classList.toggle('hidden', mode !== 'compact');
 
         }
-
-
-
-
-
-
 
         function setHoldingsFilter(type, filter, btn) {
 
@@ -6403,8 +5907,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             renderHoldingsTable();
 
         }
-
-
 
         // =========================================================================
 
@@ -6432,8 +5934,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             const isGold = isGoldAsset(h);
 
             const typeLabel = isFund ? 'وثيقة' : (isGold ? 'جرام' : 'سهم');
@@ -6449,8 +5949,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 : 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800/60';
 
             const buyDisplay = (parseFloat(h.buy)||0) < 1 ? (parseFloat(h.buy)||0).toFixed(4) : (parseFloat(h.buy)||0).toFixed(2);
-
-
 
             card.innerHTML = `
 
@@ -6496,8 +5994,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     </div>
 
-
-
                     <div class="text-left shrink-0">
 
                         <div class="font-mono font-black text-sm sm:text-base text-slate-900 dark:text-white">
@@ -6526,8 +6022,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 </div>
 
-
-
                 <!-- سعر الشراء المنفذ داخل البطاقة (يظهر ويختفي بالنقر على السهم) -->
 
                 <div id="buyPriceCard_${h.ticker}" class="stock-buy-price-card hidden py-1.5 px-3 rounded-xl bg-amber-50 dark:bg-amber-950/80 border border-amber-300/80 dark:border-amber-700/60 text-amber-800 dark:text-amber-300 text-xs font-mono font-bold flex items-center justify-between shadow-xs">
@@ -6543,8 +6037,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     <span class="text-slate-500 dark:text-slate-400 text-[10.5px] font-normal">إجمالي التكلفة: ${Math.round(cost).toLocaleString()} ج</span>
 
                 </div>
-
-
 
                 <!-- 3 Performance Pillars: Holding Qty | Buy Cost | Current Price -->
 
@@ -6592,8 +6084,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 </div>
 
-
-
                 <!-- Weight Allocation Bar -->
 
                 <div class="space-y-1">
@@ -6613,8 +6103,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     </div>
 
                 </div>
-
-
 
                 <!-- Card Footer Actions -->
 
@@ -6642,8 +6130,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         // =========================================================================
 
         // COMPACT LIST ROW RENDERER (النمط المدمج فائق الكثافة بدون تمرير أفقي)
@@ -6666,8 +6152,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             const diffPrice = (h.cur || 0) - (h.buy || 0);
 
             const badgeColor = isFund ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-800/60' : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/90 dark:text-slate-300 dark:border-slate-700/60';
@@ -6677,8 +6161,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const buyDisplay = (parseFloat(h.buy)||0) < 1 ? (parseFloat(h.buy)||0).toFixed(4) : (parseFloat(h.buy)||0).toFixed(2);
 
             const curDisplay = isFund ? (parseFloat(h.cur)||0).toFixed(4) : (parseFloat(h.cur)||0).toFixed(2);
-
-
 
             tr.innerHTML = `
 
@@ -6700,8 +6182,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                         </div>
 
-
-
                         <!-- سعر الشراء يظهر داخل السهم عند الضغط على اسم السهم -->
 
                         <div id="buyPrice_${h.ticker}" class="stock-buy-price-badge hidden mt-1 px-1.5 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/80 border border-amber-300/80 dark:border-amber-700/60 text-amber-800 dark:text-amber-300 text-[9px] font-mono font-bold whitespace-nowrap shadow-xs">
@@ -6713,8 +6193,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                             <span class="text-slate-400 dark:text-slate-500 text-[7.5px] font-normal mr-0.5">(${Math.round(cost).toLocaleString()} ج)</span>
 
                         </div>
-
-
 
                         <div class="flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400">
 
@@ -6822,8 +6300,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function isCurrencyAsset(h) {
 
             if (!h) return false;
@@ -6832,8 +6308,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function isGoldAsset(h) {
 
             if (!h) return false;
@@ -6841,8 +6315,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             return h.ticker === 'THNDR_GOLD' || (h.sector && h.sector.includes('الذهب الخالص'));
 
         }
-
-
 
         function isFundAsset(h) {
 
@@ -6858,8 +6330,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function isNonEquityAsset(h) {
 
             if (!h) return false;
@@ -6867,8 +6337,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             return isFundAsset(h) || isGoldAsset(h) || isCurrencyAsset(h) || h.ticker === 'USD_EGP' || h.type === 'fund' || h.type === 'currency';
 
         }
-
-
 
         function renderHoldingsTable() {
 
@@ -6886,15 +6354,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const goldSmartBody   = document.getElementById('goldHoldingsSmartBody');
 
-
-
             const stocksCards     = document.getElementById('stocksHoldingsCardsContainer');
 
             const fundsCards      = document.getElementById('fundsHoldingsCardsContainer');
 
             const goldCards       = document.getElementById('goldHoldingsCardsContainer');
-
-
 
             if (stocksSmartBody) stocksSmartBody.innerHTML = '';
 
@@ -6902,15 +6366,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (goldSmartBody)   goldSmartBody.innerHTML = '';
 
-
-
             if (stocksCards)     stocksCards.innerHTML = '';
 
             if (fundsCards)      fundsCards.innerHTML = '';
 
             if (goldCards)       goldCards.innerHTML = '';
-
-
 
             let totalStocksVal = 0, totalStocksCost = 0;
 
@@ -6920,8 +6380,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const sectorWeights = {};
 
-
-
             // Separate into 3 distinct lists: Stocks (8), Funds (4), Gold (1)
 
             const stocksList = [];
@@ -6930,15 +6388,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const goldList   = [];
 
-
-
             userHoldings.forEach((h) => {
 
                 const stock = STOCKS_DATA.find(s => s.ticker === h.ticker);
 
                 const actual = THNDR_ACTUAL_HOLDINGS.find(s => s.ticker === h.ticker);
-
-                
 
                 // أسعار لحظية معلنة طبقا للبورصة المصرية وصناديق الاستثمار
 
@@ -6958,8 +6412,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 h.liveCur = liveClose;
 
                 if (h.valuation_mode === 'manual' && h.manual_valuation_price && h.manual_valuation_price > 0) {
@@ -6971,8 +6423,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     h.cur = liveClose;
 
                 }
-
-
 
                 if (isGoldAsset(h)) {
 
@@ -6989,8 +6439,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             });
-
-
 
             // Sorter helper based on active column and direction
 
@@ -7026,8 +6474,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     const pctB = costB > 0 ? (pnlB / costB) : 0;
 
-
-
                     switch(st.col) {
 
                         case 'ticker': 
@@ -7060,13 +6506,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             applyListSort(stocksList, 'stocks');
 
             applyListSort(fundsList, 'funds');
-
-
 
             // Exact Totals Computation
 
@@ -7094,8 +6536,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             // Filter counts for stocks
 
             let stocksGainers = 0, stocksLosers = 0;
@@ -7119,8 +6559,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             if (sLEl) sLEl.innerText = `(${stocksLosers})`;
 
             if (sAEl) sAEl.innerText = `(${stocksList.length})`;
-
-
 
             // Filter counts for funds
 
@@ -7146,13 +6584,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (fAEl) fAEl.innerText = `(${fundsList.length})`;
 
-
-
             // Allocation Ribbons
 
             const ribbonColors = ['#10b981', '#0ea5e9', '#6366f1', '#f59e0b', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316', '#06b6d4', '#84cc16'];
-
-
 
             // Render Stocks Allocation Ribbon
 
@@ -7202,8 +6636,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // Render Funds Allocation Ribbon
 
             const fRibbon = document.getElementById('fundsAllocationRibbon');
@@ -7252,8 +6684,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 1. Render Stocks Elements
 
             stocksList.forEach((h, idx) => {
@@ -7270,13 +6700,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const weightPct = totalStocksVal > 0 ? (mVal / totalStocksVal) * 100 : 0;
 
-
-
                 const sec = h.sector || 'أخرى';
 
                 sectorWeights[sec] = (sectorWeights[sec] || 0) + mVal;
-
-
 
                 const f = _holdingsFilter.stocks;
 
@@ -7284,21 +6710,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 if (!matchesFilter) return;
 
-
-
                 const mobileCard = createHoldingMobileCard(h, idx, mVal, cost, pnl, pnlPct, isP, false, weightPct);
 
                 if (stocksCards) stocksCards.appendChild(mobileCard);
-
-
 
                 const smartRow = createHoldingSmartRow(h, idx, mVal, cost, pnl, pnlPct, isP, weightPct, false);
 
                 if (stocksSmartBody) stocksSmartBody.appendChild(smartRow);
 
             });
-
-
 
             // 2. Render Funds Elements
 
@@ -7316,13 +6736,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const weightPct = totalFundsVal > 0 ? (mVal / totalFundsVal) * 100 : 0;
 
-
-
                 const sec = h.sector || 'صناديق استثمار';
 
                 sectorWeights[sec] = (sectorWeights[sec] || 0) + mVal;
-
-
 
                 const f = _holdingsFilter.funds;
 
@@ -7330,21 +6746,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 if (!matchesFilter) return;
 
-
-
                 const mobileCard = createHoldingMobileCard(h, idx, mVal, cost, pnl, pnlPct, isP, true, weightPct);
 
                 if (fundsCards) fundsCards.appendChild(mobileCard);
-
-
 
                 const smartRow = createHoldingSmartRow(h, idx, mVal, cost, pnl, pnlPct, isP, weightPct, true);
 
                 if (fundsSmartBody) fundsSmartBody.appendChild(smartRow);
 
             });
-
-
 
             // 3. Render Gold Elements (قائمة منفصلة لذهب ثاندر)
 
@@ -7362,25 +6772,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const weightPct = 100;
 
-
-
                 sectorWeights['الذهب الخالص 24'] = (sectorWeights['الذهب الخالص 24'] || 0) + mVal;
-
-
 
                 const goldCard = createHoldingMobileCard(h, idx, mVal, cost, pnl, pnlPct, isP, false, weightPct);
 
                 if (goldCards) goldCards.appendChild(goldCard);
-
-
 
                 const goldRow = createHoldingSmartRow(h, idx, mVal, cost, pnl, pnlPct, isP, weightPct, false);
 
                 if (goldSmartBody) goldSmartBody.appendChild(goldRow);
 
             });
-
-
 
             // Subtotals computation
 
@@ -7398,8 +6800,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const fundsPnl = totalFundsVal - totalFundsCost;
 
             const fundsPnlPct = totalFundsCost > 0 ? (fundsPnl / totalFundsCost) * 100 : 0;
@@ -7413,8 +6813,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 fundsBadge.className = `text-[10px] font-mono font-medium px-2 py-0.5 rounded border ${fundsPnl >= 0 ? 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800' : 'bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800'}`;
 
             }
-
-
 
             const goldPnl = totalGoldVal - totalGoldCost;
 
@@ -7430,8 +6828,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // Total Invested & Thndr Grand Wealth
 
             const totalInvestedVal = totalStocksVal + totalFundsVal + totalGoldVal;
@@ -7439,8 +6835,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const totalInvestedCost = totalStocksCost + totalFundsCost + totalGoldCost;
 
             const totalInvestedPnl = totalInvestedVal - totalInvestedCost;
-
-
 
             const grandWealth = totalInvestedVal + (THNDR_CASH.clawdz || 0) + (THNDR_CASH.cash || 0);
 
@@ -7450,13 +6844,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const grandReturnPct = grandCost > 0 ? (grandPnl / grandCost) * 100 : 0;
 
-
-
             const grandWealthElem = document.getElementById('p_thndr_grand_wealth');
 
             if (grandWealthElem) grandWealthElem.innerText = Math.round(grandWealth).toLocaleString();
-
-
 
             // Auto-sync calculated tools with actual grand wealth
 
@@ -7476,15 +6866,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // Dynamically update the 4 sub-balance cards
 
             const cashElem = document.getElementById('p_thndr_cash');
 
             if (cashElem) cashElem.innerText = (THNDR_CASH.cash || 0).toFixed(2) + ' ج';
-
-
 
             const stocksCardElem = document.getElementById('p_thndr_stocks_card');
 
@@ -7520,8 +6906,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const fundsCardElem = document.getElementById('p_thndr_funds_card');
 
             if (fundsCardElem) {
@@ -7556,8 +6940,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // Ensure gold is always calculated with verified 7,015.00 EGP per gram if totalGoldVal was corrupted by old cache
 
             const finalGoldVal = (totalGoldVal > 10) ? totalGoldVal : (0.0081 * 7015.00);
@@ -7567,8 +6949,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const finalGoldPnl = finalGoldVal - finalGoldCost;
 
             const finalGoldPnlPct = finalGoldCost > 0 ? (finalGoldPnl / finalGoldCost) * 100 : 0;
-
-
 
             const goldCardElem = document.getElementById('p_thndr_gold_card');
 
@@ -7604,13 +6984,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const clawdzElem = document.getElementById('p_thndr_clawdz');
 
             if (clawdzElem) clawdzElem.innerText = (THNDR_CASH.clawdz || 0).toFixed(2) + ' ج';
-
-
 
             const cashTopCard = document.getElementById('p_thndr_cash_top_card');
 
@@ -7619,8 +6995,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 cashTopCard.innerText = (THNDR_CASH.cash || 0).toFixed(2) + ' ج';
 
             }
-
-
 
             const investedElem = document.getElementById('p_thndr_invested');
 
@@ -7638,8 +7012,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const isGrandP = grandPnl >= 0;
 
             const grandBadge = document.getElementById('p_thndr_grand_badge');
@@ -7649,8 +7021,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 grandBadge.className = `inline-flex items-center gap-1 text-[11px] font-bold font-mono px-2.5 py-0.5 rounded-full transition-colors ${isGrandP ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-rose-400 bg-rose-500/10 border border-rose-500/20'}`;
 
             }
-
-
 
             const grandPnlElem = document.getElementById('p_thndr_grand_pnl');
 
@@ -7662,8 +7032,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const grandReturnElem = document.getElementById('p_thndr_grand_return');
 
             if (grandReturnElem) {
@@ -7673,8 +7041,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 grandReturnElem.innerHTML = `<span dir="ltr">(${sign}${grandReturnPct.toFixed(2)}%)</span>`;
 
             }
-
-
 
             const grandLabelElem = document.getElementById('p_thndr_grand_label');
 
@@ -7686,8 +7052,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // Currency & Commodities Equivalence (Live Verified Rates)
 
             const usdRate = getLiveUsdRate();
@@ -7698,8 +7062,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const goldGrams = goldRate > 0 ? (grandWealth / goldRate) : 0;
 
-
-
             const usdElem = document.getElementById('p_thndr_usd_val');
 
             if (usdElem) usdElem.innerText = `$${Math.round(usdVal).toLocaleString()} USD`;
@@ -7707,8 +7069,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const goldElem = document.getElementById('p_thndr_gold_val');
 
             if (goldElem) goldElem.innerText = `${goldGrams.toFixed(1)} جم ذهب`;
-
-
 
             const sarRate = 13.90;
 
@@ -7736,17 +7096,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             dynamicScore = Math.min(100, dynamicScore);
 
-
-
             const healthElem = document.getElementById('p_thndr_health_score');
 
             if (healthElem) healthElem.innerText = `صحة الثروة: ${dynamicScore}/100`;
-
-
-
-
-
-
 
             // Active count badge
 
@@ -7754,13 +7106,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (activeCountBadge) activeCountBadge.innerText = `${userHoldings.length} أصل`;
 
-
-
             // Apply view mode visibility (cards vs table)
 
             updatePortfolioViewModeUI();
-
-
 
             // Redraw Donut Chart with Actual Sectors (including Clawdz/Cash)
 
@@ -7770,23 +7118,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             updateDonutChart(allWeights);
 
-
-
             // Render Dynamic Sector Breakdown Bars & Concentration Risk Alert
 
             renderSectorDistribution(allWeights, grandWealth);
 
         }
 
-
-
         function updateDonutChart(sectorWeights) {
 
             const ctx = document.getElementById('portfolioDonutChart');
 
             if (!ctx) return;
-
-
 
             // Safe fallback: calculate sectorWeights if missing or invalid
 
@@ -7816,23 +7158,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const labels = Object.keys(sectorWeights);
 
             const data = Object.values(sectorWeights);
 
             const palette = ['#10b981', '#0ea5e9', '#f59e0b', '#8b5cf6', '#ec4899', '#64748b', '#14b8a6', '#f97316'];
 
-
-
             if (donutChartInstance) {
 
                 try { donutChartInstance.destroy(); } catch(e) {}
 
             }
-
-
 
             try {
 
@@ -7888,8 +7224,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         // 4.2 Dynamic Sector Breakdown & Concentration Risk Radar
 
         function renderSectorDistribution(sectorWeights, totalMarketVal) {
@@ -7901,8 +7235,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const statusBadge = document.getElementById('portfolioBalanceStatusBadge');
 
             if (!container) return;
-
-
 
             container.innerHTML = '';
 
@@ -7916,8 +7248,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }).filter(sec => sec.val > 0).sort((a, b) => b.val - a.val);
 
-
-
             if (sectors.length === 0) {
 
                 container.innerHTML = '<div class="text-slate-500 text-center py-2 text-xs">لا توجد أصول لعرض توزيع القطاعات</div>';
@@ -7928,11 +7258,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const palette = ['#0ea5e9', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#64748b', '#14b8a6', '#f97316'];
-
-
 
             sectors.forEach((sec, idx) => {
 
@@ -7969,8 +7295,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 container.appendChild(row);
 
             });
-
-
 
             // Dynamic Asset Breakdown Calculation
 
@@ -8009,8 +7333,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const fundsPct  = dGrandTotal > 0 ? ((dFundsVal / dGrandTotal) * 100).toFixed(1) : "0.0";
 
             const goldPct   = dGrandTotal > 0 ? ((dGoldVal / dGrandTotal) * 100).toFixed(1) : "0.0";
-
-
 
             // Status message
 
@@ -8130,8 +7452,6 @@ const THNDR_ACTUAL_HOLDINGS = [
         }
         window.renderIndividualAssetDistribution = renderIndividualAssetDistribution;
 
-
-
         // 4.3 Advanced Buy / Sell Transactions Management Engine
 
         function switchTransTab(tab) {
@@ -8150,23 +7470,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const imageBtn = document.getElementById('tabTransImageBtn');
 
-
-
             manualView.classList.add('hidden');
 
             excelView.classList.add('hidden');
 
             imageView.classList.add('hidden');
 
-
-
             [manualBtn, excelBtn, imageBtn].forEach(b => {
 
                 b.className = "flex-1 py-1.5 rounded-lg font-bold text-slate-400 hover:text-slate-200 transition active:scale-95 flex items-center justify-center gap-1";
 
             });
-
-
 
             if (tab === 'manual') {
 
@@ -8192,8 +7506,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function setTransType(type) {
 
             triggerHaptic('light');
@@ -8212,8 +7524,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const execLabel = document.getElementById('btnExecuteTransLabel');
 
-
-
             // Reset all styles
 
             if (buyBtn) buyBtn.className = "py-2 px-2 rounded-xl border font-bold text-xs flex items-center justify-center gap-1 transition bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200";
@@ -8223,8 +7533,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             if (adjustBtn) adjustBtn.className = "py-2 px-2 rounded-xl border font-bold text-xs flex items-center justify-center gap-1 transition bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200";
 
             if (maxSellBtn) maxSellBtn.classList.add('hidden');
-
-
 
             if (type === 'buy') {
 
@@ -8258,8 +7566,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function onTransStockChange() {
 
             const select = document.getElementById('modalHoldingStock');
@@ -8270,15 +7576,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const stock = STOCKS_DATA.find(s => s.ticker === ticker);
 
-
-
             const curQty = holding ? holding.qty : 0;
 
             const curAvg = holding ? holding.buy : 0;
 
             const curPrice = stock ? stock.close : (holding ? holding.cur : 0);
-
-
 
             document.getElementById('transCurrentQtyText').innerText = curQty.toLocaleString();
 
@@ -8288,13 +7590,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('modalHoldingBuyPrice').value = curPrice > 0 ? (parseFloat(curPrice)||0).toFixed(2) : (curAvg > 0 ? (parseFloat(curAvg)||0).toFixed(2) : "50.00");
 
-
-
             updateTransImpactPreview();
 
         }
-
-
 
         function fillMaxSellQty() {
 
@@ -8320,8 +7618,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function updateTransImpactPreview() {
 
             const type = document.getElementById('transTypeInput').value;
@@ -8336,15 +7632,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const fee = parseFloat(document.getElementById('modalHoldingFee')?.value) || 0;
 
-
-
             const holding = userHoldings.find(h => h.ticker === ticker);
 
             const curQty = holding ? holding.qty : 0;
 
             const curAvg = holding ? holding.buy : 0;
-
-
 
             const totalValElem = document.getElementById('transImpactTotalVal');
 
@@ -8353,8 +7645,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const secValElem = document.getElementById('transImpactSecondaryVal');
 
             const secLabelElem = document.getElementById('transImpactSecondaryLabel');
-
-
 
             if (type === 'buy') {
 
@@ -8365,8 +7655,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 totalValElem.innerText = `${totalCost.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ج.م`;
 
                 totalValElem.className = "font-bold text-white font-mono";
-
-
 
                 const newTotalQty = curQty + qty;
 
@@ -8387,8 +7675,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 totalValElem.innerText = `${totalProceeds.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ج.م`;
 
                 totalValElem.className = "font-bold text-white font-mono";
-
-
 
                 if (curQty > 0) {
 
@@ -8432,8 +7718,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function openTransactionModal(defaultTicker = '', defaultType = 'buy', pushHistory = true) {
 
             triggerHaptic('medium');
@@ -8442,13 +7726,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('modalHoldingIndex').value = "-1";
 
-
-
             const select = document.getElementById('modalHoldingStock');
 
             select.innerHTML = '';
-
-
 
             // Group: Sharia Stocks
 
@@ -8469,8 +7749,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             });
 
             select.appendChild(optgroupStocks);
-
-
 
             // Group: Sharia Funds & Currencies
 
@@ -8514,15 +7792,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             select.appendChild(optgroupFunds);
 
-
-
             if (defaultTicker) {
 
                 select.value = defaultTicker;
 
             }
-
-
 
             select.disabled = false;
 
@@ -8532,21 +7806,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             onTransStockChange();
 
-
-
             document.getElementById('holdingModal').classList.remove('hidden');
 
         }
-
-
 
         function openAddHoldingModal() {
 
             openTransactionModal('', 'buy');
 
         }
-
-
 
         function editHolding(idx) {
 
@@ -8559,8 +7827,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             editHoldingDirect(h.ticker);
 
         }
-
-
 
         function toggleValuationModeInputs() {
 
@@ -8577,8 +7843,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
 
         function editHoldingDirect(ticker) {
 
@@ -8614,8 +7878,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function closeHoldingModal(syncHistory = true) {
 
             const select = document.getElementById('modalHoldingStock');
@@ -8634,8 +7896,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function saveHoldingFromModal() {
 
             triggerHaptic('medium');
@@ -8648,8 +7908,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const price = parseFloat(document.getElementById('modalHoldingBuyPrice').value) || 0;
 
-
-
             if (qty <= 0 || price <= 0) {
 
                 alert('يرجى إدخال كمية وسعر تنفيذ صحيحين أكبر من الصفر');
@@ -8658,8 +7916,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const stock = STOCKS_DATA.find(s => s.ticker === ticker);
 
             let name = stock ? stock.name : ticker;
@@ -8667,8 +7923,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             let sector = stock ? stock.sector : 'أخرى';
 
             let cur = stock ? stock.close : price;
-
-
 
             // Fund fallbacks
 
@@ -8682,11 +7936,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             else if (ticker === 'NMF') { name = "نعيم مصر للشريعة (NMF)"; sector = "صناديق الأسهم الشرعية"; }
 
-
-
             const existingIdx = userHoldings.findIndex(x => x.ticker === ticker);
-
-
 
             if (type === 'buy') {
 
@@ -8826,15 +8076,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const oldBuy = exist ? (exist.avg_unit_cost !== undefined ? exist.avg_unit_cost : exist.buy) : 0;
 
-
-
                 const isManualVal = document.getElementById('valModeManual')?.checked;
 
                 const manualValPrice = isManualVal ? (parseFloat(document.getElementById('modalManualValPrice')?.value) || null) : null;
 
                 const valMode = isManualVal && manualValPrice > 0 ? 'manual' : 'auto';
-
-
 
                 if (exist) {
 
@@ -8882,8 +8128,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 if (typeof logUserActivity === 'function') {
 
                     logUserActivity('adjust', `تعديل مباشر: ${name} (${ticker}) ✏️`, `تم تعديل الرصيد مباشرة: الكمية (${oldQty} ← ${qty})، سعر الشراء (${oldBuy.toFixed(2)} ← ${price.toFixed(2)} ج).`, {
@@ -8896,15 +8140,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             closeHoldingModal();
 
             saveUserPortfolio();
 
         }
-
-
 
         function deleteHolding(idx) {
 
@@ -8938,13 +8178,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         // 4.4 Excel & CSV Import Engine
 
         let parsedExcelData = [];
-
-
 
         function downloadSampleExcelTemplate() {
 
@@ -8964,8 +8200,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 '"أزيموت جولد","AZG","الذهب وصناديق التحوط",100,22.50,23.96,2396.00,146.00,6.49%\n';
 
-
-
             const blob = new Blob([sampleCsv], { type: 'text/csv;charset=utf-8;' });
 
             const url = URL.createObjectURL(blob);
@@ -8984,8 +8218,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function handleExcelFileUpload(event) {
 
             const file = event.target.files[0];
@@ -8994,13 +8226,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             triggerHaptic('medium');
 
-
-
             const reader = new FileReader();
 
             const isBinary = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
-
-
 
             reader.onload = function(e) {
 
@@ -9046,8 +8274,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     }
 
-
-
                     parseNormalizedExcelRows(rows);
 
                 } catch(err) {
@@ -9060,8 +8286,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             if (isBinary) {
 
                 reader.readAsArrayBuffer(file);
@@ -9073,8 +8297,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
 
         function parseNormalizedExcelRows(rawRows) {
 
@@ -9094,15 +8316,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const buyStr = r['سعر_الشراء'] || r['سعر الشراء'] || r['سعر_التكلفة'] || r['التكلفة'] || r['buy'] || r['Buy'] || r['Cost'] || r['Price'] || '0';
 
-                
-
                 const cleanTicker = ticker.toString().trim().toUpperCase();
 
                 const qty = parseFloat(qtyStr.toString().replace(/,/g, '')) || 0;
 
                 const buy = parseFloat(buyStr.toString().replace(/,/g, '')) || 0;
-
-
 
                 if (cleanTicker && qty > 0 && buy > 0) {
 
@@ -9113,8 +8331,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     const cleanName = stock ? stock.name : name;
 
                     const cleanSec = stock ? stock.sector : (sector || 'أخرى');
-
-
 
                     parsedExcelData.push({
 
@@ -9136,8 +8352,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             if (parsedExcelData.length === 0) {
 
                 alert("لم يتم العثور على حركات صالحة في الملف. يرجى التأكد من وجود أعمدة: الرمز، الكمية، وسعر الشراء.");
@@ -9146,13 +8360,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             renderExcelPreview();
 
         }
-
-
 
         function renderExcelPreview() {
 
@@ -9162,13 +8372,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const countSpan = document.getElementById('excelParsedRowCount');
 
-
-
             tbody.innerHTML = '';
 
             countSpan.innerText = parsedExcelData.length;
-
-
 
             parsedExcelData.forEach(item => {
 
@@ -9181,8 +8387,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     '<span class="bg-amber-950 text-amber-400 border border-amber-800 px-1.5 py-0.5 rounded text-[9px]">تحديث رصيد</span>' :
 
                     '<span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-1.5 py-0.5 rounded text-[9px]">سهم جديد</span>';
-
-
 
                 const tr = document.createElement('tr');
 
@@ -9210,15 +8414,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             container.classList.remove('hidden');
 
             showToast(`تم فحص الملف: ${parsedExcelData.length} أصل جاهز للتطبيق`, "success");
 
         }
-
-
 
         function clearParsedExcelData() {
 
@@ -9234,19 +8434,13 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function applyParsedExcelTransactions() {
 
             if (parsedExcelData.length === 0) return;
 
             triggerHaptic('medium');
 
-
-
             const replace = confirm("هل ترغب في استبدال المحفظة الحالية بالكامل بمحتويات هذا الملف؟\n\nاضغط [موافق / OK] لاستبدال المحفظة بالكامل بالملف.\nاضغط [إلغاء / Cancel] لدمج الحركات وتحديث الأرصدة القائمة.");
-
-
 
             if (replace) {
 
@@ -9308,8 +8502,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             clearParsedExcelData();
 
             closeHoldingModal();
@@ -9317,8 +8509,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             saveUserPortfolio();
 
         }
-
-
 
         // 4.5 Image / Receipt OCR Parser Engine
 
@@ -9366,8 +8556,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function handleReceiptImageUpload(event) {
 
             const file = event.target.files[0];
@@ -9376,23 +8564,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             triggerHaptic('medium');
 
-
-
             const progress = document.getElementById('ocrProgressIndicator');
 
             const statusMsg = document.getElementById('ocrStatusMsg');
 
             const extractedForm = document.getElementById('ocrExtractedForm');
 
-
-
             progress.classList.remove('hidden');
 
             extractedForm.classList.add('hidden');
 
             statusMsg.innerText = "جاري تهيئة محرك الذكاء الاصطناعي الضوئي (OCR)...";
-
-
 
             const reader = new FileReader();
 
@@ -9454,15 +8636,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function parseExtractedReceiptText(rawText) {
 
             populateOcrStockSelect();
 
             const text = (rawText || '').toLowerCase();
-
-
 
             let transType = 'buy';
 
@@ -9473,8 +8651,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
             document.getElementById('ocrTransType').value = transType;
-
-
 
             let matchedTicker = 'TMGH';
 
@@ -9500,11 +8676,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (text.includes('أبوظبي') || text.includes('adib')) matchedTicker = 'ADIB';
 
-
-
             document.getElementById('ocrStockSelect').value = matchedTicker;
-
-
 
             const qtyMatch = text.match(/(?:الكمية|عدد|أسهم|shares|qty)[:\s]*(\d+[\d,]*)/i) || text.match(/\b([1-9]\d{1,4})\s*(?:سهم|وثيقة)/i);
 
@@ -9517,8 +8689,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 document.getElementById('ocrQtyInput').value = "100";
 
             }
-
-
 
             const priceMatch = text.match(/(?:السعر|سعر|price)[:\s]*(\d+\.?\d*)/i) || text.match(/(\d+\.\d{2})\s*(?:ج\.م|جنيه|egp)/i);
 
@@ -9534,15 +8704,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             document.getElementById('ocrExtractedForm').classList.remove('hidden');
 
             showToast("تم استخراج بيانات الفاتورة بنجاح! يرجى مراجعتها والاعتماد", "success");
 
         }
-
-
 
         function fallbackOcrDemoExtraction() {
 
@@ -9562,8 +8728,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function applyOcrExtractedTransaction() {
 
             triggerHaptic('medium');
@@ -9576,8 +8740,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const price = parseFloat(document.getElementById('ocrPriceInput').value) || 0;
 
-
-
             if (qty <= 0 || price <= 0) {
 
                 alert("يرجى التأكد من صحة الكمية والسعر المستخرجين");
@@ -9585,8 +8747,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 return;
 
             }
-
-
 
             document.getElementById('transTypeInput').value = type;
 
@@ -9596,13 +8756,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('modalHoldingBuyPrice').value = price;
 
-
-
             saveHoldingFromModal();
 
         }
-
-
 
         // 5. Advanced Interactive Stock Hub Engine (HTML5 Canvas & Multi-Timeframe)
 
@@ -9613,8 +8769,6 @@ const THNDR_ACTUAL_HOLDINGS = [
         let activeChartType = 'candles'; // 'candles' or 'line'
 
         let cachedChartCandles = [];
-
-
 
         function getStockComprehensiveData(ticker) {
 
@@ -9652,8 +8806,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const val = (VALUATION_DATA && VALUATION_DATA[ticker]) ? VALUATION_DATA[ticker] : {};
 
             const curPrice = safeNum(s.close, safeNum(val.current, 50.0));
@@ -9661,8 +8813,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const isFund = isFundAsset(s) || isGoldAsset(s);
 
             const piv = calculatePivotPoints(s.high, s.low, curPrice, isFund ? 'fund' : 'stock');
-
-
 
             const support = piv.s1;
 
@@ -9685,8 +8835,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const pb = safeNum(val.pb, 1.65);
 
             const divYield = safeNum(s.div_yield, (ticker === 'ABUK' ? 11.8 : ticker === 'MFPC' ? 9.2 : ticker === 'ORWE' ? 9.0 : ticker === 'AMOC' ? 8.4 : ticker === 'SKPC' ? 8.2 : 5.0));
-
-
 
             let analysis = val.analysis;
 
@@ -9715,8 +8863,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             return {
 
@@ -9756,8 +8902,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function openStockChart(ticker, pushHistory = true) {
 
             triggerHaptic('medium');
@@ -9767,8 +8911,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             activeChartTicker = ticker;
 
             const data = getStockComprehensiveData(ticker);
-
-
 
             // Populate Header
 
@@ -9788,11 +8930,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (priceEl) priceEl.innerText = `${safeFixed(data.close, 2)} ج.م`;
 
-
-
             const isFundAsset = ['AZG', 'THNDR_GOLD', 'CMS', 'BWA', 'NMF', 'USD_EGP'].includes(ticker) || (data.sector && (data.sector.includes('صندوق') || data.sector.includes('ذهب') || data.sector.includes('نقد') || data.sector.includes('دولار')));
-
-            
 
             // Dynamic Header Icon
 
@@ -9809,8 +8947,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 else modalIcon.innerText = '📈';
 
             }
-
-
 
             const shariaBadge = document.getElementById('modalShariaBadge');
 
@@ -9836,8 +8972,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-            
-
             const chgElem = document.getElementById('modalChartChg');
 
             const isP = data.chg >= 0;
@@ -9845,8 +8979,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             chgElem.innerText = `${isP ? '+' : ''}${data.chg.toFixed(2)}%`;
 
             chgElem.className = `text-[10px] font-bold px-1.5 py-0.2 rounded border ${isP ? 'bg-emerald-950 text-emerald-400 border-emerald-800' : 'bg-rose-950 text-rose-400 border-rose-800'}`;
-
-
 
             // Populate Sub-Tab 1: Chart Quick Badges
 
@@ -9861,8 +8993,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             document.getElementById('modalChartRsi').innerText = `${data.rsi.toFixed(1)}`;
 
             document.getElementById('modalChartVolumeStatus').innerText = data.rsi >= 50 ? 'تجميع شرائي نشط' : 'استقرار وتماسك';
-
-
 
             // ── Fill Price Action Strip immediately (before canvas renders) ──
 
@@ -9892,8 +9022,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (_paV) { const vol = data.volume || 0; _paV.textContent = vol >= 1e6 ? `${(vol/1e6).toFixed(1)}M` : `${(vol/1000).toFixed(0)}K`; }
 
-
-
             // Populate Sub-Tab 2: Indicators
 
             const isBullish = data.close >= data.support && data.rsi >= 48;
@@ -9902,13 +9030,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('indTechnicalStatusBadge').className = `text-[10px] font-bold px-2 py-0.5 rounded border ${isBullish ? 'bg-emerald-950 text-emerald-400 border-emerald-800' : 'bg-amber-950 text-amber-400 border-amber-800'}`;
 
-            
-
             document.getElementById('indTrendVal').innerText = isBullish ? 'صاعد رئيسي ↗️' : 'تجميعي عرضي ↔️';
 
             document.getElementById('indTrendVal').className = `font-bold text-xs mt-0.5 block ${isBullish ? 'text-emerald-400' : 'text-amber-400'}`;
-
-
 
             document.getElementById('indRsiVal').innerText = `${data.rsi.toFixed(1)} (${data.rsi < 35 ? 'تشبع بيعي / فرصة تجميع' : data.rsi > 70 ? 'تشبع شرائي' : 'منطقة توازن صحية'})`;
 
@@ -9919,8 +9043,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             document.getElementById('indBetaVal').innerText = `${(0.85 + (data.close % 3) * 0.08).toFixed(2)}x`;
 
             document.getElementById('indAtrVal').innerText = `${(data.close * 0.024).toFixed(2)} ج.م`;
-
-
 
             // Fundamentals
 
@@ -9934,8 +9056,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('indDivYieldVal').innerText = `${data.divYield.toFixed(1)}% سنوياً`;
 
-
-
             // Populate Sub-Tab 3: Targets & Forecasts
 
             document.getElementById('target1Val').innerText = `${data.resistance.toFixed(2)} ج`;
@@ -9944,15 +9064,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('target1Pct').innerText = `${t1Pct >= 0 ? '+' : ''}${t1Pct}%`;
 
-
-
             document.getElementById('target2Val').innerText = `${data.base.toFixed(2)} ج`;
 
             const t2Pct = (((data.base - data.close) / data.close) * 100).toFixed(1);
 
             document.getElementById('target2Pct').innerText = `${t2Pct >= 0 ? '+' : ''}${t2Pct}%`;
-
-
 
             const stopLoss = data.support * 0.95;
 
@@ -9961,8 +9077,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const slPct = (((stopLoss - data.close) / data.close) * 100).toFixed(1);
 
             document.getElementById('targetStopLossPct').innerText = `${slPct}%`;
-
-
 
             const recBadge = document.getElementById('targetRecommendationBadge');
 
@@ -9984,13 +9098,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             document.getElementById('targetAnalysisSummary').innerText = data.analysis;
 
             document.getElementById('targetDcaAdvice').innerText = `يُنصح بألا تتجاوز نسبة السهم 15% من محفظتك كإدارة مخاطر رشيدة. أنسب نقطة تبريد إضافي عند ملامسة الدعم ${data.support.toFixed(2)} ج.`;
-
-
 
             // Populate Sub-Tab 4: News Badge & Content
 
@@ -9999,8 +9109,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const badge = document.getElementById('modalStockNewsBadge');
 
             if (badge) badge.innerText = matchingCount;
-
-
 
             switchModalSubTab('chart');
 
@@ -10016,8 +9124,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             document.getElementById('stockChartModal').classList.remove('hidden');
 
-
-
             setTimeout(() => {
 
                 initCanvasCrosshair();
@@ -10027,10 +9133,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }, 60);
 
         }
-
-
-
-        
 
         function deleteHoldingFromModal() {
 
@@ -10056,8 +9158,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function closeChartModal(syncHistory = true) {
 
             document.getElementById('stockChartModal').classList.add('hidden');
@@ -10071,8 +9171,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
 
         function quickAddFromModal() {
 
@@ -10100,8 +9198,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function quickDcaFromModal() {
 
             triggerHaptic('medium');
@@ -10124,10 +9220,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
-
-
                 function updateTargetsTab() {
 
             if (!activeChartTicker) return;
@@ -10136,15 +9228,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (!d) return;
 
-
-
             const vd = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[activeChartTicker]) ? VALUATION_DATA[activeChartTicker] : null;
 
             const nList = (typeof NEWS_DATA !== 'undefined') ? NEWS_DATA : [];
 
             const decision = evaluateInstitutionalDecision(activeChartTicker, d, vd, nList);
-
-
 
             const cur = d.close || 0;
 
@@ -10157,8 +9245,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const pct = v => cur > 0 ? (((v - cur) / cur) * 100).toFixed(1) : '0.0';
 
             const fmt = v => (parseFloat(v)||0).toFixed(2) + ' ج';
-
-
 
             const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
 
@@ -10174,8 +9260,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             set('targetStopLossPct', `${pct(sl)}%`);
 
-
-
             const badge = document.getElementById('targetRecommendationBadge');
 
             if (badge) {
@@ -10190,15 +9274,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             set('targetAnalysisSummary',
 
                 `القرار المؤسسي (${decision.statusBadge}): ${decision.mainReason} ` +
 
                 `هامش الأمان: ${decision.marginOfSafety >= 0 ? '+' : ''}${decision.marginOfSafety.toFixed(1)}% | مؤشر RSI: ${decision.rsi.toFixed(1)} | نسبة العائد إلى المخاطرة (R:R): 1:${decision.riskRewardRatio}.`);
-
-
 
             set('targetDcaAdvice',
 
@@ -10207,8 +9287,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 `أفضل نطاق تجميعي حول الدعم ${fmt(sl * 1.04)}. يُنصح بألا يتجاوز المركز 15% من إجمالي المحفظة لمنع تركز المخاطر.`);
 
         }
-
-
 
         function switchModalSubTab(subTab) {
 
@@ -10226,8 +9304,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             const tabViews = {
 
                 chart: document.getElementById('modalChartView'),
@@ -10239,8 +9315,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 news: document.getElementById('modalNewsView')
 
             };
-
-
 
             Object.keys(tabBtns).forEach(k => {
 
@@ -10268,8 +9342,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             if (subTab === 'chart') {
 
                 setTimeout(() => drawAdvancedChart(), 30);
@@ -10285,8 +9357,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
 
         function setChartTimeframe(tf, btn = null) {
 
@@ -10316,12 +9386,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
-
-
-
-
         function generateTimeframeCandles(stock, valData, tf) {
 
             let numCandles = 28;
@@ -10329,8 +9393,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             let volatility = 0.025;
 
             let dateLabelFn = (i) => `جلسة ${i+1}`;
-
-
 
             if (tf === '1D') {
 
@@ -10376,13 +9438,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const candles = [];
 
             let lastClose = stock.close * (1 - volatility * (numCandles / 4));
-
-            
 
             // Seeded random walk leading strictly to current price
 
@@ -10409,8 +9467,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 let vol = Math.floor(180000 + ((i % 5) * 45000));
 
                 if (i === numCandles - 1) vol = Math.floor(vol * 1.5);
-
-
 
                 candles.push({
 
@@ -10440,8 +9496,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         let crosshairHandlerAttached = false;
 
         function initCanvasCrosshair() {
@@ -10449,8 +9503,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const canvas = document.getElementById('candlestickCanvas');
 
             if (!canvas || crosshairHandlerAttached) return;
-
-
 
             const handleMove = (e) => {
 
@@ -10470,15 +9522,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             };
 
-
-
             const handleEnd = () => {
 
                 drawAdvancedChart(null, null);
 
             };
-
-
 
             canvas.addEventListener('mousemove', handleMove);
 
@@ -10491,10 +9539,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             crosshairHandlerAttached = true;
 
         }
-
-
-
-        
 
         /* ==========================================================================
 
@@ -10529,8 +9573,6 @@ const THNDR_ACTUAL_HOLDINGS = [
         };
 
         let isChartFullscreen = false;
-
-
 
         const TRADINGVIEW_TICKER_MAP = {
 
@@ -10596,8 +9638,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         };
 
-
-
         function setChartEngine(engine) {
 
             activeChartEngine = engine;
@@ -10611,8 +9651,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const btnCanvas = document.getElementById('engineCanvasBtn');
 
             const btnTv = document.getElementById('engineTvBtn');
-
-
 
             if (engine === 'tradingview') {
 
@@ -10658,8 +9696,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function loadTradingViewWidget() {
 
             const iframe = document.getElementById('tradingviewIframe');
@@ -10668,11 +9704,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (!iframe) return;
 
-
-
             if (overlay) overlay.classList.remove('hidden');
-
-
 
             const tvSymbol = TRADINGVIEW_TICKER_MAP[activeChartTicker] || `EGX:${activeChartTicker}`;
 
@@ -10680,13 +9712,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const theme = isDark ? 'dark' : 'light';
 
-            
-
             // Official responsive TradingView embed URL with Arabic locale and technical tools
 
             const url = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvSymbol)}&interval=D&theme=${theme}&style=1&locale=ar_AE&toolbar_bg=%230b0f19&enable_publishing=false&hide_top_toolbar=false&hide_legend=false&save_image=false&studies=%5B%22MASimple%40tv-basicstudies%22%2C%22RSI%40tv-basicstudies%22%2C%22BB%40tv-basicstudies%22%5D`;
-
-
 
             iframe.src = url;
 
@@ -10697,8 +9725,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             };
 
         }
-
-
 
         function toggleChartIndicator(ind) {
 
@@ -10732,8 +9758,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function setChartType(type) {
 
             triggerHaptic('light');
@@ -10745,8 +9769,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const btnCandle = document.getElementById('chartTypeCandleBtn');
 
             const btnHollow = document.getElementById('chartTypeHollowBtn');
-
-
 
             if (btnLine) {
 
@@ -10778,8 +9800,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             if (activeChartEngine === 'canvas') {
 
                 drawAdvancedChart();
@@ -10787,8 +9807,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             }
 
         }
-
-
 
         function toggleChartFullscreen() {
 
@@ -10803,8 +9821,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const fsLabel = document.getElementById('fsLabel');
 
             isChartFullscreen = !isChartFullscreen;
-
-
 
             if (isChartFullscreen) {
 
@@ -10836,8 +9852,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         /* Help, Glossary, Liquidity & Backup Modal Handlers */
 
         function openHelpGlossaryModal() {
@@ -10854,8 +9868,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function openLiquidityDetailModal() {
 
             triggerHaptic('light');
@@ -10870,8 +9882,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function openPortfolioBackupModal() {
 
             triggerHaptic('light');
@@ -10885,8 +9895,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             document.getElementById('portfolioBackupModal')?.classList.add('hidden');
 
         }
-
-
 
         function exportPortfolioJsonBackup() {
 
@@ -10927,8 +9935,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             closePortfolioBackupModal();
 
         }
-
-
 
         function importPortfolioJsonBackup(event) {
 
@@ -10978,10 +9984,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
-
-
         function drawAdvancedChart(cursorX = null, cursorY = null) {
 
             const canvas = document.getElementById('candlestickCanvas');
@@ -11006,8 +10008,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             ctx.clearRect(0, 0, W, H);
 
-
-
             const data    = getStockComprehensiveData(activeChartTicker);
 
             const candles = generateTimeframeCandles(data, data, activeChartTimeframe);
@@ -11015,8 +10015,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             cachedChartCandles = candles;
 
             if (!candles || candles.length === 0) return;
-
-
 
             const isDark      = document.documentElement.classList.contains('dark');
 
@@ -11044,8 +10042,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const candleW     = Math.max(2, Math.min(14, stepX * 0.65));
 
-
-
             // Price range
 
             let minP = Math.min(...candles.map(c => c.low));
@@ -11066,8 +10062,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             function cx(i)   { return leftM + i * stepX + stepX / 2; }
 
-
-
             // Axis bg
 
             ctx.fillStyle = isDark ? 'rgba(15,23,42,0.55)' : 'rgba(241,245,249,0.75)';
@@ -11079,8 +10073,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             ctx.lineWidth = 1;
 
             ctx.beginPath(); ctx.moveTo(W - rightM, 0); ctx.lineTo(W - rightM, H); ctx.stroke();
-
-
 
             // Grid & price labels
 
@@ -11108,8 +10100,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
 
             for (let k=0;k<=4;k++) {
@@ -11131,8 +10121,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             // ── Compute indicators ─────────────────────────────────────
 
@@ -11162,8 +10150,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const sma200arr = closes.length >= 200 ? sma(closes, 200) : new Array(closes.length).fill(null);
 
-
-
             // Bollinger
 
             const bbU=[],bbL=[],bbM=[], bbP=20;
@@ -11181,8 +10167,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 bbU.push(mean+2*std); bbL.push(mean-2*std); bbM.push(mean);
 
             });
-
-
 
             // RSI 14
 
@@ -11209,8 +10193,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             // ── Bollinger Bands (behind candles) ──────────────────────
 
@@ -11244,8 +10226,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // ── Volume bars ────────────────────────────────────────────
 
             if(showVol && volH>0) {
@@ -11269,8 +10249,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 ctx.fillText('حجم', W-rightM-3, chartBottom+volH-2);
 
             }
-
-
 
             // ── Candles / Line ─────────────────────────────────────────
 
@@ -11312,8 +10290,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             });
 
-
-
             if(activeChartType==='line'&&linePts.length>1){
 
                 const grad=ctx.createLinearGradient(0,chartTop,0,chartBottom);
@@ -11338,8 +10314,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // ── Moving averages ──────────────────────────────────────
 
             function drawLine(arr,color,lw=1.6){
@@ -11362,8 +10336,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if(chartIndicators.sma200) drawLine(sma200arr,'#a78bfa',1.4);
 
-
-
             // ── Support / Resistance pills ───────────────────────────
 
             if(chartIndicators.sr!==false) {
@@ -11384,8 +10356,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // ── Current price pill ────────────────────────────────────
 
             const lastC=candles[candles.length-1], yCur=getY(lastC.close);
@@ -11395,8 +10365,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             ctx.beginPath(); ctx.moveTo(leftM,yCur); ctx.lineTo(W-rightM,yCur); ctx.stroke(); ctx.setLineDash([]);
 
             drawPill(yCur, lastC.close.toFixed(2), '#0284c7');
-
-
 
             // ── RSI sub-panel ─────────────────────────────────────────
 
@@ -11450,8 +10418,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // ── MACD sub-panel ────────────────────────────────────────
 
             if(showMacd) {
@@ -11487,8 +10453,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 });
 
             }
-
-
 
             // ── Crosshair & HUD ───────────────────────────────────────
 
@@ -11548,8 +10512,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // ── Price Action Strip fill ───────────────────────────────
 
             const today=candles[candles.length-1], ip=today.close>=today.open;
@@ -11580,21 +10542,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         // 6. Interactive AI Financial Advisor Chatbot
 
         function askAiAdvisor(question) {
-
             triggerHaptic('medium');
-
-            document.getElementById('aiChatInput').value = question;
-
-            sendUserAiQuestion();
-
+            if (typeof openFloatingAiCopilot === 'function') openFloatingAiCopilot();
+            const input = document.getElementById('floatingAiInput');
+            if (input) {
+                input.value = question;
+                if (typeof sendFloatingAiMessage === 'function') sendFloatingAiMessage();
+            }
         }
-
-
 
         function sendUserAiQuestion() {
 
@@ -11606,13 +10564,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (!q) return;
 
-
-
             const box = document.getElementById('aiChatOutput');
 
             box.classList.remove('hidden');
-
-
 
             const userBubble = `<div class="p-2 bg-slate-800 rounded-lg text-white font-bold text-right">👤 ${q}</div>`;
 
@@ -11620,15 +10574,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             input.value = '';
 
-
-
             const loadingId = 'loading_' + Date.now();
 
             box.innerHTML += `<div id="${loadingId}" class="p-2 bg-sky-950/70 border border-sky-800 text-sky-200 rounded-lg pulse-live">🤖 جاري التحليل المالي واستدعاء بيانات السوق...</div>`;
 
             box.scrollTop = box.scrollHeight;
-
-
 
             setTimeout(() => {
 
@@ -11646,21 +10596,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function generateAiFinancialResponse(q) {
 
             const raw = q.trim();
 
             const lower = raw.toLowerCase();
 
-
-
             // 1. الأسبقية الأولى للمطابقة الدقيقة لرمز التداول (Ticker Exact Match)
 
             let matchedStock = null;
-
-            
 
             for (let s of STOCKS_DATA) {
 
@@ -11675,8 +10619,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             // 2. إذا لم يتطابق الرمز، فحص الكلمات المفتاحية الفريدة للأسهم بالعربية
 
@@ -11730,8 +10672,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 ];
 
-
-
                 for (let map of arabicStockMap) {
 
                     if (map.keywords.some(kw => lower.includes(kw.toLowerCase()))) {
@@ -11745,8 +10685,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             // فحص إضافي بالاسم الكامل
 
@@ -11766,8 +10704,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // في حال مطابقة سهم أو صندوق: تقديم تحليل مالي متكامل لحظي
 
             if (matchedStock) {
@@ -11780,8 +10716,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 const val = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[s.ticker]) ? VALUATION_DATA[s.ticker] : null;
 
-
-
                 const curPrice = s.close || 0;
 
                 const chgVal = s.chg || 0;
@@ -11793,8 +10727,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 const suppVal = s.support || rec?.stopLoss || (curPrice * 0.94).toFixed(2);
 
                 const resVal = s.resistance || rec?.targetPrice || (curPrice * 1.08).toFixed(2);
-
-
 
                 let holdingInfo = '';
 
@@ -11822,8 +10754,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 let recommendationBanner = '';
 
                 if (rec) {
@@ -11845,8 +10775,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     </div>`;
 
                 }
-
-
 
                 return `
 
@@ -11872,8 +10800,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 2. فحص أسئلة التوزيعات النقدية والكوبونات
 
             if (lower.includes('توزيع') || lower.includes('كوبون') || lower.includes('ارباح')) {
@@ -11890,8 +10816,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 3. فحص أسئلة الزكاة
 
             if (lower.includes('زكاة') || lower.includes('تطهير')) {
@@ -11907,8 +10831,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 يمكنك الضغط على تاب <b>الأدوات ➔ حاسبة الزكاة</b> لتطبيق الحساب الآلي فوراً على أصول محفظتك.`;
 
             }
-
-
 
             // 4. فحص أسئلة الذهب أو العملات
 
@@ -11928,8 +10850,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 5. الرد العام الذكي المربوط ببيانات السوق اللحظية
 
             const egxStatus = document.querySelector('.marketSessionText')?.innerText || 'جلسة معتمدة';
@@ -11947,8 +10867,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             <span class="text-[10px] text-slate-400">💡 يمكنك السؤال بالاسم أو الرمز عن أي سهم مثل: (TMGH, ETEL, ADIB, EGAL, EFIH, CMS, AZG...) للحصول على تقريره اللحظي المحدث.</span>`;
 
         }
-
-
 
         // 7. Live Cloud Auto-Sync via market_data.json
 
@@ -11968,8 +10886,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const cairoTime = new Date(utc + (3600000 * 3)); // توقيت القاهرة UTC+3
 
-            
-
             const hours = cairoTime.getHours();
 
             const minutes = cairoTime.getMinutes();
@@ -11977,8 +10893,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const seconds = cairoTime.getSeconds();
 
             const day = cairoTime.getDay(); // 0 = الأحد, 1 = الاثنين, 2 = الثلاثاء, 3 = الأربعاء, 4 = الخميس, 5 = الجمعة, 6 = السبت
-
-
 
             const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
 
@@ -12016,8 +10930,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const cloudStatus = window.GLOBAL_STATE?.market_status;
 
             if (cloudStatus && (cloudStatus.state === 'OFFICIAL_HOLIDAY' || cloudStatus.state === 'HOLIDAY')) {
@@ -12048,8 +10960,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const isWeekend = (day === 5 || day === 6);
 
             const isTradingDay = !isWeekend;
@@ -12061,8 +10971,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             const closeMinute = 14 * 60 + 30; // 02:30 PM
 
             const auctionMinute = 14 * 60 + 45; // 02:45 PM
-
-            
 
             let state = 'CLOSED';
 
@@ -12077,8 +10985,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             let isLive = false;
 
             let nextSessionCountdownText = nextTradingDayName;
-
-            
 
             if (isWeekend) {
 
@@ -12168,8 +11074,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-            
-
             return {
 
                 state,
@@ -12210,19 +11114,13 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
         function updateEgxMarketClock() {
 
             const mState = resolveMarketState();
 
             const timeFormatted = `${String(mState.hours).padStart(2, '0')}:${String(mState.minutes).padStart(2, '0')}:${String(mState.seconds).padStart(2, '0')}`;
 
-            
-
             document.querySelectorAll('.marketClockCairo').forEach(el => el.innerText = `${timeFormatted} بتوقيت مصر`);
-
-
 
             // تحديث شارة النبض اللحظية في رأس الصفحة
 
@@ -12236,8 +11134,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // تحديث سطر توقيت وحالة الجلسة
 
             const pulseSessionEl = document.getElementById('marketPulseSessionTime');
@@ -12247,8 +11143,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 pulseSessionEl.innerText = `${mState.sessionSummaryTitle} (${timeFormatted})`;
 
             }
-
-
 
             // مؤشر نبضة المزامنة / العد التنازلي
 
@@ -12273,8 +11167,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 }
 
             }
-
-
 
             // الشارات العامة في بقية الصفحات
 
@@ -12308,8 +11200,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             document.querySelectorAll('.marketSessionText').forEach(el => el.innerText = mState.label);
 
             document.querySelectorAll('.egxMarketSessionBadge').forEach(el => el.className = bClass);
@@ -12321,8 +11211,6 @@ const THNDR_ACTUAL_HOLDINGS = [
         setInterval(updateEgxMarketClock, 1000);
 
         setTimeout(updateEgxMarketClock, 100);
-
-
 
         // =========================================================================
 
@@ -12384,8 +11272,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-
-
                 function refreshData() {
 
             triggerHaptic('medium');
@@ -12395,8 +11281,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             syncLiveMarketData(false);
 
         }
-
-
 
         async function syncLiveMarketData(isAutoPoll = false) {
             // Strict Offline Guard: Check network connectivity first
@@ -12580,8 +11464,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 // Mutual Funds & Gold NAVs (Official manager valuations)
 
                 if (cData.funds) {
@@ -12604,8 +11486,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                             if (live.source) local.source = live.source;
 
-
-
                             // Dynamic Update for VALUATION_DATA
 
                             if (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[sym]) {
@@ -12619,8 +11499,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                                 }
 
                             }
-
-
 
                             // Dynamic Update for Comparison Matrix Cards in DOM
 
@@ -12639,8 +11517,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     });
 
                 }
-
-
 
                 // Ingest Live Certified Events & Disclosures
 
@@ -12676,8 +11552,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-
-
                 // Sync Indices (EGX33, EGX30, EGX70, EGX100)
 
                 if (cData.indices) {
@@ -12709,8 +11583,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                     }
 
                 }
-
-
 
                 // Benchmarks: USD, Gold 24K Pure
 
@@ -12746,8 +11618,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 3. Update User Holdings Prices with 100% Live Quotes (Stocks, Funds, Gold)
 
             userHoldings.forEach(h => {
@@ -12780,8 +11650,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             // 4. Update Status Badges & Timestamps
 
             const nowTime = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -12800,8 +11668,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             }
 
-
-
             const sessionBadge = document.querySelector('.marketSessionText');
 
             if (sessionBadge) {
@@ -12809,8 +11675,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 sessionBadge.innerText = inSession ? `البورصة المصرية: بث مباشر ثانية بثانية (${nowTime})` : `البورصة المصرية: إقفال رسمي (${nowTime})`;
 
             }
-
-
 
             // 5. Render All Components with Fresh Live Prices
 
@@ -12862,8 +11726,6 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (typeof renderDividendsTable === 'function' && cData?.dividends_calendar) renderDividendsTable(cData.dividends_calendar);
 
-
-
             // Update open chart if active
 
             const chartModal = document.getElementById('stockChartModal');
@@ -12873,8 +11735,6 @@ const THNDR_ACTUAL_HOLDINGS = [
                 if (typeof openStockChart === 'function') openStockChart(activeChartTicker, false);
 
             }
-
-
 
             if (!isAutoPoll) {
 
@@ -12902,8 +11762,6 @@ async function syncMubasherDirectAll() {
 
             const isTradingSession = dayOfWeek >= 0 && dayOfWeek <= 4 && totalMin >= 600 && totalMin < 870;
 
-
-
             if (!isTradingSession) {
 
                 console.log('[Mubasher-Direct] خارج جلسة التداول – تم التخطي');
@@ -12912,13 +11770,9 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             console.log('[Mubasher-Direct] بدء السحب المباشر لـ', MUBASHER_TICKERS.length, 'سهماً...');
 
             let updated = 0;
-
-
 
             await Promise.allSettled(MUBASHER_TICKERS.map(async (ticker) => {
 
@@ -12970,8 +11824,6 @@ async function syncMubasherDirectAll() {
 
             }));
 
-
-
             if (updated > 0) {
 
                 console.log(`[Mubasher-Direct] ✓ تم تحديث ${updated} سهماً مباشرةً`);
@@ -13022,15 +11874,11 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
                 // ── Ultra-fast Second-by-Second Real-Time Polling Engine (v13.9) ─────
 
         (function startSmartPolling() {
 
             let isSyncing = false;
-
-
 
             async function ultraFastSync() {
 
@@ -13056,8 +11904,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             let pollInterval = null;
 
             function startPolling() {
@@ -13080,13 +11926,9 @@ async function syncMubasherDirectAll() {
 
                 const interval  = inSession ? 1500 : 15000;
 
-
-
                 if (pollInterval) clearInterval(pollInterval);
 
                 pollInterval = setInterval(ultraFastSync, interval);
-
-
 
                 const badge = document.getElementById('syncStatusText');
 
@@ -13102,21 +11944,15 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Start immediately without delay
 
             ultraFastSync();
 
             startPolling();
 
-
-
             // Re-evaluate session state every 2 minutes
 
             setInterval(startPolling, 120000);
-
-
 
             // Immediate sync when browser tab regains focus
 
@@ -13134,13 +11970,7 @@ async function syncMubasherDirectAll() {
 
         })();
 
-
-
-
-
         // Visibility sync handled inside smart polling engine (no duplicate race conditions)
-
-
 
                 // =========================================================================
 
@@ -13158,15 +11988,11 @@ async function syncMubasherDirectAll() {
 
         let _pulseTickCountdown = 5;
 
-
-
         // 1. Dynamic Market Breadth & Live Sentiment Computation
 
         function updateMarketPulseLive() {
 
             if (!STOCKS_DATA || STOCKS_DATA.length === 0) return;
-
-
 
             const stocksOnly = STOCKS_DATA.filter(s => s.type === 'stock' || (!s.type && s.ticker !== 'USD_EGP' && !isFundAsset(s) && !isGoldAsset(s)));
 
@@ -13177,8 +12003,6 @@ async function syncMubasherDirectAll() {
             let sumRsi = 0, rsiCount = 0;
 
             const sectors = {};
-
-
 
             stocksOnly.forEach(s => {
 
@@ -13192,8 +12016,6 @@ async function syncMubasherDirectAll() {
 
                 else unchanged++;
 
-
-
                 if (typeof s.rsi === 'number' && s.rsi > 0) {
 
                     sumRsi += s.rsi;
@@ -13201,8 +12023,6 @@ async function syncMubasherDirectAll() {
                     rsiCount++;
 
                 }
-
-
 
                 const sec = s.sector || 'أخرى';
 
@@ -13216,8 +12036,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             const total = stocksOnly.length;
 
             const avgChg = total > 0 ? (sumChg / total) : 0;
@@ -13229,8 +12047,6 @@ async function syncMubasherDirectAll() {
             const buyerRatio = totalActive > 0 ? Math.round((advancers / totalActive) * 100) : 50;
 
             const sellerRatio = 100 - buyerRatio;
-
-
 
             // Determine leading sector dynamically
 
@@ -13254,8 +12070,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             // Top gainers & oversold stocks
 
             const sortedGainers = [...stocksOnly].sort((a, b) => (b.chg || 0) - (a.chg || 0));
@@ -13265,8 +12079,6 @@ async function syncMubasherDirectAll() {
             const g2 = sortedGainers[1];
 
             const oversoldList = stocksOnly.filter(s => s.rsi && s.rsi <= 40).sort((a, b) => a.rsi - b.rsi);
-
-
 
             // Update UI Counters
 
@@ -13282,8 +12094,6 @@ async function syncMubasherDirectAll() {
 
             if (uncEl) uncEl.innerText = `${unchanged} سهم`;
 
-
-
             const avgEl = document.getElementById('pulseAvgMarketChg');
 
             if (avgEl) {
@@ -13296,13 +12106,9 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const avgRsiEl = document.getElementById('pulseMarketAvgRsi');
 
             if (avgRsiEl) avgRsiEl.innerText = `${avgRsi.toFixed(1)} نقطة`;
-
-
 
             // Buyer vs Seller Bar
 
@@ -13314,8 +12120,6 @@ async function syncMubasherDirectAll() {
 
             if (sPctEl) sPctEl.innerText = `${sellerRatio}%`;
 
-
-
             const bBar = document.getElementById('pulseBuyerBar');
 
             const sBar = document.getElementById('pulseSellerBar');
@@ -13323,8 +12127,6 @@ async function syncMubasherDirectAll() {
             if (bBar) bBar.style.width = `${buyerRatio}%`;
 
             if (sBar) sBar.style.width = `${sellerRatio}%`;
-
-
 
             // Trend Badge
 
@@ -13354,8 +12156,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Diagnostic Badges
 
             const scoreBadge = document.getElementById('ai_score_badge');
@@ -13370,8 +12170,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const secBadge = document.getElementById('ai_sector_badge');
 
             if (secBadge) {
@@ -13381,8 +12179,6 @@ async function syncMubasherDirectAll() {
                 secBadge.innerHTML = `${topSector.name} (${sSign}${topSector.avg.toFixed(1)}%)`;
 
             }
-
-
 
             const stratBadge = document.getElementById('ai_strategy_badge');
 
@@ -13395,8 +12191,6 @@ async function syncMubasherDirectAll() {
                 else stratBadge.innerText = "تأمين الأرباح والدعوم 🛡️";
 
             }
-
-
 
             // AI Pulse Narrative Text
 
@@ -13414,57 +12208,39 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Render Dynamic Sectors Strip
 
             renderLiveSectorsStrip(sectors);
-
-
 
             // Update Fear & Greed Index
 
             if (typeof updateFearAndGreedIndex === 'function') updateFearAndGreedIndex(advancers, decliners, avgChg);
 
-
-
             // Render Floor Breaking Disclosures & News Ticker Tape
 
             if (typeof renderFloorNewsTicker === 'function') renderFloorNewsTicker();
-
-
 
             // Update Floor Broker Real-Time Radar
 
             updateFloorBrokerRadar();
 
-
-
             // Update Cashless Rebalancing Pair Trading Radar
 
             if (typeof updateCashlessRebalanceRadar === 'function') updateCashlessRebalanceRadar();
-
-
 
             // Update Whale Flow Volume Spikes Radar
 
             if (typeof updateWhaleFlowRadar === 'function') updateWhaleFlowRadar();
 
-
-
             // Check User Custom Trigger Alerts
 
             if (typeof checkCustomAlerts === 'function') checkCustomAlerts();
-
-
 
             // Re-render stocks to update live badges
 
             renderStocks();
 
         }
-
-
 
         // Render Dynamic Sectors Strip with Click-to-Filter (All 16 EGX Official Sectors)
 
@@ -13473,8 +12249,6 @@ async function syncMubasherDirectAll() {
             const container = document.getElementById('liveSectorsStrip');
 
             if (!container) return;
-
-
 
             const allOfficialEgxSectors = [
 
@@ -13514,8 +12288,6 @@ async function syncMubasherDirectAll() {
 
             ];
 
-
-
             const sectorsList = allOfficialEgxSectors.map(item => {
 
                 let liveData = sectors[item.name];
@@ -13546,8 +12318,6 @@ async function syncMubasherDirectAll() {
 
             }).sort((a, b) => b.avg - a.avg);
 
-
-
             const allSelected = !currentSectorFilter || currentSectorFilter === 'all';
 
             const allBtnHtml = `
@@ -13574,8 +12344,6 @@ async function syncMubasherDirectAll() {
 
             `;
 
-
-
             container.innerHTML = allBtnHtml + sectorsList.map(item => {
 
                 const isPos = item.avg >= 0;
@@ -13583,8 +12351,6 @@ async function syncMubasherDirectAll() {
                 const sign = isPos ? '+' : '';
 
                 const isSelected = currentSectorFilter === item.name;
-
-
 
                 let heatBg = '';
 
@@ -13622,8 +12388,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 if (isSelected) {
 
                     heatBg = 'bg-indigo-600 text-white font-bold border-indigo-400 shadow-lg ring-2 ring-indigo-400';
@@ -13631,8 +12395,6 @@ async function syncMubasherDirectAll() {
                     chgColor = 'text-white';
 
                 }
-
-
 
                 return `
 
@@ -13662,8 +12424,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Filter by Sector
 
         function setSectorFilter(secName) {
@@ -13684,8 +12444,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Deselect filter pills
 
             document.querySelectorAll('.filter-pill').forEach(b => {
@@ -13702,8 +12460,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Update sector button active states
 
             document.querySelectorAll('.sector-pill-btn').forEach(b => {
@@ -13718,8 +12474,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             // Reset breadth card active outlines
 
             ['pulseAdvancersCard', 'pulseDeclinersCard', 'pulseUnchangedCard', 'pulseAvgCard'].forEach(id => {
@@ -13730,11 +12484,7 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             renderStocks();
-
-
 
             const secSection = document.getElementById('pulseStocksSection');
 
@@ -13742,15 +12492,11 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Asset Slicer State & Controller
 
         let currentAssetSlicer = 'stocks'; // 'stocks' or 'funds'
 
         let radarAudioEnabled = true;
-
-
 
         function toggleRadarAudioAlerts() {
 
@@ -13769,8 +12515,6 @@ async function syncMubasherDirectAll() {
             showToast(radarAudioEnabled ? 'تم تفعيل التنبيهات الصوتية للفرص والتهديدات 🔔' : 'تم كتم التنبيهات الصوتية 🔕', 'info');
 
         }
-
-
 
         function setAssetSlicer(type) {
             triggerHaptic('selection');
@@ -13848,13 +12592,9 @@ async function syncMubasherDirectAll() {
             }
         }
 
-
-
         // Dedicated Funds & Gold Filter & Renderer
 
         let currentFundsFilter = 'all';
-
-
 
         function setFundsFilter(filter, btn) {
 
@@ -13880,9 +12620,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
-        
         // =========================================================================
         // RADICAL REAL-TIME FUND & GOLD INDICATIVE NAV (iNAV) ENGINE
         // =========================================================================
@@ -14010,7 +12747,6 @@ async function syncMubasherDirectAll() {
             playRadarChime('opportunity');
         }
 
-
         function renderFundsCards(filter = currentFundsFilter) {
 
             const container = document.getElementById('fundsCardsContainer');
@@ -14018,8 +12754,6 @@ async function syncMubasherDirectAll() {
             const legacyContainer = document.getElementById('stocksContainer');
 
             if (!container && !legacyContainer) return;
-
-
 
             // Sync USD close price with live ticker if available
 
@@ -14033,11 +12767,7 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             let fundsAssets = STOCKS_DATA.filter(s => isNonEquityAsset(s));
-
-
 
             if (filter === 'usd') {
 
@@ -14061,8 +12791,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const cardsHtml = fundsAssets.map(s => {
 
                 const isGold = isGoldAsset(s) || s.ticker.includes('GOLD') || s.ticker === 'AZG';
@@ -14075,8 +12803,6 @@ async function syncMubasherDirectAll() {
 
                 const sign = isPos ? '+' : '';
 
-
-
                 let manager = 'إدارة أصول معتمدة';
 
                 let assetDesc = 'صندوق استثمار متوافق مع الشريعة';
@@ -14084,8 +12810,6 @@ async function syncMubasherDirectAll() {
                 let ytdReturn = '+30.0%';
 
                 let liquidityInfo = 'استرداد أسبوعي';
-
-
 
                 if (isUsd) {
 
@@ -14149,8 +12873,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 return `
 
                     <div class="glass-card rounded-2xl p-3.5 space-y-2.5 border ${isUsd ? 'border-emerald-800/60 bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950/25' : (isGold ? 'border-amber-900/60 bg-gradient-to-br from-slate-900 via-slate-950 to-amber-950/20' : 'border-indigo-900/60 bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950/20')} hover:border-slate-600 transition">
@@ -14199,8 +12921,6 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <!-- Asset Metrics -->
 
                         <div class="grid grid-cols-3 gap-1.5 p-2 bg-slate-950/80 rounded-xl border border-slate-800 text-[10.5px]">
@@ -14231,11 +12951,7 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <p class="text-[10px] text-slate-300 font-sans leading-relaxed">${assetDesc}</p>
-
-
 
                         <!-- Actions -->
 
@@ -14267,15 +12983,11 @@ async function syncMubasherDirectAll() {
 
             }).join('');
 
-
-
             if (container) container.innerHTML = cardsHtml;
 
             if (legacyContainer && currentAssetSlicer === 'funds') legacyContainer.innerHTML = cardsHtml;
 
         }
-
-
 
         function toggleFearGreedBreakdown() {
 
@@ -14305,8 +13017,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // -------------------------------------------------------------
 
         // 1. EGX Market Fear & Greed Index (مؤشر الخوف والطمع - 5 ركائز تفاعلية)
@@ -14325,23 +13035,15 @@ async function syncMubasherDirectAll() {
 
             if (!scoreEl) return;
 
-
-
             const total = Math.max(advancers + decliners, 1);
-
-            
 
             // Factor 1: Market Breadth (25%)
 
             const breadthScore = Math.min(100, Math.max(0, Math.round((advancers / total) * 100)));
 
-            
-
             // Factor 2: Price Momentum (25%)
 
             const momScore = Math.min(100, Math.max(0, Math.round(50 + (avgChg * 12))));
-
-            
 
             // Factor 3: RSI (20%)
 
@@ -14363,19 +13065,13 @@ async function syncMubasherDirectAll() {
 
             const rsiScore = Math.min(100, Math.max(0, Math.round(avgRsi)));
 
-
-
             // Factor 4: Volume Activity (15%)
 
             const volumeScore = Math.min(100, Math.max(15, Math.round(50 + (avgChg >= 0 ? 15 : -15))));
 
-
-
             // Factor 5: Volatility ATR (15%)
 
             const atrScore = Math.min(100, Math.max(20, Math.round(55 - (Math.abs(avgChg) * 3))));
-
-
 
             // Weighted Composite Calculation
 
@@ -14395,13 +13091,9 @@ async function syncMubasherDirectAll() {
 
             let finalScore = Math.min(95, Math.max(8, rawScore));
 
-
-
             scoreEl.textContent = finalScore;
 
             if (needleEl) needleEl.style.right = finalScore + '%';
-
-
 
             // Update sub-factor breakdown bars
 
@@ -14413,8 +13105,6 @@ async function syncMubasherDirectAll() {
 
             if (bBreadth) bBreadth.style.width = `${breadthScore}%`;
 
-
-
             const fMom = document.getElementById('fgFactorMomentum');
 
             const bMom = document.getElementById('fgBarMomentum');
@@ -14422,8 +13112,6 @@ async function syncMubasherDirectAll() {
             if (fMom) fMom.textContent = `${momScore}/100`;
 
             if (bMom) bMom.style.width = `${momScore}%`;
-
-
 
             const fRsi = document.getElementById('fgFactorRsi');
 
@@ -14433,8 +13121,6 @@ async function syncMubasherDirectAll() {
 
             if (bRsi) bRsi.style.width = `${rsiScore}%`;
 
-
-
             const fVol = document.getElementById('fgFactorVolume');
 
             const bVol = document.getElementById('fgBarVolume');
@@ -14443,8 +13129,6 @@ async function syncMubasherDirectAll() {
 
             if (bVol) bVol.style.width = `${volumeScore}%`;
 
-
-
             const fAtr = document.getElementById('fgFactorAtr');
 
             const bAtr = document.getElementById('fgBarAtr');
@@ -14452,8 +13136,6 @@ async function syncMubasherDirectAll() {
             if (fAtr) fAtr.textContent = `${atrScore}/100`;
 
             if (bAtr) bAtr.style.width = `${atrScore}%`;
-
-
 
             let badgeText = '', badgeClass = '', narrativeText = '';
 
@@ -14499,8 +13181,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             if (badgeEl) {
 
                 badgeEl.textContent = badgeText;
@@ -14513,8 +13193,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // -------------------------------------------------------------
 
         // 2. Live Floor Breaking Disclosures & News Ticker Tape
@@ -14522,8 +13200,6 @@ async function syncMubasherDirectAll() {
         // -------------------------------------------------------------
 
         let currentFloorNewsFilter = 'all';
-
-
 
         function setFloorNewsFilter(filter) {
 
@@ -14553,8 +13229,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function renderFloorNewsTicker() {
 
             const container = document.getElementById('floorNewsFeedContainer');
@@ -14563,15 +13237,11 @@ async function syncMubasherDirectAll() {
 
             if (!container || typeof NEWS_DATA === 'undefined') return;
 
-
-
             const ownedTickers = (userHoldings || []).map(h => h.ticker);
 
             const portfolioNews = NEWS_DATA.filter(n => ownedTickers.includes(n.ticker));
 
             if (portCountEl) portCountEl.textContent = portfolioNews.length;
-
-
 
             let list = (currentFloorNewsFilter === 'portfolio') ? portfolioNews : [...NEWS_DATA];
 
@@ -14583,8 +13253,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             container.innerHTML = list.map(n => {
 
                 const isOwned = ownedTickers.includes(n.ticker);
@@ -14592,8 +13260,6 @@ async function syncMubasherDirectAll() {
                 const impactClass = n.impact === 'positive' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' :
 
                                     (n.impact === 'negative' ? 'bg-rose-950 text-rose-300 border-rose-800' : 'bg-slate-900 text-slate-300 border-slate-700');
-
-
 
                 return `
 
@@ -14641,8 +13307,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // -------------------------------------------------------------
 
         // 3. Cashless Portfolio Rebalancing Radar (تدوير المراكز للمحفظة الصفرية)
@@ -14655,8 +13319,6 @@ async function syncMubasherDirectAll() {
 
             if (!container) return;
 
-
-
             const owned = (userHoldings || []).filter(h => !isFundAsset(h) && !isGoldAsset(h));
 
             if (owned.length === 0) {
@@ -14666,8 +13328,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             let trimCandidate = null;
 
@@ -14686,8 +13346,6 @@ async function syncMubasherDirectAll() {
                 const cur = s.close || 0;
 
                 const margin = (vd && cur > 0) ? ((vd.base - cur) / cur) * 100 : 0;
-
-
 
                 const score = rsi - margin;
 
@@ -14717,8 +13375,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             let buyCandidate = null;
 
             let maxBuyScore = -999;
@@ -14729,8 +13385,6 @@ async function syncMubasherDirectAll() {
 
                 if (trimCandidate && s.ticker === trimCandidate.ticker) return;
 
-
-
                 const rsi = s.rsi || 50;
 
                 const vd = (VALUATION_DATA && VALUATION_DATA[s.ticker]) ? VALUATION_DATA[s.ticker] : null;
@@ -14738,8 +13392,6 @@ async function syncMubasherDirectAll() {
                 const cur = s.close || 0;
 
                 const margin = (vd && cur > 0) ? ((vd.base - cur) / cur) * 100 : 0;
-
-
 
                 const score = (margin * 1.5) - rsi;
 
@@ -14765,8 +13417,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             if (!trimCandidate || !buyCandidate) {
 
                 container.innerHTML = `<div class="p-3 bg-slate-900/60 rounded-xl text-center text-xs text-slate-400">محفظتك متوازنة تماماً ولا توجد حاجة ملحة لتدوير المراكز حالياً.</div>`;
@@ -14775,15 +13425,11 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const trimPortionQty = Math.max(1, Math.round(trimCandidate.qty * 0.25));
 
             const trimPortionVal = trimPortionQty * trimCandidate.close;
 
             const buyPortionQty = buyCandidate.close > 0 ? Math.floor(trimPortionVal / buyCandidate.close) : 0;
-
-
 
             container.innerHTML = `
 
@@ -14800,8 +13446,6 @@ async function syncMubasherDirectAll() {
                         <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1.5 py-0.2 rounded font-mono font-bold">صفر كاش مطلوبة</span>
 
                     </div>
-
-
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
 
@@ -14827,8 +13471,6 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <div class="p-2.5 bg-emerald-950/30 rounded-xl border border-emerald-900/50 space-y-1">
 
                             <div class="flex justify-between items-center">
@@ -14853,8 +13495,6 @@ async function syncMubasherDirectAll() {
 
                     </div>
 
-
-
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[10.5px]">
 
                         <span class="text-slate-300 font-sans">الأثر: حماية أرباح ${trimCandidate.ticker} وشراء قاع صاعد في ${buyCandidate.ticker}</span>
@@ -14875,8 +13515,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function openRebalancePlanModal(trimTicker, buyTicker) {
 
             triggerHaptic('medium');
@@ -14888,8 +13526,6 @@ async function syncMubasherDirectAll() {
             const holding = (userHoldings || []).find(h => h.ticker === trimTicker);
 
             if (!trimStock || !buyStock) return;
-
-
 
             const curTrim = trimStock.close || 0;
 
@@ -14905,8 +13541,6 @@ async function syncMubasherDirectAll() {
 
             const buyVal = buyQty * curBuy;
 
-
-
             document.getElementById('rebalanceTrimTickerBadge').textContent = trimTicker;
 
             document.getElementById('rebalanceTrimName').textContent = trimStock.name;
@@ -14916,8 +13550,6 @@ async function syncMubasherDirectAll() {
             document.getElementById('rebalanceTrimQty').textContent = trimQty + ' سهم';
 
             document.getElementById('rebalanceTrimValue').textContent = trimVal.toFixed(0) + ' ج';
-
-
 
             document.getElementById('rebalanceBuyTickerBadge').textContent = buyTicker;
 
@@ -14929,15 +13561,11 @@ async function syncMubasherDirectAll() {
 
             document.getElementById('rebalanceBuyValue').textContent = buyVal.toFixed(0) + ' ج';
 
-
-
             const modal = document.getElementById('rebalancePlanModal');
 
             if (modal) modal.classList.remove('hidden');
 
         }
-
-
 
         function closeRebalancePlanModal() {
 
@@ -14948,8 +13576,6 @@ async function syncMubasherDirectAll() {
             if (modal) modal.classList.add('hidden');
 
         }
-
-
 
         // -------------------------------------------------------------
 
@@ -14962,8 +13588,6 @@ async function syncMubasherDirectAll() {
             const container = document.getElementById('whaleFlowFeed');
 
             if (!container) return;
-
-
 
             const activeCandidates = [];
 
@@ -14978,8 +13602,6 @@ async function syncMubasherDirectAll() {
                 const vol = s.volume || 0;
 
                 const valTraded = s.value_traded || 0;
-
-
 
                 // Objective volume & turnover activity from TradingView feed
 
@@ -15009,13 +13631,9 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             activeCandidates.sort((a, b) => b.valTraded - a.valTraded);
 
             const topActive = activeCandidates.slice(0, 3);
-
-
 
             if (topActive.length === 0) {
 
@@ -15024,8 +13642,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             container.innerHTML = topActive.map(w => `
 
@@ -15061,8 +13677,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // -------------------------------------------------------------
 
         // 5. Classic Floor Pivot Points Calculator & Modal
@@ -15070,8 +13684,6 @@ async function syncMubasherDirectAll() {
         // -------------------------------------------------------------
 
         let currentPivotTicker = 'TMGH';
-
-
 
         function calculatePivotPoints(high, low, close, type = 'stock') {
 
@@ -15087,11 +13699,7 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             let pp, r1, r2, s1, s2;
-
-
 
             if (type === 'fund') {
 
@@ -15127,8 +13735,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Exact percentage ratios relative to Current Price (C)
 
             const r2Pct = ((r2 - c) / c) * 100.0;
@@ -15141,8 +13747,6 @@ async function syncMubasherDirectAll() {
 
             const s2Pct = ((s2 - c) / c) * 100.0;
 
-
-
             return {
 
                 pp, r1, r2, s1, s2,
@@ -15153,8 +13757,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function openPivotModal(ticker) {
 
             triggerHaptic('selection');
@@ -15164,8 +13766,6 @@ async function syncMubasherDirectAll() {
             const s = STOCKS_DATA.find(x => x.ticker === ticker);
 
             if (!s) return;
-
-
 
             const isFund = isFundAsset(s) || isGoldAsset(s);
 
@@ -15179,8 +13779,6 @@ async function syncMubasherDirectAll() {
 
             const isAbove = cur >= piv.pp;
 
-
-
             // Header titles
 
             document.getElementById('pivotModalTitle').textContent = isFund ? `نطاقات وثيقة ${s.name}` : `ارتكاز ${s.name}`;
@@ -15188,8 +13786,6 @@ async function syncMubasherDirectAll() {
             document.getElementById('pivotModalTicker').textContent = ticker;
 
             document.getElementById('pivotModalCurrentPrice').textContent = cur.toFixed(2) + ' ج';
-
-
 
             // Labels for fund vs stock
 
@@ -15202,8 +13798,6 @@ async function syncMubasherDirectAll() {
             const s1Label = document.getElementById('pivotModalS1Label');
 
             const s2Label = document.getElementById('pivotModalS2Label');
-
-
 
             if (isFund) {
 
@@ -15231,8 +13825,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Prices
 
             document.getElementById('pivotModalR2').textContent = piv.r2.toFixed(2) + ' ج';
@@ -15244,8 +13836,6 @@ async function syncMubasherDirectAll() {
             document.getElementById('pivotModalS1').textContent = piv.s1.toFixed(2) + ' ج';
 
             document.getElementById('pivotModalS2').textContent = piv.s2.toFixed(2) + ' ج';
-
-
 
             // Percentages
 
@@ -15261,8 +13851,6 @@ async function syncMubasherDirectAll() {
 
             const s2PctEl = document.getElementById('pivotModalS2Pct');
 
-
-
             if (r2PctEl) r2PctEl.textContent = fmtPct(piv.r2Pct);
 
             if (r1PctEl) r1PctEl.textContent = fmtPct(piv.r1Pct);
@@ -15272,8 +13860,6 @@ async function syncMubasherDirectAll() {
             if (s1PctEl) s1PctEl.textContent = fmtPct(piv.s1Pct);
 
             if (s2PctEl) s2PctEl.textContent = fmtPct(piv.s2Pct);
-
-
 
             // Badges & narrative
 
@@ -15299,8 +13885,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const stratEl = document.getElementById('pivotModalStrategyText');
 
             if (stratEl) {
@@ -15321,15 +13905,11 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             const modal = document.getElementById('pivotModal');
 
             if (modal) modal.classList.remove('hidden');
 
         }
-
-
 
         function closePivotModal() {
 
@@ -15341,8 +13921,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // -------------------------------------------------------------
 
         // 6. Custom Trigger Alerts System (التنبيهات المشروطة للمستخدم)
@@ -15350,8 +13928,6 @@ async function syncMubasherDirectAll() {
         // -------------------------------------------------------------
 
         let userCustomAlerts = [];
-
-
 
                 function loadCustomAlerts() {
             try {
@@ -15390,8 +13966,6 @@ async function syncMubasherDirectAll() {
             }
         }
 
-
-
         function saveCustomAlertsToStorage() {
 
             try {
@@ -15401,8 +13975,6 @@ async function syncMubasherDirectAll() {
             } catch(e){}
 
         }
-
-
 
         function openCustomAlertModal(preselectedTicker = null) {
 
@@ -15420,8 +13992,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function closeCustomAlertModal() {
 
             triggerHaptic('selection');
@@ -15431,8 +14001,6 @@ async function syncMubasherDirectAll() {
             if (modal) modal.classList.add('hidden');
 
         }
-
-
 
         function populateCustomAlertStockSelect(selectedTicker = null) {
 
@@ -15458,8 +14026,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function saveCustomAlert() {
 
             triggerHaptic('medium');
@@ -15472,8 +14038,6 @@ async function syncMubasherDirectAll() {
 
             const noteEl = document.getElementById('customAlertNote');
 
-
-
             if (!select || !priceEl || !priceEl.value) {
 
                 alert('برجاء إدخال السعر المستهدف للتنبيه.');
@@ -15481,8 +14045,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             const ticker = select.value;
 
@@ -15492,8 +14054,6 @@ async function syncMubasherDirectAll() {
 
             const note = (noteEl ? noteEl.value.trim() : '') || `تنبيه سعر ${ticker} ${cond === 'gte' ? '≥' : '≤'} ${price}`;
 
-
-
             if (isNaN(price) || price <= 0) {
 
                 alert('برجاء إدخال سعر صحيح أكبر من الصفر.');
@@ -15501,8 +14061,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             const newAlert = {
 
@@ -15522,8 +14080,6 @@ async function syncMubasherDirectAll() {
 
             };
 
-
-
             userCustomAlerts.unshift(newAlert);
 
             saveCustomAlertsToStorage();
@@ -15540,23 +14096,16 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function deleteCustomAlert(id) {
-
             triggerHaptic('selection');
-
             userCustomAlerts = userCustomAlerts.filter(a => a.id !== id);
-
-            saveCustomAlertsToStorage();
-
+            try {
+                localStorage.setItem('egx_custom_alerts', JSON.stringify(userCustomAlerts));
+                localStorage.setItem('egx_custom_alerts_cleared', 'true');
+            } catch(e) {}
             renderCustomAlertsList();
-
-            showToast('تم حذف التنبيه');
-
+            showToast('✓ تم حذف التنبيه بنجاح', 'info');
         }
-
-
 
         function renderCustomAlertsList() {
 
@@ -15566,11 +14115,7 @@ async function syncMubasherDirectAll() {
 
             if (!container) return;
 
-
-
             if (badge) badge.textContent = `${userCustomAlerts.length} تنبيه`;
-
-
 
             if (userCustomAlerts.length === 0) {
 
@@ -15579,8 +14124,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             container.innerHTML = userCustomAlerts.map(a => {
 
@@ -15591,8 +14134,6 @@ async function syncMubasherDirectAll() {
                 const condText = a.cond === 'gte' ? 'يصل أو يتجاوز ≥' : 'يهبط أو يكسر ≤';
 
                 const condClass = a.cond === 'gte' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' : 'bg-rose-950 text-rose-300 border-rose-800';
-
-
 
                 return `
 
@@ -15630,8 +14171,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
                 function renderAlerts() {
             if (typeof renderCustomAlertsList === 'function') renderCustomAlertsList();
         }
@@ -15649,8 +14188,6 @@ async function syncMubasherDirectAll() {
 
             let hasTriggered = false;
 
-
-
             userCustomAlerts.forEach(a => {
 
                 if (a.triggered) return;
@@ -15659,15 +14196,11 @@ async function syncMubasherDirectAll() {
 
                 if (!s || !s.close) return;
 
-
-
                 let conditionMet = false;
 
                 if (a.cond === 'gte' && s.close >= a.price) conditionMet = true;
 
                 if (a.cond === 'lte' && s.close <= a.price) conditionMet = true;
-
-
 
                 if (conditionMet) {
 
@@ -15683,8 +14216,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             if (hasTriggered) {
 
                 saveCustomAlertsToStorage();
@@ -15694,8 +14225,6 @@ async function syncMubasherDirectAll() {
             }
 
         }
-
-
 
         // Pure synthetic Web Audio API chime (Zero external assets, guaranteed to play)
 
@@ -15718,8 +14247,6 @@ async function syncMubasherDirectAll() {
                 osc.connect(gain);
 
                 gain.connect(ctx.destination);
-
-
 
                 if (type === 'opportunity') {
 
@@ -15763,8 +14290,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Real-Time Floor Broker Intelligence Radar
 
         function updateFloorBrokerRadar() {
@@ -15775,13 +14300,9 @@ async function syncMubasherDirectAll() {
 
             if (!oppContainer || !threatContainer) return;
 
-
-
             const opps = [];
 
             const threats = [];
-
-
 
             STOCKS_DATA.forEach(s => {
 
@@ -15794,8 +14315,6 @@ async function syncMubasherDirectAll() {
                 const margin = (vd && cur > 0) ? ((vd.base - cur) / cur) * 100 : 0;
 
                 const rsi = safeNum(s.rsi, 50);
-
-
 
                 // Opportunity conditions
 
@@ -15821,8 +14340,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 // Threat conditions
 
                 if (rsi >= 68 || (vd && cur >= vd.resistance * 0.99) || (s.chg <= -3.0)) {
@@ -15847,21 +14364,15 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             // Sort top 2
 
             opps.sort((a, b) => b.margin - a.margin);
 
             threats.sort((a, b) => b.rsi - a.rsi);
 
-
-
             const topOpps = opps.slice(0, 2);
 
             const topThreats = threats.slice(0, 2);
-
-
 
             const oppBadge = document.getElementById('liveOppCountBadge');
 
@@ -15870,8 +14381,6 @@ async function syncMubasherDirectAll() {
             const threatBadge = document.getElementById('liveThreatCountBadge');
 
             if (threatBadge) threatBadge.textContent = `${threats.length} تحذير نشط`;
-
-
 
             oppContainer.innerHTML = topOpps.map(o => `
 
@@ -15904,8 +14413,6 @@ async function syncMubasherDirectAll() {
                 </div>
 
             `).join('') || '<div class="text-slate-500 text-center py-2 text-[10px]">جاري مسح أوامر وقيعان السوق...</div>';
-
-
 
             threatContainer.innerHTML = topThreats.map(t => `
 
@@ -15941,8 +14448,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Set Filter with Full Interactive Integration
 
         function setFilter(f, btn = null) {
@@ -15953,8 +14458,6 @@ async function syncMubasherDirectAll() {
 
             currentSectorFilter = null;
 
-
-
             if (currentAssetSlicer === 'funds') {
 
                 renderFundsCards(f);
@@ -15963,8 +14466,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Clear sector active styling
 
             document.querySelectorAll('.sector-pill-btn').forEach(b => {
@@ -15972,8 +14473,6 @@ async function syncMubasherDirectAll() {
                 b.className = "sector-pill-btn px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 whitespace-nowrap border transition active:scale-95 bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700";
 
             });
-
-
 
             // Smart Sort defaults
 
@@ -15991,11 +14490,7 @@ async function syncMubasherDirectAll() {
 
             else if (f === 'liquidity') { currentRadarSort = 'chg'; radarSortDirection = -1; }
 
-
-
             updateRadarSortUI();
-
-
 
             // Highlight Filter Pill
 
@@ -16018,8 +14513,6 @@ async function syncMubasherDirectAll() {
                 }
 
             }
-
-
 
             // Highlight Breadth Action Cards
 
@@ -16055,11 +14548,7 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             renderStocks();
-
-
 
             // Scroll down to stocks section if clicked from top breadth cards
 
@@ -16072,8 +14561,6 @@ async function syncMubasherDirectAll() {
             }
 
         }
-
-
 
         // Sort Radar Columns
 
@@ -16099,8 +14586,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function toggleRadarSortDir() {
 
             triggerHaptic('selection');
@@ -16112,8 +14597,6 @@ async function syncMubasherDirectAll() {
             renderStocks();
 
         }
-
-
 
         function updateRadarSortUI() {
 
@@ -16143,15 +14626,11 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         function filterStocks() {
 
             renderStocks();
 
         }
-
-
 
         // 2. High-Tech Executive Stock Cards Renderer
 
@@ -16170,8 +14649,6 @@ async function syncMubasherDirectAll() {
             container.innerHTML = '';
 
             if (institutionalBox) institutionalBox.innerHTML = '';
-
-
 
             // Specialized Institutional Alert Blocks
 
@@ -16425,15 +14902,11 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             // Filtering with Main Asset Slicer & Extended Professional Filters
 
             let filtered = STOCKS_DATA.filter(s => {
 
                 const isFund = isNonEquityAsset(s);
-
-
 
                 // 1. Slicer Segregation: Stocks vs Funds
 
@@ -16441,13 +14914,9 @@ async function syncMubasherDirectAll() {
 
                 if (currentAssetSlicer === 'funds' && !isFund) return false;
 
-
-
                 const matchSearch = s.name.toLowerCase().includes(search) || s.ticker.toLowerCase().includes(search);
 
                 if (!matchSearch) return false;
-
-
 
                 if (currentFilter === 'sector') {
 
@@ -16460,8 +14929,6 @@ async function syncMubasherDirectAll() {
                 if (currentFilter === 'losers') return (s.chg || 0) < -0.0001;
 
                 if (currentFilter === 'unchanged') return Math.abs(s.chg || 0) <= 0.0001;
-
-                
 
                 // Professional Technical & Fundamental Filters
 
@@ -16523,8 +14990,6 @@ async function syncMubasherDirectAll() {
 
                 if (currentFilter === 'insiders') return ['TMGH', 'SKPC', 'FWRY', 'MFPC', 'OCDI'].includes(s.ticker);
 
-
-
                 // Floor Broker Opportunities & Threats Filters
 
                 if (currentFilter === 'opportunities') {
@@ -16553,8 +15018,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 // Specialized Funds Filters
 
                 if (currentFilter === 'gold') return isGoldAsset(s);
@@ -16565,13 +15028,9 @@ async function syncMubasherDirectAll() {
 
                 if (currentFilter === 'daily_liquidity') return ['AZG', 'CMS', 'THNDR_GOLD'].includes(s.ticker);
 
-
-
                 return true;
 
             });
-
-
 
             // Sorting logic
 
@@ -16605,8 +15064,6 @@ async function syncMubasherDirectAll() {
 
             });
 
-
-
             if (filtered.length === 0) {
 
                 container.innerHTML = `
@@ -16627,8 +15084,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             filtered.forEach(s => {
 
                 const isPos = (s.chg || 0) > 0.0001;
@@ -16641,8 +15096,6 @@ async function syncMubasherDirectAll() {
 
                 const sign = isPos ? '+' : '';
 
-
-
                 // Valuation margin if available
 
                 const vd = VALUATION_DATA[s.ticker];
@@ -16650,8 +15103,6 @@ async function syncMubasherDirectAll() {
                 const curPrice = s.close || (vd ? vd.current : 0);
 
                 const margin = (vd && curPrice > 0) ? ((vd.base - curPrice) / curPrice) * 100 : 0;
-
-
 
                 // High / Low Range Ratio & Classic Pivot
 
@@ -16669,8 +15120,6 @@ async function syncMubasherDirectAll() {
 
                 const pivotBadge = `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${isAbovePivot ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800' : 'bg-rose-950/80 text-rose-300 border-rose-800'}">${isAbovePivot ? '↗️ ارتكاز' : '↘️ ارتكاز'} ${piv.pp.toFixed(2)} • ${isAbovePivot ? 'R1: ' + piv.r1.toFixed(2) : 'S1: ' + piv.s1.toFixed(2)}</span>`;
 
-
-
                 // Technical tags
 
                 let tagBadges = [pivotBadge];
@@ -16679,21 +15128,15 @@ async function syncMubasherDirectAll() {
 
                 else if (s.rsi && s.rsi >= 68) tagBadges.push(`<span class="bg-amber-950 text-amber-300 border border-amber-800 px-1.5 py-0.5 rounded text-[9px] font-bold">🔥 تشبع شرائي</span>`);
 
-                
-
                 if (margin >= 20) tagBadges.push(`<span class="bg-sky-950 text-sky-300 border border-sky-800 px-1.5 py-0.5 rounded text-[9px] font-bold">🛡️ أمان +${margin.toFixed(0)}%</span>`);
 
                 if (['ABUK', 'MFPC', 'ORWE', 'AMOC'].includes(s.ticker)) tagBadges.push(`<span class="bg-purple-950 text-purple-300 border border-purple-800 px-1.5 py-0.5 rounded text-[9px] font-bold">💰 عائد مجزي</span>`);
-
-
 
                 const card = document.createElement('div');
 
                 card.className = "glass-card rounded-2xl p-3 space-y-2 hover:border-slate-600 transition";
 
                 card.setAttribute('data-ticker', s.ticker);
-
-
 
                 const recColor = (s.rec || '').includes('شراء') ? 'text-emerald-400' : (s.rec || '').includes('بيع') ? 'text-rose-400' : 'text-amber-400';
 
@@ -16702,8 +15145,6 @@ async function syncMubasherDirectAll() {
                 const arabicPe  = s.pe ? `<span class="text-[10px] text-slate-400">مكرر: <b class="font-mono text-slate-300">${s.pe}x</b></span>` : '';
 
                 const arabicRsi = s.rsi ? `<span class="text-[10px] font-mono ${s.rsi <= 35 ? 'text-emerald-400 font-bold' : s.rsi >= 70 ? 'text-rose-400 font-bold' : 'text-slate-400'}">RSI: ${s.rsi.toFixed(1)}</span>` : '';
-
-
 
                 card.innerHTML = `
 
@@ -16743,8 +15184,6 @@ async function syncMubasherDirectAll() {
 
                     </div>
 
-
-
                     <!-- Daily Range Slider -->
 
                     <div class="space-y-0.5 pt-0.5">
@@ -16768,8 +15207,6 @@ async function syncMubasherDirectAll() {
                         </div>
 
                     </div>
-
-
 
                     <!-- 3-Pillar Institutional Rating Strip (الركائز الثلاث المؤسسية) -->
 
@@ -16812,8 +15249,6 @@ async function syncMubasherDirectAll() {
                         </span>
 
                     </div>
-
-
 
                     <!-- Metrics & Quick Action CTAs -->
 
@@ -16875,8 +15310,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Quick AI Diagnosis for a specific stock from its card
 
         function askAiAboutStock(ticker) {
@@ -16892,8 +15325,6 @@ async function syncMubasherDirectAll() {
             askAiMarketAdvisor(`ما هو التحليل الفني والمالي اللحظي لسهم ${stockName} (${ticker}) وهل ينصح بالشراء الآن؟`);
 
         }
-
-
 
         // Quick Valuation for a specific stock from its card
 
@@ -16931,8 +15362,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Dynamically populate Valuation dropdown respecting currentAssetSlicer (Stocks vs Funds)
 
         function populateValuationStockSelect(force = false) {
@@ -16947,8 +15376,6 @@ async function syncMubasherDirectAll() {
 
             const targetSlicer = isFunds ? 'funds' : 'stocks';
 
-            
-
             // Only repopulate if forced, or options outdated/mismatched with slicer
 
             if (force || selectEl.getAttribute('data-slicer') !== targetSlicer || selectEl.options.length === 0) {
@@ -16959,15 +15386,11 @@ async function syncMubasherDirectAll() {
 
                 selectEl.setAttribute('data-slicer', targetSlicer);
 
-
-
                 const list = isFunds 
 
                     ? STOCKS_DATA.filter(s => isNonEquityAsset(s))
 
                     : STOCKS_DATA.filter(s => !isNonEquityAsset(s));
-
-
 
                 list.forEach(s => {
 
@@ -16980,8 +15403,6 @@ async function syncMubasherDirectAll() {
                     selectEl.appendChild(opt);
 
                 });
-
-
 
                 if (curVal && list.some(s => s.ticker === curVal)) {
 
@@ -16996,8 +15417,6 @@ async function syncMubasherDirectAll() {
             }
 
         }
-
-
 
         // 4. Valuation Card Matrix (100% Comprehensive for all EGX Assets & Funds)
 
@@ -17017,8 +15436,6 @@ async function syncMubasherDirectAll() {
 
             if (!container) return;
 
-
-
             const isFund = isFundAsset(data) || isGoldAsset(data) || ['CMS', 'AZG', 'THNDR_GOLD', 'BWA', 'NMF'].includes(ticker);
 
             const currentPrice = safeNum(data.close, 50.0);
@@ -17031,8 +15448,6 @@ async function syncMubasherDirectAll() {
 
             const marginColor = margin >= 20 ? 'text-emerald-400' : (margin >= 0 ? 'text-amber-400' : 'text-rose-400');
 
-
-
             if (isFund) {
 
                 // Specialized Mutual Fund / Gold NAV Valuation Card
@@ -17044,8 +15459,6 @@ async function syncMubasherDirectAll() {
                 let redemption = 'استرداد أسبوعي';
 
                 let ytdReturn = '+30.0%';
-
-
 
                 if (ticker === 'CMS') {
 
@@ -17099,8 +15512,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 container.innerHTML = `
 
                     <div class="p-3.5 bg-slate-950/80 rounded-2xl border border-amber-900/60 space-y-3 mt-2">
@@ -17130,8 +15541,6 @@ async function syncMubasherDirectAll() {
                             </div>
 
                         </div>
-
-
 
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px] pt-1">
 
@@ -17169,15 +15578,11 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <p class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
 
                             💡 <b>الاستراتيجية والسياسة الاستثمارية:</b> ${policy}. يوفر الصندوق للمستثمر حماية مؤسسية وتنويعاً احترافياً دون تحمل مخاطر اختيار الأسهم الفردية.
 
                         </p>
-
-
 
                         <button onclick="openStockChart('${ticker}')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-slate-200 transition active:scale-98 flex items-center justify-center gap-1.5">
 
@@ -17217,8 +15622,6 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <div class="grid grid-cols-3 gap-2 text-center text-xs">
 
                             <div class="p-2 bg-emerald-950/40 rounded-xl border border-emerald-900/60">
@@ -17252,8 +15655,6 @@ async function syncMubasherDirectAll() {
                             </div>
 
                         </div>
-
-
 
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px] pt-1">
 
@@ -17291,15 +15692,11 @@ async function syncMubasherDirectAll() {
 
                         </div>
 
-
-
                         <p class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
 
                             💡 <b>الخلاصة والتقييم الاستثماري:</b> ${data.analysis}
 
                         </p>
-
-
 
                         <button onclick="openStockChart('${ticker}')" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold text-slate-200 transition active:scale-98 flex items-center justify-center gap-1.5">
 
@@ -17315,8 +15712,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // 5. Dynamic Dividends Table
 
         function renderDividendsTable(calendarData) {
@@ -17324,8 +15719,6 @@ async function syncMubasherDirectAll() {
             const tbody = document.getElementById('dividendsTableBody');
 
             if (!tbody) return;
-
-
 
             const data = calendarData || [
 
@@ -17341,8 +15734,6 @@ async function syncMubasherDirectAll() {
 
             ];
 
-
-
             tbody.innerHTML = '';
 
             data.forEach(item => {
@@ -17352,8 +15743,6 @@ async function syncMubasherDirectAll() {
                 const curPrice = stock ? stock.close : 0;
 
                 const dynamicYield = curPrice > 0 ? ((item.coupon / curPrice) * 100) : item.yield_pct;
-
-
 
                 const tr = document.createElement('tr');
 
@@ -17386,8 +15775,6 @@ async function syncMubasherDirectAll() {
             });
 
         }
-
-
 
         // 6. Subtab Switcher
 
@@ -17433,8 +15820,6 @@ async function syncMubasherDirectAll() {
 
             };
 
-
-
             Object.keys(views).forEach(k => {
 
                 const el = document.getElementById(views[k]);
@@ -17458,8 +15843,6 @@ async function syncMubasherDirectAll() {
                 }
 
             });
-
-
 
             if (sub === 'fair') {
 
@@ -17495,8 +15878,6 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // 7. AI Market Advisor & Analytical Engine
 
         let _equityAiCardsHtml = null;
@@ -17508,8 +15889,6 @@ async function syncMubasherDirectAll() {
         let _lastAiResponseHtml = "";
 
         let _lastAiRequestTimestamp = 0;
-
-
 
         function initAiAdvisorTemplates() {
 
@@ -17530,8 +15909,6 @@ async function syncMubasherDirectAll() {
             }
 
         }
-
-
 
         const _fundsAiPillsHtml = `
 
@@ -17567,8 +15944,6 @@ async function syncMubasherDirectAll() {
 
         `;
 
-
-
         const _fundsAiCardsHtml = `
 
             <!-- Fund Card 1: مقارنة الصناديق الإسلامية -->
@@ -17599,8 +15974,6 @@ async function syncMubasherDirectAll() {
 
             </div>
 
-
-
             <!-- Fund Card 2: أزيموت جولد -->
 
             <div data-cat="gold" onclick="askAiMarketAdvisor('ما هي مميزات الاستثمار في صندوق أزيموت جولد (AZG) مقارنة بشراء سبائك الذهب العينية؟')" class="ai-question-card group p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between active:scale-95 text-right shadow-sm">
@@ -17628,8 +16001,6 @@ async function syncMubasherDirectAll() {
                 </div>
 
             </div>
-
-
 
             <!-- Fund Card 3: التراكم الشهري بالصناديق -->
 
@@ -17659,8 +16030,6 @@ async function syncMubasherDirectAll() {
 
             </div>
 
-
-
             <!-- Fund Card 4: مواعيد ودورات السيولة والاسترداد -->
 
             <div data-cat="dca" onclick="askAiMarketAdvisor('ما هي مواعيد تنفيذ أوامر الشراء والاسترداد ودورات التسوية النقدية لكل صندوق عبر ثندر؟')" class="ai-question-card group p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-violet-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between active:scale-95 text-right shadow-sm">
@@ -17688,8 +16057,6 @@ async function syncMubasherDirectAll() {
                 </div>
 
             </div>
-
-
 
             <!-- Fund Card 5: الرقابة الشرعية والتطهير -->
 
@@ -17719,8 +16086,6 @@ async function syncMubasherDirectAll() {
 
             </div>
 
-
-
             <!-- Fund Card 6: صافي قيمة الأصول وعوائد الصناديق -->
 
             <div data-cat="gold" onclick="askAiMarketAdvisor('ما هي أحدث أسعار صافي قيمة الأصول (NAV) للصناديق ونسب التغير منذ بداية العام؟')" class="ai-question-card group p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-indigo-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between active:scale-95 text-right shadow-sm">
@@ -17749,8 +16114,6 @@ async function syncMubasherDirectAll() {
 
             </div>
 
-
-
             <!-- Fund Card 7: توقعات سعر صرف الدولار والجنيه -->
 
             <div data-cat="usd" onclick="askAiMarketAdvisor('ما هي أحدث توقعات سعر صرف الدولار مقابل الجنيه (USD/EGP) وما هو التقييم العادل وقرارات البنك المركزي؟')" class="ai-question-card group p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between active:scale-95 text-right shadow-sm">
@@ -17778,8 +16141,6 @@ async function syncMubasherDirectAll() {
                 </div>
 
             </div>
-
-
 
             <!-- Fund Card 8: توصيات حائزي الأصول الدولارية والتحوط -->
 
@@ -17811,8 +16172,6 @@ async function syncMubasherDirectAll() {
 
         `;
 
-
-
         function updateAiMarketAdvisorView(slicer = currentAssetSlicer) {
 
             initAiAdvisorTemplates();
@@ -17828,8 +16187,6 @@ async function syncMubasherDirectAll() {
             const titleEl = document.querySelector('#marketSubViewAi h2');
 
             const subTitleEl = document.querySelector('#marketSubViewAi p');
-
-
 
             if (slicer === 'funds') {
 
@@ -17863,13 +16220,9 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         window.quickAskMarketAi = function(q) { return askAiMarketAdvisor(q); };
 
         window.askAiMarketAdvisor = askAiMarketAdvisor;
-
-
 
         // Auto-configure user's Gemini key securely without raw secrets in git
         const _GEMINI_KEY_CHUNKS = ["AQ.", "Ab8RN6JqJGLbqEUD", "p0qQpuS5RlydghOx", "wUrEXkUgw4yVqZ97JA"];
@@ -17899,8 +16252,6 @@ async function syncMubasherDirectAll() {
             if (input) input.value = localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '';
             if (grokInput) grokInput.value = localStorage.getItem('egx_grok_api_key') || DEFAULT_GROK_API_KEY || '';
             if (modal) modal.classList.remove('hidden');
-
-
 
             // Auto-check clipboard for newly copied key
 
@@ -17947,8 +16298,6 @@ async function syncMubasherDirectAll() {
             }
 
         };
-
-
 
         window.pasteAndSaveGeminiKey = async function() {
 
@@ -18042,8 +16391,6 @@ async function syncMubasherDirectAll() {
 
         };
 
-
-
         window.closeGeminiSettingsModal = function() {
 
             triggerHaptic('light');
@@ -18054,8 +16401,6 @@ async function syncMubasherDirectAll() {
 
         };
 
-
-
         window.toggleGeminiKeyVisibility = function() {
 
             const input = document.getElementById('geminiApiKeyInput');
@@ -18065,8 +16410,6 @@ async function syncMubasherDirectAll() {
             input.type = input.type === 'password' ? 'text' : 'password';
 
         };
-
-
 
         window.updateGeminiUiState = function() {
 
@@ -18081,8 +16424,6 @@ async function syncMubasherDirectAll() {
             const quickTestBtn = document.getElementById('geminiQuickTestBtn');
 
             const dot = document.getElementById('geminiLiveStatusDot');
-
-
 
             if (key && key.length > 10) {
 
@@ -18140,8 +16481,6 @@ async function syncMubasherDirectAll() {
 
         };
 
-
-
         window.saveGeminiApiKey = function() {
 
             triggerHaptic('medium');
@@ -18151,8 +16490,6 @@ async function syncMubasherDirectAll() {
             const key = (input ? input.value : '').trim();
 
             const statusBox = document.getElementById('geminiModalTestStatus');
-
-
 
             if (key) {
                 localStorage.setItem('egx_gemini_api_key', key);
@@ -18257,8 +16594,6 @@ async function syncMubasherDirectAll() {
             window.openGeminiSettingsModal();
         };
 
-
-
         window.testGeminiApiKey = async function() {
 
             triggerHaptic('selection');
@@ -18268,8 +16603,6 @@ async function syncMubasherDirectAll() {
             const key = (input && input.value ? input.value : localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 
             const statusBox = document.getElementById('geminiModalTestStatus');
-
-
 
             if (!key) {
 
@@ -18284,8 +16617,6 @@ async function syncMubasherDirectAll() {
                 return;
 
             }
-
-
 
             if (statusBox) {
 
@@ -18305,8 +16636,6 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             try {
 
                 const testPrompt = "أجب في جملة واحدة باللغة العربية: هل الاتصال السحابي يعمل بنجاح للبورصة المصرية؟";
@@ -18318,8 +16647,6 @@ async function syncMubasherDirectAll() {
                 let reply = '';
 
                 let usedModel = '';
-
-
 
                 for (const m of modelsToTry) {
 
@@ -18362,8 +16689,6 @@ async function syncMubasherDirectAll() {
                     } catch (err) {}
 
                 }
-
-
 
                 if (success) {
 
@@ -18427,13 +16752,9 @@ async function syncMubasherDirectAll() {
 
         };
 
-
-
         // Auto-save default key into localStorage if not set and non-empty
 
         // R02 Fix: No auto-injection into localStorage
-
-
 
         // Initialize state on load
 
@@ -18442,8 +16763,6 @@ async function syncMubasherDirectAll() {
             if (typeof updateGeminiUiState === 'function') updateGeminiUiState();
 
         }, 300);
-
-
 
         // Listen to window focus (e.g. returning from Google AI Studio tab)
 
@@ -18473,8 +16792,6 @@ async function syncMubasherDirectAll() {
 
         });
 
-
-
         // HTML Output Sanitizer for AI Responses (Guards against XSS)
 
         function sanitizeAiHtml(str) {
@@ -18499,11 +16816,7 @@ async function syncMubasherDirectAll() {
 
         }
 
-
-
         // Advanced Cloud Gemini API Caller
-
-        
 
         // =========================================================================
 
@@ -18512,8 +16825,6 @@ async function syncMubasherDirectAll() {
         // (Full Executive Control & Universal Access across all platform modules)
 
         // =========================================================================
-
-
 
         window.dispatchGeminiExecutiveCommand = function(cmdStr, autoCloseModal = false) {
 
@@ -18531,11 +16842,7 @@ async function syncMubasherDirectAll() {
 
             const extra = (parts[2] || '').trim();
 
-
-
             let actionLabel = 'تنفيذ أمر Gemini';
-
-
 
             try {
 
@@ -18667,8 +16974,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 if (typeof showToast === 'function') {
 
                     showToast(`⚡ نفّذ Gemini الإجراء: ${actionLabel} بنجاح 🚀`, 'success');
@@ -18683,21 +16988,15 @@ async function syncMubasherDirectAll() {
 
         };
 
-
-
         window.parseAndRenderGeminiExecutiveCommands = function(rawText, autoExecFirst = false) {
 
             if (!rawText) return { html: '', commands: [] };
-
-
 
             const cmdRegex = /\[EXEC:([A-Za-z0-9_]+)(?::([A-Za-z0-9_]+))?(?::([A-Za-z0-9_]+))?\]/g;
 
             const commands = [];
 
             let match;
-
-
 
             while ((match = cmdRegex.exec(rawText)) !== null) {
 
@@ -18715,11 +17014,7 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             let formattedText = rawText;
-
-
 
             const friendlyTitles = {
 
@@ -18757,8 +17052,6 @@ async function syncMubasherDirectAll() {
 
             };
 
-
-
             commands.forEach(cmd => {
 
                 const key = `${cmd.action}${cmd.param ? ':' + cmd.param : ''}`;
@@ -18766,8 +17059,6 @@ async function syncMubasherDirectAll() {
                 let title = `إجراء: ${cmd.action} (${cmd.param})`;
 
                 let desc = 'تحكم تنفيذي مباشر بواسطة Google Gemini';
-
-
 
                 if (cmd.action === 'OPEN_STOCK') {
 
@@ -18821,8 +17112,6 @@ async function syncMubasherDirectAll() {
 
                 }
 
-
-
                 const cardHtml = `
 
                     <div class="my-3 p-3 rounded-xl bg-gradient-to-r from-indigo-950/90 via-slate-900 to-indigo-950/90 border border-indigo-500/70 shadow-lg flex items-center justify-between gap-3 text-right" dir="rtl">
@@ -18859,15 +17148,11 @@ async function syncMubasherDirectAll() {
 
                 `;
 
-
-
                 const inlineBtn = `<button onclick="dispatchGeminiExecutiveCommand('${cmd.action}:${cmd.param}${cmd.extra ? ':' + cmd.extra : ''}', true)" class="inline-flex items-center gap-1 px-2.5 py-0.5 mx-1 my-0.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow align-middle active:scale-95 transition cursor-pointer border border-indigo-400/30"><span>⚡ ${title}</span><span>➔</span></button>`;
 
                 formattedText = formattedText.split(cmd.full).join(inlineBtn);
 
             });
-
-
 
             // Auto-execute the first command if requested
 
@@ -18880,8 +17165,6 @@ async function syncMubasherDirectAll() {
                     dispatchGeminiExecutiveCommand(`${first.action}:${first.param}${first.extra ? ':' + first.extra : ''}`, false);
 
                 }, 700);
-
-
 
                 let autoBanner = `
 
@@ -18905,13 +17188,9 @@ async function syncMubasherDirectAll() {
 
             }
 
-
-
             return { html: formattedText, commands };
 
         };
-
-
 
         // Advanced Cloud Gemini API Caller with Full Executive Control & Universal Observability
 
@@ -18929,15 +17208,11 @@ async function syncMubasherDirectAll() {
 
                 : 'المستثمر لم يدخل بيانات محفظة شخصية بعد.';
 
-
-
             const stocksUniverseContext = (typeof STOCKS_DATA !== 'undefined' && Array.isArray(STOCKS_DATA))
 
                 ? STOCKS_DATA.map(s => `- ${s.ticker}: ${s.name} (${s.sector}) | سعر: ${s.close}ج (${s.chg > 0 ? '+' : ''}${s.chg}%) | RSI: ${s.rsi} | مضاعف ربحية P/E: ${s.pe} | توصية: ${s.rec}`).join('\n')
 
                 : '';
-
-
 
             const fundsUniverseContext = `
 - CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.5305 ج | تتبع رسمي لمؤشر EGX33)
@@ -18947,15 +17222,11 @@ async function syncMubasherDirectAll() {
 - THNDR_GOLD: سبائك الذهب عيار 24 النقي عبر ثندر (سعر الجرام المعتمد: 7,015.00 ج | سعر تكلفة الشراء بالمحفظة: 6,972.84 ج | ربح +0.60%)
 `;
 
-
-
             const egx33Val = window.GLOBAL_STATE?.indices?.EGX33?.close || 6447.37;
 
             const systemContext = `أنت المدير التنفيذي والمستشار المالي والمحاسبي الأول Google Gemini لمنصة تداول وتحليل الأسهم الشرعية بالبورصة المصرية (EGX).
 
 أنت تمتلك **السيطرة الكاملة والوصول الشامل (Full Executive Control & Universal Access)** لكافة وظائف البرنامج:
-
-
 
 📊 حالة السوق والاقتصاد الكلي:
 
@@ -18971,31 +17242,21 @@ async function syncMubasherDirectAll() {
 
 - جرام الذهب عيار 24 الصافي: 7,015.00 ج (السعر المعتمد في محفظة ثندر الرقمية).
 
-
-
 💼 محفظة المستثمر الحقيقية (منفذة على ثندر):
 
 ${holdingsContext}
-
-
 
 🏛️ صناديق الاستثمار الإسلامية والذهب:
 
 ${fundsUniverseContext}
 
-
-
 📋 كافة الأسهم الشرعية الـ 33 المتاحة بالمنصة:
 
 ${stocksUniverseContext}
 
-
-
 🏢 قطاعات البورصة الـ 16:
 
 البنوك، العقارات، الأسمدة والكيماويات، الاتصالات، الموارد الأساسية، الرعاية الصحية، الأغذية والمشروبات، التشييد ومواد البناء، الخدمات المالية غير المصرفية، الطاقة، المنسوجات، السياحة، النقل، التعليم، التجارة، التكنولوجيا.
-
-
 
 ⚡ **بروتوكول السيطرة التنفيذية الكاملة (Executive Control Protocol)**:
 
@@ -19023,13 +17284,9 @@ ${stocksUniverseContext}
 
 * قاعدة ملزمة: كلما طلب منك المستثمر فحص سهم أو فتح شاشة أو تصفية تقرير أو تدقيق محفظة، أدرج الأمر التنفيذي [EXEC:...] فوراً في ردك ليتم تنفيذه مباشرة!`;
 
-
-
             const modelsToTry = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3-flash-preview'];
 
             let lastError = null;
-
-
 
             for (const model of modelsToTry) {
 
@@ -19157,8 +17414,6 @@ ${stocksUniverseContext}
 
                     });
 
-
-
                     if (res.ok) {
 
                         const data = await res.json();
@@ -19203,13 +17458,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             throw lastError || new Error('فشل استدعاء نموذج Gemini');
 
         }
-
-
 
         const EGX_STOCK_ALIASES = [
 
@@ -19269,8 +17520,6 @@ ${stocksUniverseContext}
 
         ];
 
-
-
         async function askAiMarketAdvisor(question) {
 
             triggerHaptic('medium');
@@ -19279,13 +17528,9 @@ ${stocksUniverseContext}
 
             if (!textEl) return;
 
-
-
             const trimmedQ = (question || "").trim();
 
             if (!trimmedQ) return;
-
-
 
             // 1. Deduplication Guard: If exact same question asked recently, refresh with timestamp
 
@@ -19309,8 +17554,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             textEl.innerHTML = `
 
                 <div class="flex items-center gap-2 text-indigo-400 py-3">
@@ -19323,15 +17566,11 @@ ${stocksUniverseContext}
 
             `;
 
-
-
             // 2. Resolve Market State ACCURATELY (Fixing isLive / isOpen check)
 
             const mState = typeof resolveMarketState === 'function' ? resolveMarketState() : { isLive: true, isOpen: true, label: 'جلسة التداول مفتوحة' };
 
             const isMarketActive = (mState.isLive === true || mState.isOpen === true || mState.state === 'OPEN');
-
-            
 
             const sessionHeader = isMarketActive 
 
@@ -19350,8 +17589,6 @@ ${stocksUniverseContext}
                      <span>البورصة مغلقة حالياً (${mState.isWeekend ? 'عطلة أسبوعية رسمية' : 'خارج أوقات التداول'}) — التحليل يعتمد على إغلاق الجلسة الأخيرة (${mState.nextSessionCountdownText || 'استئناف 10:00 ص'})</span>
 
                    </div>`;
-
-
 
             // 3. Check for Custom Gemini API Key & Generative Cloud Reasoning
 
@@ -19489,8 +17726,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // 4. Advanced Local Quantitative & Financial Reasoning Engine
 
             setTimeout(() => {
@@ -19519,8 +17754,6 @@ ${stocksUniverseContext}
 
             const qLower = q.toLowerCase();
 
-
-
             // 1. Detect if any stock is mentioned
 
             let targetStock = null;
@@ -19537,8 +17770,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Also check general ticker lookup
 
             if (!targetStock) {
@@ -19546,8 +17777,6 @@ ${stocksUniverseContext}
                 targetStock = STOCKS_DATA.find(s => s && s.ticker && (qLower.includes(s.ticker.toLowerCase()) || qLower.includes((s.name||'').toLowerCase())));
 
             }
-
-
 
             // ---------------------------------------------------------------------
 
@@ -19560,8 +17789,6 @@ ${stocksUniverseContext}
                 return renderStockDeepAnalysis(targetStock, qLower, sessionHeader);
 
             }
-
-
 
             // ---------------------------------------------------------------------
 
@@ -19577,8 +17804,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ---------------------------------------------------------------------
 
             // CASE 3: SELLING & PROFIT TAKING ("ابيع ايه", "جني ارباح", "تخارج", "كسبان")
@@ -19592,8 +17817,6 @@ ${stocksUniverseContext}
                 return renderProfitTakingReport(sessionHeader);
 
             }
-
-
 
             // ---------------------------------------------------------------------
 
@@ -19609,8 +17832,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ---------------------------------------------------------------------
 
             // CASE 5: CAPITAL ALLOCATION ("معايا مبلغ", "50 الف", "100 الف", "تقسيم", "توزيع")
@@ -19624,8 +17845,6 @@ ${stocksUniverseContext}
                 return renderCapitalAllocationReport(qLower, sessionHeader);
 
             }
-
-
 
             // ---------------------------------------------------------------------
 
@@ -19641,8 +17860,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ---------------------------------------------------------------------
 
             // CASE 7: MARKET TREND & SESSION DIRECTION ("السوق", "البورصة", "المؤشر", "طالع ولا نازل")
@@ -19657,8 +17874,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ---------------------------------------------------------------------
 
             // CASE 8: ADVANCED INTELLIGENT SYNTHESIS FOR ANY OTHER QUERY
@@ -19669,15 +17884,11 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // =========================================================================
 
         // SUB-RENDERERS FOR ADVANCED FINANCIAL RESPONSES
 
         // =========================================================================
-
-
 
         function renderStockDeepAnalysis(s, qLower, sessionHeader) {
 
@@ -19711,8 +17922,6 @@ ${stocksUniverseContext}
 
             const target2 = Math.round(r2 * 100) / 100;
 
-
-
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
 
             const holding = userHoldingsList.find(h => h.ticker === s.ticker) || null;
@@ -19738,8 +17947,6 @@ ${stocksUniverseContext}
                 `;
 
             }
-
-
 
             // Custom tailored strategy based on stock health
 
@@ -19773,8 +17980,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             return `
 
                 <div class="space-y-2.5">
@@ -19799,11 +18004,7 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     ${holdingHtml}
-
-
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-2 bg-slate-900/90 rounded-xl border border-slate-800 text-[10px] font-mono">
 
@@ -19817,8 +18018,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-200 leading-relaxed space-y-1">
 
                         <div class="flex items-center gap-1.5 font-bold text-amber-300">
@@ -19830,8 +18029,6 @@ ${stocksUniverseContext}
                         <p class="text-[10.5px] leading-relaxed text-slate-300">${verdict}</p>
 
                     </div>
-
-
 
                     <div class="p-2 bg-indigo-950/40 rounded-xl border border-indigo-800/60 text-[10.5px] text-indigo-200 flex items-center justify-between flex-wrap gap-2">
 
@@ -19850,8 +18047,6 @@ ${stocksUniverseContext}
             `;
 
         }
-
-
 
         function renderTopBuyPicksReport(sessionHeader) {
 
@@ -19878,8 +18073,6 @@ ${stocksUniverseContext}
                 .sort((a,b) => b.margin - a.margin)
 
                 .slice(0, 3);
-
-
 
             const picksHtml = topPicks.map((s, idx) => `
 
@@ -19908,8 +18101,6 @@ ${stocksUniverseContext}
                 </div>
 
             `).join('');
-
-
 
             return `
 
@@ -19949,15 +18140,11 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderProfitTakingReport(sessionHeader) {
 
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
 
             const winners = userHoldingsList.filter(h => (h.cur || h.close || 0) > (h.buy || 0)).sort((a,b) => (((b.cur || b.close || 0) - b.buy)/b.buy) - (((a.cur || a.close || 0) - a.buy)/a.buy));
-
-
 
             let winnersHtml = winners.length > 0 
 
@@ -19974,8 +18161,6 @@ ${stocksUniverseContext}
                 }).join('<br>')
 
                 : '• لا توجد مراكز رابحة بمحفظتك حالياً أو لم يتم إدخال بيانات المحفظة.';
-
-
 
             return `
 
@@ -20021,15 +18206,11 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderDcaPlanReport(sessionHeader) {
 
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
 
             const losers = userHoldingsList.filter(h => (h.buy || 0) > 0 && (h.cur || h.close || 0) < h.buy).sort((a,b) => (((a.cur || a.close || 0) - a.buy)/a.buy) - (((b.cur || b.close || 0) - b.buy)/b.buy));
-
-
 
             let losersHtml = losers.length > 0
 
@@ -20046,8 +18227,6 @@ ${stocksUniverseContext}
                 }).join('<br>')
 
                 : '• محفظتك لا تحتوي على مراكز خاسرة تستدعي التبريد حالياً!';
-
-
 
             return `
 
@@ -20093,8 +18272,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderCapitalAllocationReport(qLower, sessionHeader) {
 
             let amount = 50000;
@@ -20113,8 +18290,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const stocksAmount = Math.round(amount * 0.45);
 
             const cmsAmount = Math.round(amount * 0.25);
@@ -20122,8 +18297,6 @@ ${stocksUniverseContext}
             const goldAmount = Math.round(amount * 0.20);
 
             const cashAmount = Math.round(amount * 0.10);
-
-
 
             return `
 
@@ -20142,8 +18315,6 @@ ${stocksUniverseContext}
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-950 text-teal-300 border border-teal-800">Portfolio Allocation</span>
 
                     </div>
-
-
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
 
@@ -20189,8 +18360,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-200 leading-relaxed space-y-1">
 
                         <div class="font-bold text-amber-300">💡 فلسفة التوزيع (الموازنة بين النمو والأمان):</div>
@@ -20208,8 +18377,6 @@ ${stocksUniverseContext}
             `;
 
         }
-
-
 
         function renderMacroComparisonReport(qLower, sessionHeader) {
 
@@ -20231,8 +18398,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-2 bg-slate-900 rounded-xl border border-slate-800 text-[10px] font-mono text-center">
 
                         <div>فائدة الإيداع: <b class="text-sky-300">19.00% سنوي (الإيداع) / 20.00% (الإقراض)</b></div>
@@ -20244,8 +18409,6 @@ ${stocksUniverseContext}
                         <div>العائد الحقيقي للدين: <b class="text-rose-400">-4.7% (تآكل القوة الشرائية)</b></div>
 
                     </div>
-
-
 
                     <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-200 leading-relaxed space-y-1.5">
 
@@ -20265,8 +18428,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderMarketSessionPulseReport(sessionHeader) {
 
             const upCount = STOCKS_DATA.filter(s => s.type === 'stock' && s.chg > 0).length;
@@ -20274,8 +18435,6 @@ ${stocksUniverseContext}
             const downCount = STOCKS_DATA.filter(s => s.type === 'stock' && s.chg < 0).length;
 
             const flatCount = STOCKS_DATA.filter(s => s.type === 'stock' && s.chg === 0).length;
-
-
 
             return `
 
@@ -20294,8 +18453,6 @@ ${stocksUniverseContext}
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Market Pulse</span>
 
                     </div>
-
-
 
                     <div class="grid grid-cols-3 gap-2 text-center text-xs">
 
@@ -20325,8 +18482,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-200 leading-relaxed space-y-1">
 
                         <div class="font-bold text-amber-300">📊 الاتجاه العام وحركة السيولة المؤسسية:</div>
@@ -20345,8 +18500,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderUniversalPortfolioDiagnostic(q, sessionHeader) {
 
             let totalVal = 0;
@@ -20354,8 +18507,6 @@ ${stocksUniverseContext}
             const userHoldingsList = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
 
             userHoldingsList.forEach(h => totalVal += (h.shares || 0) * (h.cur || h.close || 0));
-
-
 
             return `
 
@@ -20374,8 +18525,6 @@ ${stocksUniverseContext}
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Diagnostic</span>
 
                     </div>
-
-
 
                     <div class="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-[11px] text-slate-200 leading-relaxed space-y-1.5">
 
@@ -20399,8 +18548,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <div class="p-2 bg-slate-950 rounded-xl border border-slate-800 text-[10px] text-slate-400 leading-relaxed">
 
                         💡 يمكنك كتابة اسم أي سهم بعينه (مثال: "طلعت مصطفى"، "فوري"، "السويدي") للحصول على تقرير رقمي فوري يتضمن نقاط الدخول والهدف ووقف الخسارة بدقة.
@@ -20412,8 +18559,6 @@ ${stocksUniverseContext}
             `;
 
         }
-
-
 
         function submitMarketAiQuestion() {
 
@@ -20429,20 +18574,13 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // =========================================================================
 
         // FLOATING GLOBAL AI GEMINI COPILOT (سلاسة وسيطرة شاملة على كافة أقسام المنصة)
 
         // =========================================================================
 
-
-
         // PAGE_AI_SUGGESTIONS is loaded modularly from js/page-ai-suggestions.js
-
-
-
 
         // =========================================================================
 
@@ -20470,10 +18608,6 @@ ${stocksUniverseContext}
 
         window._geminiActiveAttachment = null; // { name, size, type, dataUrl, textContent }
 
-
-
-        
-
         window.askGeminiForStockFromModal = function(tickerParam) {
 
             triggerHaptic('heavy');
@@ -20494,8 +18628,6 @@ ${stocksUniverseContext}
 
             const val = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[ticker]) ? VALUATION_DATA[ticker] : null;
 
-
-
             const name = s?.name || ticker;
 
             const curPrice = s?.close || 0;
@@ -20510,8 +18642,6 @@ ${stocksUniverseContext}
 
             const fairVal = val?.base || rec?.fairValue || '—';
 
-
-
             const prompt = `أرجو تقديم استشارة وتحليل مالي وفني وشرعي دقيق لسهم ${name} (${ticker}) من واقع شارت التداول:
 
 • السعر اللحظي: ${curPrice} ج (${chg >= 0 ? '+' : ''}${chg}%)
@@ -20523,8 +18653,6 @@ ${stocksUniverseContext}
 • القيمة العادلة المعتمدة: ${fairVal} ج
 
 • ما هو تقييمك للسهم حالياً وتوصيتك الفنية للمحفظة وفق إدارة المخاطر؟`;
-
-
 
             window.openFloatingAiCopilot();
 
@@ -20543,8 +18671,6 @@ ${stocksUniverseContext}
             }, 300);
 
         };
-
-
 
         window.openFloatingAiCopilot = function(customPrompt = '', customTitle = '') {
             triggerHaptic('medium');
@@ -20582,8 +18708,6 @@ ${stocksUniverseContext}
             if (el) el.classList.add('hidden');
         };
 
-
-
         window.closeFloatingAiCopilot = function() {
 
             triggerHaptic('light');
@@ -20594,8 +18718,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         window.renderFloatingAiSuggestions = function(tabKey) {
 
             const pageData = PAGE_AI_SUGGESTIONS[tabKey] || PAGE_AI_SUGGESTIONS.portfolio;
@@ -20603,8 +18725,6 @@ ${stocksUniverseContext}
             const grid = document.getElementById('floatingAiSuggestionsGrid');
 
             if (!grid) return;
-
-
 
             grid.innerHTML = pageData.suggestions.map(s => `
 
@@ -20623,8 +18743,6 @@ ${stocksUniverseContext}
             `).join('');
 
         };
-
-
 
         // Reset Conversation (محادثة جديدة)
 
@@ -20650,8 +18768,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         // File Attachment Handlers (ملفات وصور)
 
         window.handleFloatingAiFileSelect = function(event) {
@@ -20660,15 +18776,11 @@ ${stocksUniverseContext}
 
             if (!file) return;
 
-
-
             const reader = new FileReader();
 
             const isImg = file.type.startsWith('image/');
 
             const isText = file.type.includes('text') || file.type.includes('csv') || file.name.endsWith('.csv') || file.name.endsWith('.txt') || file.name.endsWith('.json');
-
-
 
             if (isImg) {
 
@@ -20754,8 +18866,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         function renderFloatingAiAttachmentBar() {
 
             const bar = document.getElementById('floatingAiFileAttachmentBar');
@@ -20786,8 +18896,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         window.removeFloatingAiAttachment = function() {
 
             window._geminiActiveAttachment = null;
@@ -20801,8 +18909,6 @@ ${stocksUniverseContext}
             if (inp) inp.value = '';
 
         };
-
-
 
         window.previewFloatingAiAttachment = function() {
 
@@ -20828,8 +18934,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         // Handle Enter key for fast conversational messaging
 
         window.handleFloatingAiInputKeydown = function(event) {
@@ -20843,8 +18947,6 @@ ${stocksUniverseContext}
             }
 
         };
-
-
 
         window.submitFloatingAiCustomQuery = function() {
 
@@ -20868,8 +18970,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         // Render Multi-Turn Chat Stream Bubbles
 
         window.renderFloatingAiChatStream = function() {
@@ -20882,8 +18982,6 @@ ${stocksUniverseContext}
 
             if (!container) return;
 
-
-
             if (!window._geminiChatHistory || window._geminiChatHistory.length === 0) {
 
                 if (welcomeCard) welcomeCard.classList.remove('hidden');
@@ -20894,11 +18992,7 @@ ${stocksUniverseContext}
 
             }
 
-
-
             if (welcomeCard) welcomeCard.classList.add('hidden');
-
-
 
             container.innerHTML = window._geminiChatHistory.map((item, idx) => {
 
@@ -20947,8 +19041,6 @@ ${stocksUniverseContext}
                         }
 
                     }
-
-
 
                     return `
 
@@ -21024,8 +19116,6 @@ ${stocksUniverseContext}
 
             }).join('');
 
-
-
             // Scroll stream to bottom
 
             setTimeout(() => {
@@ -21035,8 +19125,6 @@ ${stocksUniverseContext}
             }, 50);
 
         };
-
-
 
         window.copyGeminiTurnText = function(idx) {
 
@@ -21062,8 +19150,6 @@ ${stocksUniverseContext}
 
         };
 
-
-
         // Master Multi-Turn Submitter
 
         window.submitFloatingAiQuery = async function(userPrompt) {
@@ -21074,19 +19160,13 @@ ${stocksUniverseContext}
 
             const loading = document.getElementById('floatingAiLoading');
 
-
-
             // Current pending attachment
 
             const currentAtt = window._geminiActiveAttachment ? { ...window._geminiActiveAttachment } : null;
 
             removeFloatingAiAttachment();
 
-
-
             const timeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-
-
 
             // Push User Message to Chat History
 
@@ -21108,15 +19188,11 @@ ${stocksUniverseContext}
 
             } catch (e) {}
 
-
-
             renderFloatingAiChatStream();
 
             if (loading) loading.classList.remove('hidden');
 
             if (stream) stream.scrollTop = stream.scrollHeight;
-
-
 
             // Build Context (Live Funds from SNDUK, Portfolio, Macro)
 
@@ -21142,8 +19218,6 @@ ${stocksUniverseContext}
 
             }).join(' \n');
 
-
-
             const unearnedPnl = currentMarketVal - totalInvestedCost;
 
             const unearnedPnlPct = totalInvestedCost > 0 ? ((unearnedPnl / totalInvestedCost) * 100).toFixed(2) : '0.00';
@@ -21156,25 +19230,17 @@ ${stocksUniverseContext}
 
             const gold24k = 7015.00;
 
-
-
             const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة سندك وإفصاحات مديري الصناديق (11 أكتوبر 2026): CMS مصر شريعة (22.5305 ج | +0.33%)، AZG أزيموت جولد (23.5686 ج | +0.11%)، BWA بلتون وفرة (2.1827 ج | +0.38%)، NMF نعيم مصر (49.5200 ج | +0.66%)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
-
-
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 
             const mState = typeof resolveMarketState === 'function' ? resolveMarketState() : { isLive: true };
-
-
 
             try {
 
                 let responseText = '';
 
                 let modelName = 'Gemini 2.5 Controller';
-
-
 
                 if (apiKey && apiKey.length > 10) {
 
@@ -21212,8 +19278,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 // If cloud didn't produce text (or failed/offline), use intelligent local controller engine
 
                 if (!responseText) {
@@ -21223,8 +19287,6 @@ ${stocksUniverseContext}
                     let execCmd = '';
 
                     let localAnalysisHtml = '';
-
-
 
                     // Find if user mentioned any stock in STOCKS_DATA
 
@@ -21250,8 +19312,6 @@ ${stocksUniverseContext}
 
                     );
 
-
-
                     if (foundStock) {
 
                         execCmd = `[EXEC:OPEN_STOCK:${foundStock.ticker}]`;
@@ -21265,8 +19325,6 @@ ${stocksUniverseContext}
                         const val = (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[foundStock.ticker]) ? VALUATION_DATA[foundStock.ticker] : null;
 
                         const holding = userHoldingsList.find(h => h.ticker === foundStock.ticker);
-
-
 
                         const curP = foundStock.close || foundStock.price || 0;
 
@@ -21286,8 +19344,6 @@ ${stocksUniverseContext}
 
                         const safety = curP > 0 ? (((fair - curP) / fair) * 100).toFixed(1) : '15.0';
 
-
-
                         let actionBadge = 'احتفاظ ومراقبة 🟡';
 
                         let actionDesc = 'التداول عند مستويات متوازنة مع ترقب إشارات الزخم.';
@@ -21305,8 +19361,6 @@ ${stocksUniverseContext}
                             actionDesc = 'السهم وصل لمناطق تشبع شرائي بالقرب من المقاومات الرئيسية.';
 
                         }
-
-
 
                         localAnalysisHtml = `
 
@@ -21460,15 +19514,11 @@ ${stocksUniverseContext}
 
                     }
 
-
-
                     responseText = localAnalysisHtml + (execCmd ? `\n${execCmd}` : '');
 
                     modelName = 'المحرك الخوارزمي المدمج';
 
                 }
-
-
 
                 // Format Markdown and Parse Executive Action Commands
 
@@ -21491,8 +19541,6 @@ ${stocksUniverseContext}
                         .replace(/\n/g, '<br/>');
 
                 }
-
-
 
                 const execRegex = /\[EXEC:([A-Z_]+)(?::([^\]]+))?\]/g;
 
@@ -21518,8 +19566,6 @@ ${stocksUniverseContext}
 
                     else if (cmdType === 'SYNC_FUNDS') btnLabel = `مزامنة صناديق SNDUK 🔄`;
 
-                    
-
                     actionButtons += `
 
                         <button onclick="dispatchGeminiExecutiveCommand('${rawCmd}', false)" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow transition active:scale-95 m-1">
@@ -21534,8 +19580,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 finalHtml = finalHtml.replace(execRegex, '');
 
                 if (actionButtons) {
@@ -21543,8 +19587,6 @@ ${stocksUniverseContext}
                     finalHtml += `<div class="pt-2 border-t border-indigo-900/40 flex flex-wrap gap-1.5 mt-2">${actionButtons}</div>`;
 
                 }
-
-
 
                 window._geminiChatHistory.push({
 
@@ -21564,13 +19606,9 @@ ${stocksUniverseContext}
 
                 } catch (e) {}
 
-
-
                 if (loading) loading.classList.add('hidden');
 
                 renderFloatingAiChatStream();
-
-
 
             } catch (err) {
 
@@ -21615,8 +19653,6 @@ ${stocksUniverseContext}
             }
 
         };
-
-
 
         // Live Fund Sync Engine (One-Click Synchronizer - Strict Real-Time Mode)
         window.syncLiveFundsEngine = async function(force = true, silent = false) {
@@ -21786,8 +19822,6 @@ ${stocksUniverseContext}
             return true;
         };
 
-
-
         // =========================================================================
 
         // RECOMMENDATIONS & ANALYSIS MASTER SLICER (توصيات وتحليل v16.3)
@@ -21806,8 +19840,6 @@ ${stocksUniverseContext}
 
             const analysisBtn = document.getElementById('recSlicerBtn_analysis');
 
-
-
             if (slicer === 'analysis') {
 
                 if (recPanel) recPanel.classList.add('hidden');
@@ -21821,8 +19853,6 @@ ${stocksUniverseContext}
                 if (recBtn) recBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800 active:scale-95";
 
                 if (analysisBtn) analysisBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md active:scale-95";
-
-                
 
                 if (typeof initAiAdvisorTemplates === 'function') initAiAdvisorTemplates();
 
@@ -21843,8 +19873,6 @@ ${stocksUniverseContext}
             }
 
         };
-
-
 
         function switchDecisionsSubTab(sub) {
 
@@ -21878,8 +19906,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         window.switchPortfolioSubTab = function(sub) {
 
             triggerHaptic('selection');
@@ -21887,8 +19913,6 @@ ${stocksUniverseContext}
             const pView = document.getElementById('view-portfolio');
 
             const perfView = document.getElementById('view-performance');
-
-
 
             const pBtnHoldings = document.getElementById('portSubHoldingsBtn_p');
 
@@ -21898,27 +19922,19 @@ ${stocksUniverseContext}
 
             const perfBtnPerf = document.getElementById('portSubPerfBtn_perf');
 
-
-
             if (sub === 'performance') {
 
                 if (pView) pView.classList.add('hidden');
 
                 if (perfView) perfView.classList.remove('hidden');
 
-
-
                 if (pBtnHoldings) pBtnHoldings.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 active:scale-95";
 
                 if (pBtnPerf) pBtnPerf.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-md active:scale-95";
 
-
-
                 if (perfBtnHoldings) perfBtnHoldings.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 active:scale-95";
 
                 if (perfBtnPerf) perfBtnPerf.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-md active:scale-95";
-
-
 
                 renderPerformanceTab();
 
@@ -21928,27 +19944,19 @@ ${stocksUniverseContext}
 
                 if (pView) pView.classList.remove('hidden');
 
-
-
                 if (pBtnHoldings) pBtnHoldings.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow-md active:scale-95";
 
                 if (pBtnPerf) pBtnPerf.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 active:scale-95";
 
-
-
                 if (perfBtnHoldings) perfBtnHoldings.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow-md active:scale-95";
 
                 if (perfBtnPerf) perfBtnPerf.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 active:scale-95";
-
-
 
                 renderHoldingsTable();
 
             }
 
         };
-
-
 
         window.filterAiQuestions = function(category, btnEl) {
 
@@ -21994,15 +20002,11 @@ ${stocksUniverseContext}
 
         };
 
-
-
         window.switchTab = switchTab;
 
         function switchTab(tabId, btn, pushHistory = true) {
 
             triggerHaptic('medium');
-
-            
 
             // Backward compatibility routing
 
@@ -22011,8 +20015,6 @@ ${stocksUniverseContext}
             let subTarget = null;
 
             let isPerfRoute = false;
-
-
 
             if (tabId === 'performance') {
 
@@ -22046,8 +20048,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             currentActiveTab = actualTabId;
 
             if (pushHistory) {
@@ -22058,13 +20058,9 @@ ${stocksUniverseContext}
 
             updateBackUI();
 
-
-
             // Hide all tab content
 
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-
-
 
             // Mobile Bottom Nav Highlight
 
@@ -22086,8 +20082,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Desktop Nav Highlight
 
             document.querySelectorAll('.desktop-tab-btn').forEach(b => {
@@ -22103,8 +20097,6 @@ ${stocksUniverseContext}
                 activeDesktopBtn.className = "desktop-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 shadow-sm";
 
             }
-
-
 
             if (actualTabId === 'portfolio') {
 
@@ -22127,8 +20119,6 @@ ${stocksUniverseContext}
                 const target = document.getElementById('view-' + actualTabId);
 
                 if (target) target.classList.remove('hidden');
-
-
 
                 if (actualTabId === 'radar') {
 
@@ -22174,13 +20164,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
         }
-
-
 
         // =========================================================================
         // v16.4 UNIFIED TOOLS HUB & REAL-TIME STATE ENGINES
@@ -22445,6 +20431,27 @@ ${stocksUniverseContext}
             out.classList.remove('hidden');
         }
 
+        // =========================================================================
+        // REAL-TIME BROKERAGE FEE INPUT SYNCHRONIZATION
+        // =========================================================================
+        function syncFeeSharesCalculation() {
+            const val = parseFloat(document.getElementById('fee_trade_val')?.value) || 0;
+            const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
+            const sharesIn = document.getElementById('fee_trade_shares');
+            if (sharesIn && price > 0 && val > 0) {
+                sharesIn.value = Math.floor(val / price);
+            }
+        }
+
+        function syncFeeValueFromShares() {
+            const shares = parseFloat(document.getElementById('fee_trade_shares')?.value) || 0;
+            const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
+            const valIn = document.getElementById('fee_trade_val');
+            if (valIn && shares > 0 && price > 0) {
+                valIn.value = (shares * price).toFixed(2);
+            }
+        }
+
         function calculateBrokerageFees() {
             triggerHaptic('medium');
             const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
@@ -22512,19 +20519,7 @@ ${stocksUniverseContext}
         // TOOL 3: 🔔 التنبيهات السعرية والشرعية (Persistent Alerts Engine)
         // =========================================================================
 
-        function populateCustomAlertStockSelect() {
-            const select = document.getElementById('alert_stock_select');
-            if (!select) return;
-            select.innerHTML = '';
-
-            const list = Array.isArray(STOCKS_DATA) ? STOCKS_DATA : [];
-            list.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s.ticker;
-                opt.textContent = `${s.name} (${s.ticker}) — السعر: ${s.close ? s.close.toFixed(2) + ' ج' : ''}`;
-                select.appendChild(opt);
-            });
-        }
+        
 
         function addNewCustomAlert() {
             triggerHaptic('medium');
@@ -22570,16 +20565,7 @@ ${stocksUniverseContext}
             showToast(`✓ تم تفعيل التنبيه لسهم ${ticker} عند ${price.toFixed(2)} ج`, 'success');
         }
 
-        function deleteCustomAlert(id) {
-            triggerHaptic('selection');
-            userCustomAlerts = userCustomAlerts.filter(a => a.id !== id);
-            try {
-                localStorage.setItem('egx_custom_alerts', JSON.stringify(userCustomAlerts));
-                localStorage.setItem('egx_custom_alerts_cleared', 'true');
-            } catch(e) {}
-            renderCustomAlertsList();
-            showToast('✓ تم حذف التنبيه بنجاح', 'info');
-        }
+        
 
         function clearAllCustomAlerts() {
             triggerHaptic('medium');
@@ -22656,29 +20642,6 @@ ${stocksUniverseContext}
             toggleManualActivityForm();
             renderUserActivityLog('all');
             showToast("✓ تم توثيق الحركة بنجاح في سجل العمليات", "success");
-        }
-
-        function exportUserActivityLog() {
-            triggerHaptic('medium');
-            const logs = getUserActivityLogs();
-            if (!logs || logs.length === 0) {
-                showToast("⚠️ لا توجد حركات مسجلة لتصديرها", "warning");
-                return;
-            }
-
-            let csv = "\uFEFFالتاريخ,الوقت,نوع_الحركة,السهم,البيان,التفاصيل\n";
-            logs.forEach(l => {
-                csv += `"${l.displayDate || ''}","${l.displayTime || ''}","${l.badge || l.type}","${l.ticker || ''}","${(l.title || '').replace(/"/g, '""')}","${(l.description || '').replace(/"/g, '""')}"\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `EGX_Audit_Log_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast("✓ تم تصدير سجل الحركات إلى ملف Excel (CSV)", "success");
         }
 
         // =========================================================================
@@ -22911,7 +20874,6 @@ ${stocksUniverseContext}
                 setTimeout(() => location.reload(), 800);
             }
         }
-        
 
         function printPortfolioStatement() {
 
@@ -22967,28 +20929,17 @@ ${stocksUniverseContext}
 
             document.getElementById('printZakatVal').innerText = `${(totalM * 0.02577).toLocaleString(undefined, {minimumFractionDigits: 2})} ج.م`;
 
-
-
             window.print();
 
         }
 
-
-
         // 15. Initial Load & Setup
-
-        
 
         // ================= NEWS FEED & PER-STOCK NEWS LOGIC =================
 
         // NEWS_DATA is loaded modularly from js/news-data.js
 
-
-
-
         let currentNewsCategory = 'all';
-
-
 
         function renderNewsFeed() {
 
@@ -23002,13 +20953,9 @@ ${stocksUniverseContext}
 
             if (containers.length === 0) return;
 
-
-
             const searchInput = document.getElementById('newsSearchInput2') || document.getElementById('newsSearchInput');
 
             const search = (searchInput ? searchInput.value : '').trim().toLowerCase();
-
-
 
             const filtered = NEWS_DATA.filter(n => {
 
@@ -23021,8 +20968,6 @@ ${stocksUniverseContext}
                                     (n.summary || '').toLowerCase().includes(search);
 
                 if (!matchSearch) return false;
-
-
 
                 if (currentNewsCategory === 'portfolio') {
 
@@ -23043,8 +20988,6 @@ ${stocksUniverseContext}
                 return true;
 
             });
-
-
 
             containers.forEach(container => {
 
@@ -23088,15 +21031,9 @@ ${stocksUniverseContext}
 
                         </div>
 
-
-
                         <h4 class="text-xs font-bold text-white leading-snug">${n.title}</h4>
 
-
-
                         <p class="text-[11px] text-slate-300 leading-relaxed">${n.summary}</p>
-
-
 
                         <div class="pt-1 flex items-center justify-between border-t border-slate-800/60 text-xs flex-wrap gap-2">
 
@@ -23142,8 +21079,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function filterNewsFeed() {
 
             renderNewsFeed();
@@ -23153,8 +21088,6 @@ ${stocksUniverseContext}
         window.filterNewsByInput = filterNewsFeed;
 
         window.filterNewsCategory = setNewsCategory;
-
-
 
         function setNewsCategory(cat, btn = null) {
 
@@ -23184,8 +21117,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function openStockFromNews(ticker) {
 
             triggerHaptic('medium');
@@ -23194,11 +21125,7 @@ ${stocksUniverseContext}
 
         }
 
-
-
 // 2-tab duplicate switchModalSubTab removed (using 4-tab definition at line 1821)
-
-
 
         function openStockNews(ticker) {
 
@@ -23210,8 +21137,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function renderPerStockNewsInModal(ticker) {
 
             const container = document.getElementById('modalStockNewsContainer');
@@ -23220,15 +21145,11 @@ ${stocksUniverseContext}
 
             container.innerHTML = '';
 
-
-
             const matchingNews = NEWS_DATA.filter(n => n.ticker === ticker);
 
             const badge = document.getElementById('modalStockNewsBadge');
 
             if (badge) badge.innerText = matchingNews.length;
-
-
 
             if (matchingNews.length === 0) {
 
@@ -23259,8 +21180,6 @@ ${stocksUniverseContext}
                 return;
 
             }
-
-
 
             matchingNews.forEach(n => {
 
@@ -23296,8 +21215,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         window.addEventListener('DOMContentLoaded', () => {
 
             initThemeMode();
@@ -23328,13 +21245,9 @@ ${stocksUniverseContext}
 
             ]);
 
-
-
             // Attempt Cloud Live Sync immediately
 
             syncLiveMarketData(true);
-
-
 
             // Periodic auto-sync every 60 seconds
 
@@ -23346,15 +21259,11 @@ ${stocksUniverseContext}
 
         });
 
-
-
         // =========================================================================
 
         // WEALTH MANAGEMENT SUITE IMPLEMENTATION (الفئات 13-26)
 
         // =========================================================================
-
-
 
         // 1. Thndr Fees & Egyptian Capital Gains Tax Calculator (الفئة 14)
 
@@ -23370,8 +21279,6 @@ ${stocksUniverseContext}
 
             const out = document.getElementById('fee_tax_output');
 
-
-
             const thndrComm = Math.max(2.0, tradeVal * 0.002);
 
             const egxFees = tradeVal * 0.000125;
@@ -23380,15 +21287,11 @@ ${stocksUniverseContext}
 
             const totalFees = thndrComm + egxFees + stampDuty;
 
-
-
             // ضريبة الأرباح الرأسمالية: معفاة/مؤجلة رسمياً للأفراد المقيمين في البورصة المصرية
 
             let cgtTax = 0;
 
             const netAmount = tradeType === 'buy' ? (tradeVal + totalFees) : (tradeVal - totalFees);
-
-
 
             out.innerHTML = `
 
@@ -23462,8 +21365,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // 2. Milestone Goal & Monte Carlo Wealth Simulation (الفئة 18)
 
         function runGoalsMonteCarloSimulation() {
@@ -23482,8 +21383,6 @@ ${stocksUniverseContext}
 
             const out = document.getElementById('goal_output');
 
-
-
             const monthlyRate = annualRate / 12;
 
             let detMonths = 0;
@@ -23500,15 +21399,11 @@ ${stocksUniverseContext}
 
             const detYears = (detMonths / 12).toFixed(1);
 
-
-
             const runs = 500;
 
             const simMonthsResults = [];
 
             let reachedIn3YearsCount = 0;
-
-
 
             for (let r = 0; r < runs; r++) {
 
@@ -23548,8 +21443,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             simMonthsResults.sort((a, b) => a - b);
 
             const validReaches = simMonthsResults.filter(x => x < 999);
@@ -23569,8 +21462,6 @@ ${stocksUniverseContext}
             const p90Years = p90M < 999 ? (p90M / 12).toFixed(1) + ' سنوات' : 'يتطلب أكثر من 10 سنوات';
 
             const prob3Years = ((reachedIn3YearsCount / runs) * 100).toFixed(1);
-
-
 
             out.innerHTML = `
 
@@ -23630,284 +21521,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
-        // 3. Surplus Allocation Advisor & DCA Order Generator (الفئتان 19 و 22)
-
-        function runSurplusAllocation() {
-
-            triggerHaptic('medium');
-
-            const surplus = parseFloat(document.getElementById('advisor_surplus_val').value) || 10000;
-
-            const strategy = document.getElementById('advisor_strategy').value;
-
-            const out = document.getElementById('advisor_output');
-
-
-
-            // Define strategy-driven weights dynamically
-
-            let weights = {
-
-                growth: [
-
-                    { ticker: 'EFIH', weight: 0.40, reason: 'نمو تكنولوجي وشمول مالي متسارع' },
-
-                    { ticker: 'TMGH', weight: 0.30, reason: 'مشاريع تصدير عقاري وتدفقات دولارية' },
-
-                    { ticker: 'ADIB', weight: 0.15, reason: 'عائد مصرفي إسلامي قياسي' },
-
-                    { ticker: 'AZG',  weight: 0.10, reason: 'تحوط ذهبي عيار 24' },
-
-                    { ticker: 'CLAW', weight: 0.05, reason: 'سيولة يومية بفائدة مركبة' }
-
-                ],
-
-                income: [
-
-                    { ticker: 'ADIB', weight: 0.35, reason: 'توزيعات نقدية مرتفعة مستمرة' },
-
-                    { ticker: 'ETEL', weight: 0.25, reason: 'تدفقات أرباح فودافون مصر' },
-
-                    { ticker: 'CLAW', weight: 0.20, reason: 'عائد يومي تراكمي مركب' },
-
-                    { ticker: 'EFIH', weight: 0.10, reason: 'توزيعات قطاع المدفوعات' },
-
-                    { ticker: 'AZG',  weight: 0.10, reason: 'حفظ القوة الشرائية' }
-
-                ],
-
-                balanced: [
-
-                    { ticker: 'EFIH', weight: 0.25, reason: 'نمو رأسمالي مدعوم بالرقمنة' },
-
-                    { ticker: 'TMGH', weight: 0.20, reason: 'أصول عقارية واستثمار فندقي' },
-
-                    { ticker: 'ADIB', weight: 0.20, reason: 'أداء بنكي شرعي متميز' },
-
-                    { ticker: 'AZG',  weight: 0.20, reason: 'حماية الذهب عيار 24' },
-
-                    { ticker: 'CLAW', weight: 0.15, reason: 'سيولة نقدية فورية' }
-
-                ],
-
-                defensive: [
-
-                    { ticker: 'AZG',  weight: 0.40, reason: 'حماية الملاذ الآمن عيار 24' },
-
-                    { ticker: 'CLAW', weight: 0.35, reason: 'صندوق سيولة يومي منخفض المخاطر' },
-
-                    { ticker: 'ADIB', weight: 0.15, reason: 'أعلى معدل كفاية رأس مال' },
-
-                    { ticker: 'ETEL', weight: 0.10, reason: 'قطاع اتصالات دفاعي صلب' }
-
-                ]
-
-            };
-
-
-
-            const selectedPlan = weights[strategy] || weights['balanced'];
-
-            let ordersHtml = '';
-
-            let allocatedSum = 0;
-
-            const liveOrdersList = [];
-
-
-
-            selectedPlan.forEach(c => {
-
-                const st = STOCKS_DATA.find(s => s.ticker === c.ticker);
-
-                let price = 1.0;
-
-                let name = c.ticker;
-
-
-
-                if (c.ticker === 'CLAW') {
-
-                    price = 1.0; 
-
-                    name = 'صندوق سيولة ثندر اليومي (CLAW)';
-
-                } else if (c.ticker === 'AZG') {
-
-                    price = (typeof _liveTickerCache !== 'undefined' && _liveTickerCache.gold && _liveTickerCache.gold.azg) ? _liveTickerCache.gold.azg : 24.27;
-
-                    name = 'صندوق الذهب أزيموت (AZG)';
-
-                } else if (st) {
-
-                    price = st.close || st.price || 1.0;
-
-                    name = st.name;
-
-                }
-
-
-
-                const targetBudget = surplus * c.weight;
-
-                const shares = c.ticker === 'CLAW' ? Math.round(targetBudget) : Math.floor(targetBudget / price);
-
-                const cost = shares * price;
-
-                allocatedSum += cost;
-
-
-
-                liveOrdersList.push({
-
-                    ticker: c.ticker,
-
-                    name: name,
-
-                    shares: shares,
-
-                    price: price,
-
-                    cost: cost,
-
-                    weight: Math.round(c.weight * 100)
-
-                });
-
-
-
-                ordersHtml += `
-
-                    <tr class="border-b border-slate-800 text-slate-200 hover:bg-slate-800/40 transition">
-
-                        <td class="py-2 px-2.5 font-bold text-white">${name} <span class="text-[10px] text-slate-400">(${c.ticker})</span></td>
-
-                        <td class="py-2 px-2.5 text-center font-mono text-emerald-400 font-bold">${shares.toLocaleString()} ${c.ticker === 'CLAW' ? 'وثيقة' : 'سهم/وثيقة'}</td>
-
-                        <td class="py-2 px-2.5 text-center font-mono text-slate-300">${price.toFixed(2)} ج.م</td>
-
-                        <td class="py-2 px-2.5 text-right font-mono font-bold text-amber-300">${cost.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ج.م</td>
-
-                        <td class="py-2 px-2.5 text-[10.5px] text-slate-400">${c.reason} (${Math.round(c.weight*100)}%)</td>
-
-                    </tr>`;
-
-            });
-
-
-
-            const unallocated = surplus - allocatedSum;
-
-            window._lastGeneratedSurplusOrders = liveOrdersList;
-
-
-
-            out.classList.remove('hidden');
-
-            out.innerHTML = `
-
-                <div class="space-y-3" dir="rtl">
-
-                    <div class="p-3 rounded-xl bg-amber-950/30 border border-amber-800/50 text-xs text-amber-300 flex items-center justify-between">
-
-                        <span>💡 <b>خطة توزيع الفائض الشهري:</b> تم حساب الكميات بناءً على <b>الأسعار اللحظية الفعلية</b> للسوق مع بقاء رصيد كاش غير موظف مقداره <b>${unallocated.toFixed(2)} ج.م</b>.</span>
-
-                        <button onclick="copySurplusOrdersToClipboard()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition shadow flex items-center gap-1 active:scale-95 shrink-0">
-
-                            <span>📋 نسخ أوامر التنفيذ لتطبيق ثندر</span>
-
-                        </button>
-
-                    </div>
-
-                    <div class="overflow-x-auto">
-
-                        <table class="w-full text-xs text-right">
-
-                            <thead>
-
-                                <tr class="text-[10.5px] text-slate-400 border-b border-slate-700 bg-slate-900/60">
-
-                                    <th class="py-2 px-2.5">الأصل الموصى به</th>
-
-                                    <th class="py-2 px-2.5 text-center">الكمية المقترحة</th>
-
-                                    <th class="py-2 px-2.5 text-center">السعر اللحظي</th>
-
-                                    <th class="py-2 px-2.5 text-right">القيمة الإجمالية</th>
-
-                                    <th class="py-2 px-2.5">الركيزة الاستثمارية</th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>${ordersHtml}</tbody>
-
-                        </table>
-
-                    </div>
-
-                    <div class="flex items-center justify-between text-xs pt-2.5 border-t border-slate-800 font-mono">
-
-                        <span class="text-slate-400">إجمالي المخصص استثماره: <b class="text-white">${allocatedSum.toLocaleString(undefined, {minimumFractionDigits:2})} ج.م</b></span>
-
-                        <span class="text-slate-400">السيولة المتبقية (كاش): <b class="text-emerald-400">${unallocated.toFixed(2)} ج.م</b></span>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-
-
-        function copySurplusOrdersToClipboard() {
-
-            triggerHaptic('success');
-
-            const orders = window._lastGeneratedSurplusOrders || [];
-
-            if (orders.length === 0) return;
-
-            let text = `📋 أوامر تنفيذ شراء الفائض الشهري (تطبيق ثندر):\n-----------------------------------\n`;
-
-            orders.forEach(o => {
-
-                text += `• ${o.name} (${o.ticker}): شراء ${o.shares.toLocaleString()} بسعر تقريبي ${o.price.toFixed(2)} ج.م (الإجمالي: ${Math.round(o.cost).toLocaleString()} ج.م)\n`;
-
-            });
-
-            text += `-----------------------------------\nتم التوليد آلياً عبر منصة الرادار الاستثماري`;
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-
-                navigator.clipboard.writeText(text).then(() => {
-
-                    showToast('✅ تم نسخ أوامر الشراء للحافظة بنجاح!');
-
-                }).catch(() => {
-
-                    showToast('تم نسخ الأوامر بنجاح!');
-
-                });
-
-            } else {
-
-                showToast('تم إنشاء الأوامر بنجاح!');
-
-            }
-
-        }
-
-
-
-
-
         // 6. Multi-Sheet Excel Export (الفئة 17)
 
         function exportMultiSheetExcel() {
@@ -23922,11 +21535,7 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const wb = XLSX.utils.book_new();
-
-
 
             // 1. Stocks Sheet (ديناميكي ومطابق لمحفظة الأسهم الفعلية)
 
@@ -23994,8 +21603,6 @@ ${stocksUniverseContext}
 
             XLSX.utils.book_append_sheet(wb, wsStocks, 'الأسهم الشرعية');
 
-
-
             // 2. Funds & Gold Sheet (ديناميكي ومطابق للصناديق والذهب)
 
             const fundsData = [
@@ -24062,8 +21669,6 @@ ${stocksUniverseContext}
 
             XLSX.utils.book_append_sheet(wb, wsFunds, 'صناديق الاستثمار والذهب');
 
-
-
             // 3. Cash Sheet (Only included if user has liquid cash)
 
             const clawdzVal = (THNDR_CASH && THNDR_CASH.clawdz) || 0;
@@ -24090,8 +21695,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // 4. Wealth Valuation & Zakat Summary Sheet
 
             const totalInvestedVal = totStocksMVal + totFundsMVal;
@@ -24106,8 +21709,6 @@ ${stocksUniverseContext}
 
             const grandReturnPct = grandCost > 0 ? (grandPnl / grandCost) * 100 : 0;
 
-
-
             const usdRate = getLiveUsdRate();
 
             const goldRate = getLiveGoldGramRate();
@@ -24119,8 +21720,6 @@ ${stocksUniverseContext}
             const sarRate = 13.90;
 
             const sarVal = grandWealth / sarRate;
-
-
 
             const summaryData = [
 
@@ -24152,15 +21751,11 @@ ${stocksUniverseContext}
 
             XLSX.utils.book_append_sheet(wb, wsSummary, 'تقييم الثروة والزكاة');
 
-
-
             XLSX.writeFile(wb, 'محفظة_الأسهم_والصناديق_الشرعية_الشاملة.xlsx');
 
             showToast('تم تصدير مصنف الإكسيل متعدد الأوراق بنجاح ✓', 'success');
 
         }
-
-
 
         // 7. Backup & Restore (الفئة 16)
 
@@ -24205,8 +21800,6 @@ ${stocksUniverseContext}
             showToast('تم تنزيل النسخة الاحتياطية بنجاح ✓', 'success');
 
         }
-
-
 
         function restorePortfolioData(event) {
 
@@ -24254,10 +21847,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
-    
-
         // =========================================================================
 
         // THNDR SMART SCREENSHOT SCANNER & OCR PARSER
@@ -24266,11 +21855,7 @@ ${stocksUniverseContext}
 
         // =========================================================================
 
-
-
         let thndrParsedAssets = [];
-
-
 
         function openThndrScannerModal() {
 
@@ -24282,8 +21867,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function closeThndrScannerModal() {
 
             triggerHaptic('light');
@@ -24293,8 +21876,6 @@ ${stocksUniverseContext}
             if (m) m.classList.add('hidden');
 
         }
-
-
 
         // Handle Image Selection
 
@@ -24307,8 +21888,6 @@ ${stocksUniverseContext}
             processThndrImageFile(file);
 
         }
-
-
 
         // Process image with ultra-fast progressive recognition and automatic application
 
@@ -24326,21 +21905,15 @@ ${stocksUniverseContext}
 
             const resultsBox = document.getElementById('thndrParsedResultsBox');
 
-
-
             if (progressBox) progressBox.classList.remove('hidden');
 
             if (resultsBox) resultsBox.classList.add('hidden');
-
-
 
             if (statusText) statusText.innerText = "جاري قراءة محفظة ثندر والتحقق من الأصول...";
 
             if (progressBar) progressBar.style.width = "30%";
 
             if (percentText) percentText.innerText = "30%";
-
-
 
             const reader = new FileReader();
 
@@ -24356,11 +21929,7 @@ ${stocksUniverseContext}
 
                     if (statusText) statusText.innerText = "جاري مطابقة الأسهم والصناديق مع قاعدة بيانات ثندر...";
 
-
-
                     let ocrSucceeded = false;
-
-
 
                     // Attempt fast OCR with 6.5-second timeout to allow full mobile processing
 
@@ -24396,8 +21965,6 @@ ${stocksUniverseContext}
 
                             );
 
-
-
                             const result = await Promise.race([ocrPromise, timeoutPromise]);
 
                             const rawText = result?.data?.text || "";
@@ -24418,8 +21985,6 @@ ${stocksUniverseContext}
 
                     }
 
-
-
                     // If OCR timed out or not available, use verified master holdings directly
 
                     if (!ocrSucceeded) {
@@ -24429,8 +21994,6 @@ ${stocksUniverseContext}
                         if (percentText) percentText.innerText = "100%";
 
                         if (statusText) statusText.innerText = "✓ تم استخراج وتدقيق أصول ثندر الـ 13 بنجاح!";
-
-                        
 
                         setTimeout(() => {
 
@@ -24454,8 +22017,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // Parse OCR text for Thndr tickers and amounts
 
         function parseThndrOcrText(text) {
@@ -24463,8 +22024,6 @@ ${stocksUniverseContext}
             console.log("[Thndr OCR Raw Text]:", text);
 
             const upper = text.toUpperCase();
-
-
 
             // 1. Detect if this is a Thndr Home Dashboard Capture (شاشة الصفحة الرئيسية في ثندر)
 
@@ -24478,8 +22037,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             let isDashboard = false;
 
             if (text.includes("86,645") || text.includes("86645") || text.includes("948") || text.includes("0") || upper.includes("36.88K") || upper.includes("49.7K") || text.includes("497k") || text.includes("497K") || text.includes("المحفظة") || text.includes("الثروة")) {
@@ -24489,8 +22046,6 @@ ${stocksUniverseContext}
                 console.log("[Thndr Scanner] Detected Thndr Home Dashboard Capture!");
 
             }
-
-
 
             // Known Thndr EGX asset mappings with exact verified portfolio quantities (86,645 EGP)
 
@@ -24524,8 +22079,6 @@ ${stocksUniverseContext}
 
             ];
 
-
-
             let detected = [];
 
             KNOWN.forEach(k => {
@@ -24533,8 +22086,6 @@ ${stocksUniverseContext}
                 const hasTicker = upper.includes(k.ticker);
 
                 const hasArabic = text.includes(k.name.split(' ')[0]);
-
-
 
                 if (hasTicker || hasArabic) {
 
@@ -24558,8 +22109,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // If dashboard capture OR not enough individual stocks visible, use full verified master holdings with detected cash
 
             if (isDashboard || detected.length < 3) {
@@ -24572,8 +22121,6 @@ ${stocksUniverseContext}
 
             }
 
-            
-
             // Auto-apply extracted portfolio
 
             setTimeout(() => {
@@ -24583,8 +22130,6 @@ ${stocksUniverseContext}
             }, 300);
 
         }
-
-
 
         // Render the parsed results into the preview table
 
@@ -24602,19 +22147,13 @@ ${stocksUniverseContext}
 
             const cashInput = document.getElementById('parsedCashInput');
 
-
-
             if (!resultsBox || !listEl) return;
-
-
 
             if (clawdzInput) clawdzInput.value = clawdzVal;
 
             if (cashInput) cashInput.value = cashVal;
 
             if (countEl) countEl.innerText = assets.length;
-
-
 
             listEl.innerHTML = '';
 
@@ -24623,8 +22162,6 @@ ${stocksUniverseContext}
                 const curPrice = a.cur;
 
                 const mVal = Math.round(a.qty * curPrice);
-
-
 
                 const item = document.createElement('div');
 
@@ -24672,15 +22209,11 @@ ${stocksUniverseContext}
 
             });
 
-
-
             resultsBox.classList.remove('hidden');
 
             triggerHaptic('success');
 
         }
-
-
 
         // 1-Click Instant Import & Apply from Thndr Verified Preset
 
@@ -24694,8 +22227,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // Quick 1-click Preset from Thndr Verified Capture (86,645 EGP)
 
         function loadThndrVerifiedPreset(cashVal = 0) {
@@ -24705,8 +22236,6 @@ ${stocksUniverseContext}
             renderThndrParsedResults(verified, 0, cashVal);
 
         }
-
-
 
         // Apply Parsed Portfolio to System
 
@@ -24720,19 +22249,13 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const clawdzVal = parseFloat(document.getElementById('parsedClawdzInput')?.value) || 0;
 
             const cashVal   = parseFloat(document.getElementById('parsedCashInput')?.value) || 0;
 
-
-
             // Update userHoldings
 
             userHoldings = JSON.parse(JSON.stringify(thndrParsedAssets));
-
-
 
             // Preserve verified prices and holdings metadata
 
@@ -24756,8 +22279,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Update Cash and Clawdz
 
             if (typeof THNDR_CASH !== 'undefined') {
@@ -24769,8 +22290,6 @@ ${stocksUniverseContext}
                 THNDR_CASH.clawdzPnl = 0;
 
             }
-
-
 
             // Save to localStorage consistently across all version keys (DATA-03 unified)
 
@@ -24787,8 +22306,6 @@ ${stocksUniverseContext}
             localStorage.setItem('egx_sharia_thndr_cash_v6', JSON.stringify({ clawdz: clawdzVal, cash: cashVal }));
 
             localStorage.setItem('egx_sharia_thndr_cash', JSON.stringify({ clawdz: clawdzVal, cash: cashVal }));
-
-
 
             // Log this OCR activity with screenshot & breakdown
 
@@ -24812,23 +22329,17 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Re-render UI safely
 
             try { renderHoldingsTable(); } catch(e) { console.warn("[Render] Table render note:", e); }
 
             try { if (typeof renderValuationCard === 'function') renderValuationCard(); } catch(e) {}
 
-
-
             closeThndrScannerModal();
 
             showToast(`✓ تم استيراد وتطبيق محفظة ثندر بنجاح (${userHoldings.length} أصل • 86,645 ج.م • نقدية 0 ج)`, "success");
 
         }
-
-
 
         // =========================================================================
 
@@ -24846,8 +22357,6 @@ ${stocksUniverseContext}
 
             modal.classList.remove('hidden');
 
-
-
             // Default dates: Start = 30 days ago, End = Today
 
             const today = new Date();
@@ -24856,13 +22365,9 @@ ${stocksUniverseContext}
 
             start.setDate(today.getDate() - 30);
 
-
-
             const startInput = document.getElementById('perfStartDate');
 
             const endInput = document.getElementById('perfEndDate');
-
-
 
             if (startInput && !startInput.value) {
 
@@ -24876,13 +22381,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             runPeriodPerformanceAnalysis();
 
         }
-
-
 
         function closePeriodPerformanceModal() {
 
@@ -24894,8 +22395,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function setPeriodPerformancePreset(preset) {
 
             triggerHaptic('selection');
@@ -24903,8 +22402,6 @@ ${stocksUniverseContext}
             const today = new Date();
 
             let start = new Date();
-
-
 
             if (preset === 'inception') {
 
@@ -24936,8 +22433,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const startInput = document.getElementById('perfStartDate');
 
             const endInput = document.getElementById('perfEndDate');
@@ -24946,13 +22441,9 @@ ${stocksUniverseContext}
 
             if (endInput) endInput.value = today.toISOString().split('T')[0];
 
-
-
             runPeriodPerformanceAnalysis();
 
         }
-
-
 
         function runPeriodPerformanceAnalysis() {
 
@@ -24962,8 +22453,6 @@ ${stocksUniverseContext}
 
             const filterInput = document.getElementById('perfAssetFilter');
 
-
-
             if (!startInput || !endInput) return;
 
             const startDateStr = startInput.value;
@@ -24971,8 +22460,6 @@ ${stocksUniverseContext}
             const endDateStr = endInput.value;
 
             const filter = filterInput ? filterInput.value : 'all';
-
-
 
             let d1 = new Date(startDateStr);
 
@@ -24986,8 +22473,6 @@ ${stocksUniverseContext}
 
             const elapsedDays = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24)));
 
-
-
             const isFundAsset = (h) => {
 
                 return h.isFund === true || 
@@ -24998,15 +22483,11 @@ ${stocksUniverseContext}
 
             };
 
-
-
             const isGoldAsset = (h) => {
 
                 return ['AZG', 'THNDR_GOLD'].includes(h.ticker) || (h.sector && h.sector.includes('ذهب'));
 
             };
-
-
 
             // Entity Aggregates
 
@@ -25022,19 +22503,13 @@ ${stocksUniverseContext}
 
             };
 
-
-
             const holdings = (userHoldings && userHoldings.length > 0) ? userHoldings : THNDR_ACTUAL_HOLDINGS;
-
-
 
             holdings.forEach(h => {
 
                 const isFund = isFundAsset(h);
 
                 const isGold = isGoldAsset(h);
-
-
 
                 // Apply category filter (Stocks vs Funds vs Gold)
 
@@ -25046,13 +22521,9 @@ ${stocksUniverseContext}
 
                 if (filter === 'cash') return;
 
-
-
                 const qty = h.qty || 0;
 
                 const endPrice = h.cur || h.buy || 0;
-
-
 
                 // Price modeling between two dates:
 
@@ -25076,8 +22547,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 const startVal = qty * startPrice;
 
                 const endVal = qty * endPrice;
@@ -25089,8 +22558,6 @@ ${stocksUniverseContext}
                 const priceChg = endPrice - startPrice;
 
                 const priceChgPct = startPrice > 0 ? (priceChg / startPrice) * 100 : 0;
-
-
 
                 const itemData = {
 
@@ -25124,8 +22591,6 @@ ${stocksUniverseContext}
 
                 };
 
-
-
                 if (isGold) {
 
                     entities.goldFunds.startVal += startVal;
@@ -25154,8 +22619,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Handle Cash & Clawdz Liquidity (Only if user has actual liquidity)
 
             const clawdzBalance = (THNDR_CASH && typeof THNDR_CASH.clawdz === 'number') ? THNDR_CASH.clawdz : 0.0;
@@ -25169,8 +22632,6 @@ ${stocksUniverseContext}
                 const clawdzStartVal = Math.max(0, clawdzBalance - periodReturnAmount);
 
                 const clawdzEndVal = clawdzBalance;
-
-
 
                 entities.cash.startVal = clawdzStartVal;
 
@@ -25210,8 +22671,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Total Grand Metrics
 
             const totalStartVal = entities.stocks.startVal + entities.equityFunds.startVal + entities.goldFunds.startVal + entities.cash.startVal;
@@ -25224,21 +22683,15 @@ ${stocksUniverseContext}
 
             const annualizedReturnPct = elapsedDays > 0 ? (totalReturnPct * (365 / elapsedDays)) : totalReturnPct;
 
-
-
             // Render Executive Cards
 
             document.getElementById('perfCardStartVal').innerText = Math.round(totalStartVal).toLocaleString() + ' ج.م';
 
             document.getElementById('perfCardStartDateLbl').innerText = `تاريخ: ${startDateStr}`;
 
-
-
             document.getElementById('perfCardEndVal').innerText = Math.round(totalEndVal).toLocaleString() + ' ج.م';
 
             document.getElementById('perfCardEndDateLbl').innerText = `تاريخ: ${endDateStr}`;
-
-
 
             const pnlElem = document.getElementById('perfCardNetPnl');
 
@@ -25248,11 +22701,7 @@ ${stocksUniverseContext}
 
             pnlElem.className = `text-base sm:text-lg font-bold font-mono ${totalNetPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
 
-
-
             document.getElementById('perfCardDays').innerText = `${elapsedDays} يوم منقضي بين التاريخين`;
-
-
 
             const returnElem = document.getElementById('perfCardReturnPct');
 
@@ -25260,19 +22709,13 @@ ${stocksUniverseContext}
 
             returnElem.className = `text-base sm:text-lg font-bold font-mono ${totalReturnPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
 
-
-
             document.getElementById('perfCardAnnualized').innerText = `معادل سنوي: ${sign}${annualizedReturnPct.toFixed(1)}%`;
-
-
 
             // Render Entities Grid
 
             const entitiesGrid = document.getElementById('perfEntitiesGrid');
 
             entitiesGrid.innerHTML = '';
-
-
 
             [entities.stocks, entities.equityFunds, entities.goldFunds, entities.cash].forEach(ent => {
 
@@ -25285,8 +22728,6 @@ ${stocksUniverseContext}
                 const entSign = entPnl >= 0 ? '+' : '';
 
                 const isProfit = entPnl >= 0;
-
-
 
                 const card = document.createElement('div');
 
@@ -25334,19 +22775,13 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Render Itemized Table Rows
 
             const tbody = document.getElementById('perfItemizedTbody');
 
             tbody.innerHTML = '';
 
-
-
             const allItems = [...entities.stocks.items, ...entities.equityFunds.items, ...entities.goldFunds.items, ...entities.cash.items];
-
-
 
             allItems.forEach(item => {
 
@@ -25358,11 +22793,7 @@ ${stocksUniverseContext}
 
                 tr.className = "hover:bg-slate-900/70 transition border-b border-slate-800/40";
 
-
-
                 const icon = item.isGold ? '🪙' : (item.isFund ? (item.ticker === 'CLAWDZ' ? '⚡' : '🕌') : '📈');
-
-
 
                 tr.innerHTML = `
 
@@ -25424,8 +22855,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Render Table Totals
             const tfoot = document.getElementById('perfItemizedTfoot');
             if (tfoot) {
@@ -25451,8 +22880,6 @@ ${stocksUniverseContext}
             }
         }
 
-
-
         function exportPeriodPerformanceCsv() {
 
             triggerHaptic('medium');
@@ -25462,8 +22889,6 @@ ${stocksUniverseContext}
             const end = document.getElementById('perfEndDate').value;
 
             let csv = '\uFEFFبند الاستثمار,الرمز,النوع والقطاع,الكمية,سعر البداية,سعر النهاية,تغير السعر ج,قيمة البداية,قيمة النهاية,الربح أو الخسارة,العائد %\n';
-
-
 
             const tbody = document.getElementById('perfItemizedTbody');
 
@@ -25495,15 +22920,11 @@ ${stocksUniverseContext}
 
                     const ret = cols[9].innerText.trim();
 
-
-
                     csv += `"${name}","${sector}","${qty}","${p1}","${p2}","${pchg}","${v1}","${v2}","${pnl}","${ret}"\n`;
 
                 }
 
             });
-
-
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
@@ -25519,12 +22940,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
-
-
-
-
         // =========================================================================
 
         // COMPREHENSIVE RECOMMENDATIONS & DECISION ENGINE (منظومة التوصيات الشاملة)
@@ -25535,17 +22950,11 @@ ${stocksUniverseContext}
 
         let recCurrentTypeFilter = 'all';
 
-
-
         // =========================================================================
 
         // DYNAMIC QUANTITATIVE & TECHNICAL RECOMMENDATION ENGINE (خوارزمية التوصيات اللحظية الحقيقية)
 
         // =========================================================================
-
-
-
-
 
                 // =========================================================================
 
@@ -25554,8 +22963,6 @@ ${stocksUniverseContext}
         // خوارزمية القرارات الاستثمارية الثلاثية المؤسسية وحواجز الحماية الرأسمالية الصارمة
 
         // =========================================================================
-
-
 
         /**
 
@@ -25599,13 +23006,9 @@ ${stocksUniverseContext}
 
             const sector = stockData.sector || 'سوق المال المصري';
 
-
-
             // Floor Pivots
 
             const piv = calculatePivotPoints(stockData.high, stockData.low, curPrice, assetType);
-
-
 
             // Structural Targets and Supports from Valuation or Floor Pivots
 
@@ -25617,8 +23020,6 @@ ${stocksUniverseContext}
 
             const margin = curPrice > 0 ? ((fairVal - curPrice) / curPrice * 100.0) : 0.0;
 
-
-
             // Stop-Loss: strictly defined as minimum of 96% of institutional support or S2
 
             const stopLoss = Math.round(Math.min(instSupport * 0.96, piv.s2 * 0.98) * 100) / 100;
@@ -25627,15 +23028,11 @@ ${stocksUniverseContext}
 
             const targetPrice = Math.round(instResistance * 100) / 100;
 
-
-
             const downside = Math.max(0.01, curPrice - stopLoss);
 
             const upside = Math.max(0.01, targetPrice - curPrice);
 
             const rrRatio = Math.round((upside / downside) * 100) / 100;
-
-
 
             // -------------------------------------------------------------
 
@@ -25657,8 +23054,6 @@ ${stocksUniverseContext}
 
             else sFund = -10.0;
 
-
-
             if (pe > 0) {
 
                 if (pe <= 7.0) sFund = Math.min(10.0, sFund + 2.0);
@@ -25672,8 +23067,6 @@ ${stocksUniverseContext}
                 sFund = 8.5; // High intrinsic physical gold / audited balance backing
 
             }
-
-
 
             // -------------------------------------------------------------
 
@@ -25693,8 +23086,6 @@ ${stocksUniverseContext}
 
             let sNews = 0.0;
 
-
-
             if (relevantNews.length > 0) {
 
                 const latest = relevantNews[0];
@@ -25703,13 +23094,9 @@ ${stocksUniverseContext}
 
                 latestImpactLabel = latest.impact_label || 'إفصاح رسمي';
 
-
-
                 const posCount = relevantNews.filter(n => n.impact === 'positive').length;
 
                 const negCount = relevantNews.filter(n => n.impact === 'bearish' || n.impact === 'negative' || n.impact === 'cautious').length;
-
-
 
                 if (negCount > 0) {
 
@@ -25732,8 +23119,6 @@ ${stocksUniverseContext}
                 sNews = 2.0; // Constructive baseline
 
             }
-
-
 
             // -------------------------------------------------------------
 
@@ -25761,8 +23146,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             if (rrRatio >= 2.2) {
 
                 sTech = Math.min(10.0, sTech + 3.0);
@@ -25772,8 +23155,6 @@ ${stocksUniverseContext}
                 sTech = Math.max(-10.0, sTech - 5.0);
 
             }
-
-
 
             // -------------------------------------------------------------
 
@@ -25793,8 +23174,6 @@ ${stocksUniverseContext}
 
             const vetoBearishNews = hasBearishNews;
 
-
-
             // -------------------------------------------------------------
 
             // COMPOSITE INSTITUTIONAL SCORE & RESOLUTION
@@ -25803,13 +23182,9 @@ ${stocksUniverseContext}
 
             const compositeScore = Math.round(((sFund * 0.40) + (sNews * 0.30) + (sTech * 0.30)) * 10) / 10;
 
-
-
             const entryLow = Math.max(0.01, curPrice * 0.985).toFixed(2);
 
             const entryHigh = (curPrice * 1.01).toFixed(2);
-
-
 
             let action = 'hold';
 
@@ -25818,8 +23193,6 @@ ${stocksUniverseContext}
             let actionTitle = `احتفاظ ومراقبة التوازن السعري لسهم ${name} (${ticker})`;
 
             let mainReason = '';
-
-
 
             const fundReason = pe > 0 
 
@@ -25834,8 +23207,6 @@ ${stocksUniverseContext}
                 : `انتظام تشغيلي مستقر وتوافق شرعي تام 100% وفقاً لمؤشر EGX33.`;
 
             const techReason = `مؤشر RSI: ${rsi.toFixed(1)} | الدعم: ${instSupport.toFixed(2)} ج | المقاومة: ${instResistance.toFixed(2)} ج | معدل العائد/المخاطرة: 1:${rrRatio}.`;
-
-
 
             if (vetoStopLossBroken) {
 
@@ -25933,8 +23304,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             return {
 
                 ticker: ticker,
@@ -26007,8 +23376,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // =========================================================================
 
         // DYNAMIC QUANTITATIVE & TECHNICAL RECOMMENDATION ENGINE (v13.9)
@@ -26021,8 +23388,6 @@ ${stocksUniverseContext}
 
             if (typeof STOCKS_DATA === 'undefined' || !Array.isArray(STOCKS_DATA)) return list;
 
-
-
             STOCKS_DATA.forEach(s => {
 
                 if (!s || !s.ticker) return;
@@ -26031,19 +23396,13 @@ ${stocksUniverseContext}
 
                 const nList = (typeof NEWS_DATA !== 'undefined') ? NEWS_DATA : [];
 
-
-
                 const decision = evaluateInstitutionalDecision(s.ticker, s, vd, nList);
-
-                
 
                 // Keep s.rec and s.institutionalDecision dynamically synchronized
 
                 s.rec = decision.statusBadge;
 
                 s.institutionalDecision = decision;
-
-
 
                 list.push({
 
@@ -26103,15 +23462,11 @@ ${stocksUniverseContext}
 
             });
 
-
-
             window.MASTER_RECOMMENDATIONS = list;
 
             return list;
 
         }
-
-
 
                 // =========================================================================
 
@@ -26122,8 +23477,6 @@ ${stocksUniverseContext}
         recCurrentActionFilter = 'all';
 
         recCurrentTypeFilter = 'all';
-
-
 
         function setRecActionFilter(action, btn) {
 
@@ -26147,8 +23500,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function setRecTypeFilter(type, btn) {
             triggerHaptic('selection');
             recCurrentTypeFilter = type;
@@ -26170,8 +23521,6 @@ ${stocksUniverseContext}
             renderRecommendationsView();
         }
 
-
-
         function renderRecommendationsView() {
 
             const container = document.getElementById('recommendationsListContainer');
@@ -26180,13 +23529,9 @@ ${stocksUniverseContext}
 
             container.innerHTML = '';
 
-
-
             const liveRecs = generateLiveRecommendations();
 
             const ownedTickers = (Array.isArray(userHoldings) && userHoldings.length > 0) ? userHoldings.map(h => h.ticker) : [];
-
-
 
             let buyCount = 0;
 
@@ -26195,8 +23540,6 @@ ${stocksUniverseContext}
             let holdCount = 0;
 
             let sellCount = 0;
-
-
 
             // Enrich recommendations respecting institutional veto rules & risk/reward
 
@@ -26210,8 +23553,6 @@ ${stocksUniverseContext}
 
                 const buy = holding ? (holding.buy || 0) : 0;
 
-                
-
                 // Do NOT fabricate fairValue if missing; preserve verified value or mark null
 
                 const fair = item.fairValue || null;
@@ -26222,8 +23563,6 @@ ${stocksUniverseContext}
 
                 const rsi = item.rsi || 50;
 
-
-
                 // Respect primary decision from evaluateInstitutionalDecision without bypassing veto guards
 
                 let action = item.action || 'hold';
@@ -26231,8 +23570,6 @@ ${stocksUniverseContext}
                 let actionLabel = item.actionTitle || item.statusBadge || 'مراقبة واحتفاظ 🟡';
 
                 let badgeClass = '';
-
-
 
                 // DCA applies strictly if owned, current price is below buy cost, and positive safety margin without sell signal
 
@@ -26282,8 +23619,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 // Targets from quantitative model without fake fallbacks
 
                 const target1 = item.targetPrice || null;
@@ -26293,8 +23628,6 @@ ${stocksUniverseContext}
                 const stopLoss = item.stopLoss || null;
 
                 const expectedGainPct = (target1 && cur > 0) ? (((target1 - cur) / cur) * 100).toFixed(1) : null;
-
-
 
                 return {
 
@@ -26332,8 +23665,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Counters
 
             enrichedRecs.forEach(r => {
@@ -26347,8 +23678,6 @@ ${stocksUniverseContext}
                 else holdCount++;
 
             });
-
-
 
             const bEl = document.getElementById('recBuyCount');
 
@@ -26366,13 +23695,9 @@ ${stocksUniverseContext}
 
             if (sEl) sEl.innerText = `${sellCount} تخارج`;
 
-
-
             const topBadge = document.getElementById('recsTopCountBadge');
 
             if (topBadge) topBadge.innerText = `${buyCount + dcaCount} فرصة نشطة`;
-
-
 
             // Filter
 
@@ -26396,8 +23721,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             if (filtered.length === 0) {
 
                 container.innerHTML = `
@@ -26416,8 +23739,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             let html = '';
 
             filtered.forEach(r => {
@@ -26428,8 +23749,6 @@ ${stocksUniverseContext}
 
                 const isSell = r.action === 'sell';
 
-
-
                 const borderCol = isBuy ? 'border-emerald-600/60 bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/20' :
 
                                   isDca ? 'border-sky-600/60 bg-gradient-to-br from-slate-900 via-slate-900 to-sky-950/20' :
@@ -26437,8 +23756,6 @@ ${stocksUniverseContext}
                                   isSell ? 'border-rose-600/60 bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950/20' :
 
                                   'border-amber-600/50 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/20';
-
-
 
                 html += `
 
@@ -26476,8 +23793,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <!-- 5 Structured Research Sections (Section 3.2 of Unified Guidelines) -->
 
                     <div class="space-y-2.5 text-xs text-slate-300">
@@ -26501,8 +23816,6 @@ ${stocksUniverseContext}
                             </p>
 
                         </div>
-
-
 
                         <!-- القسم 2: النتائج وجودة الأرباح -->
 
@@ -26528,8 +23841,6 @@ ${stocksUniverseContext}
 
                         </div>
 
-
-
                         <!-- القسم 3: التقييم والسيناريوهات -->
 
                         <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1.5">
@@ -26553,8 +23864,6 @@ ${stocksUniverseContext}
                             </div>
 
                         </div>
-
-
 
                         <!-- القسم 4: السعر والسيولة ومخاطر السوق -->
 
@@ -26580,8 +23889,6 @@ ${stocksUniverseContext}
 
                         </div>
 
-
-
                         <!-- القسم 5: الأطروحة والقرار الاستثماري -->
 
                         <div class="p-2.5 rounded-xl bg-slate-950/90 border border-purple-900/50 space-y-1">
@@ -26604,8 +23911,6 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <!-- Point 12: Methodological Finance Overhaul (Benjamin Graham, Damodaran, Weinstein, Minervini, Elder & AAOIFI) -->
 
                     <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/90 text-[10.5px] text-slate-300 leading-relaxed space-y-2">
@@ -26625,8 +23930,6 @@ ${stocksUniverseContext}
                             </span>
 
                         </div>
-
-                        
 
                         <!-- 6 Financial Masters Badges Strip -->
 
@@ -26682,8 +23985,6 @@ ${stocksUniverseContext}
 
                         </div>
 
-
-
                         <!-- Summary Thesis -->
 
                         <div class="pt-1 border-t border-slate-800/60 flex items-center justify-between text-[10px]">
@@ -26699,8 +24000,6 @@ ${stocksUniverseContext}
                         </div>
 
                     </div>
-
-
 
                     <!-- Action Buttons Strip (ربط الشراء والتحليل والشارت) -->
 
@@ -26738,13 +24037,9 @@ ${stocksUniverseContext}
 
             });
 
-
-
             container.innerHTML = html;
 
         }
-
-
 
         function setRecFilter(action, btn) {
 
@@ -26768,19 +24063,13 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // setRecTypeFilter is defined above (unified implementation)
-
-
 
         // ════════════════════════════════════════════════════════
 
         //  v11 — SORT ENGINE & LIVE DATA CONNECTIONS
 
         // ════════════════════════════════════════════════════════
-
-
 
         // ── Sort State ──────────────────────────────────────────
 
@@ -26795,8 +24084,6 @@ ${stocksUniverseContext}
             dividends: { col: 'yield', dir: -1 }
 
         };
-
-
 
         // ── Update Sort Header Arrow Indicators ─────────────────
 
@@ -26815,8 +24102,6 @@ ${stocksUniverseContext}
                     document.getElementById(prefix + 'smart_' + c)
 
                 ].filter(Boolean);
-
-
 
                 elements.forEach(th => {
 
@@ -26858,8 +24143,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // ── Sort Holdings Table (stocks or funds) ───────────────
 
         function sortHoldingsTable(type, col) {
@@ -26869,8 +24152,6 @@ ${stocksUniverseContext}
             const st = _sortState[type];
 
             if (!st) return;
-
-
 
             // Toggle direction if already active column, otherwise default to descending (-1)
 
@@ -26886,13 +24167,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Update arrow indicators
 
             updateSortArrows(type, st.col, st.dir);
-
-
 
             // Re-render table and cards with active sort order
 
@@ -26900,15 +24177,11 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // Expose globally for inline onclick handlers
 
         window.sortHoldingsTable = sortHoldingsTable;
 
         window.updateSortArrows = updateSortArrows;
-
-
 
         // Expose modern sort functions globally for inline onclick handlers
 
@@ -26916,15 +24189,11 @@ ${stocksUniverseContext}
 
         window.toggleRadarSortDir = typeof toggleRadarSortDir === 'function' ? toggleRadarSortDir : () => {};
 
-
-
         // ── Sort Dividends Table ─────────────────────────────────
 
         let _divSortCol = 'yield';
 
         let _divSortDir = -1;
-
-
 
         function sortDividendsTable(col) {
 
@@ -26962,15 +24231,11 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // ════════════════════════════════════════════════════════
 
         //  LIVE DATA CONNECTIONS — Sync ALL sections after update
 
         // ════════════════════════════════════════════════════════
-
-
 
         async function syncAllLiveSections() {
             if (!navigator.onLine) {
@@ -27015,8 +24280,6 @@ ${stocksUniverseContext}
             }
         }
 
-
-
         function updateLiveGoalsInput() {
 
             try {
@@ -27032,8 +24295,6 @@ ${stocksUniverseContext}
             } catch(e) {}
 
         }
-
-
 
         function updateLiveZakatInput() {
 
@@ -27051,12 +24312,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
-
-
-
-
         // Mark inputs as user-modified when touched
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -27069,8 +24324,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Initial live sync after 3s
 
             setTimeout(() => {
@@ -27081,15 +24334,9 @@ ${stocksUniverseContext}
 
         });
 
-
-
         // Override refreshData globally
 
         window.refreshData = syncAllLiveSections;
-
-
-
-
 
         // =========================================================================
 
@@ -27100,8 +24347,6 @@ ${stocksUniverseContext}
         const ACTIVITY_STORAGE_KEY = 'egx_user_audit_log';
 
         let currentActivityFilter = 'all';
-
-
 
         function getUserActivityLogs() {
             try {
@@ -27270,8 +24515,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function logUserActivity(type, title, description, meta = {}) {
 
             try {
@@ -27279,8 +24522,6 @@ ${stocksUniverseContext}
                 const logs = getUserActivityLogs();
 
                 const now = new Date();
-
-                
 
                 let badge = 'تعديل ✏️';
 
@@ -27312,8 +24553,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 const newLog = {
 
                     id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
@@ -27340,15 +24579,11 @@ ${stocksUniverseContext}
 
                 };
 
-
-
                 logs.unshift(newLog);
 
                 if (logs.length > 100) logs.pop();
 
                 localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(logs));
-
-
 
                 const actView = document.getElementById('toolSubViewActivity');
 
@@ -27365,8 +24600,6 @@ ${stocksUniverseContext}
             }
 
         }
-
-
 
         function filterUserActivity(category, btn) {
 
@@ -27386,15 +24619,9 @@ ${stocksUniverseContext}
 
         }
 
-
-
-        
-
         // Fallback verified Thndr scan data URI
 
         const THNDR_VERIFIED_CAPTURE_DATA_URI = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAQAAcwDASIAAhEBAxEB/8QAHQABAAAHAQEAAAAAAAAAAAAAAAIDBAUGBwgJAf/EAF0QAAEDAwMBAwYHDgMEBgcGBwEAAgMEBQYHERIhCBMxFBUiQVGRCTJSYXGx0RgjMzRCU1RWY3JzgZKTFmJkF3WCoSQ3s7TS0xk2OFd2lsElNVh0g6RDlJWisrXD/8QAHAEBAAIDAQEBAAAAAAAAAAAAAAEEAgMFBgcI/8QAOxEBAAEDAgQEAwUGBAcAAAAAAAECAxEEIQUSMVEGE0FhIjJxBxSBkaEjQnKx0eEVgsHwFlJTYpKi8f/aAAwDAQACEQMRAD8A9PUREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQFrOxdojTXJtWptGLFWXCqv9LSVNXO/yGSOlY2CRkcjRK8APcHPA9DkOh6rZi0Vf7HeJO2niWQxWuqda4NP7nSy1giPcsmdWwubGX+AcQCQPHogym09ojTS/aru0bstZcKq/wAbKp0rxQSx0rHU5AmYJngNe5pcAeHIAnqQs6qsmx+itlzvM96ohRWVszrhMJ2ltL3TeUgkIPoFrepB22Wocyst3n7XenF9gtlTJbqTFb5BPVNiJiike+Dg1zvAE7HYevYqw6p4BkOqtkr8X0Wx+yWShjy+WozKlyCnqrdHf3wlryGvhje6WGWQAvd05tbtvs47hfrZ2udPLzoxDrfabNfqy0Vd48yUlHBStdWVNQajuGhkZcPF3XqQdlnuD6lw5banXO9YpfcNJrG0MFNkcLKSapkcAW92OZ5b77DruSD0XI2nWH5Hb+zpWUGtGltzr7TR6k1lxFPi89VDXUUZq53Pre7DBJJCx7hwbH6To3B3QjZZ9oM409qvMud4tl18wyo1AgGnovtBPV11JGWt41L++++xQNl5Fr5Ni0b+GyDaEHaNt1xz+6YFYNNM3vJst1ZaK+60NuY+gp5yGOJdJzBDWh4JO3TYqiyTtPU2IXSjt+SaPag0EFwu0Vmpa2Wgg7iaeWTgwtIm5Fp+N4fFBK0Vm9oraDU99NpLhepOO6j1OoMNZUHymqlstdbHSf8ASKyR2wpu5fEPiH02u2HqW6LrbL9qn2o6GC4Wmqgw3SmgbcIZponNiuN9qw5rCwno9sEAd1Hg+Qj1oN8DqPBERAREQEREBERAREQEREBERAREQEREBERAREQEREBU10q5rfbKuup6KWslp4Hysp4hu+ZzWkhjfnJGw+lVKhla58b2MeWOc0gOHqPtQcUyfCWYngNXVY5rDi88WTU9U81Vtx//AKW21wdNoqiVxDXTt682s3a09N9wQN09mzX2967MvV4NhoTjTZBLY71QTOdFUxFxDoJo37PhqY9hzYehDgWkggryG1BhuOjOf6sYhmFmq6rJLnPUWiKYvHcMjlmEskxPi9xZ3XEDps8k+AB9CfgncLyjHdD77kF7a+KgyC8mS3QvPUNhb3cjtvVu8Ef8BQbj7S/awtegtyseE2HEa/Mc5yVrpbdZKI7EQgkd7I7Y8WkhwHT8lx6AKx9n3tky6oZ9JpHqZpxW4HmTqPzjQ000wmp6+m+XDKBs7wPUbg7O2O4IWpfhCNLswxvOLR2n8asTsjstvslRjmS2uOV0c0VJM2VhnY5oJaC2ZzS4A8CGnYgnbAOwXp/fdW9TMU1WtOJVOLadaX2+rtllbVVbqqeuqaiSWSUGYtaJAHTvJ4tDWgNAG+5Idna/6s6haS0keRWLG7DW2SHyeOQVtc9lZcKuadsbKSkiY0l0hDi4b+O3htuRXat6p5hit6xDCsDx231uR5dFcKqJt0qHRU9PBRQskmDiwEl5MsbQB06k+pYv2n9PMSioBrzeZspqLphUDPIKS13J0IHeTMjc6NmzgJSHkcgNyOm4BWmr5nuM5bfKSyZPb7rGKaObIaa80WTTOrqA1lFM+Sljf3XDgWU4jdEHA83eiDx3QZfP2177ccUl1ExjBaKXHccsNsvmTsqqtzKlgqpjHJFTAN4vMfB7t3bB2wHRb31W1nxDSOz0FffRW19wvU3ktls9up3T11zqNge7hiHU7AgucdmtBG56jfn7AtNdOtRszOnmS4cMdZjtmoLfNbLfd5zDd6ajdHIwVMYj7uSMSvJ2Mpk9Tx1XUmW4pbMxsdVY7i+eAVMEsDKqlf3VTTiRhY50Mg9KNxaSNx12KDmq9drrUS13Y2642HSXGqou2FnyLUamp7oz2NkjY1zGOPhsXeK2dpj2iaHMMng09zbE6/Dctq6d1XQUlVKyopLrA1vJ0tFVRkxzgN9IgHkB1I6Hbl/ONOG6U5/Y9IhV49Z5swqJo8dobdp2y80UkIeWtdcq2oImkldtu/gD3e+/xdidy6Y2+HQbUTENJYsbx2GbKaSa43GGkvjjDbq0R/fPNdLOO8FO4tJftx+MDt02Ibh1e1Oj0msdryivt7Z7TNeaS33SodJxFDTTks8o8PSDZDGCPY4n1LBtNO1lhmdXCz47cbTc7ZeLu+OMbU7pKSCSeJ1TSQPm6bSyUgjm47bDmATv0Vw7Tl4tsGN4thl/ttorbJnWTQY3dG3Tl3LKeSmqZee4c3Yh8DOu46b/AErlU5vkVgzmkzBuN4U66UeXXLDaattliqJnAWymDI6kQOrY43uMThG0l3JrNxyI6IPQ1FKo3vlpIJJJGyPfG1znNbsHEjqQNzsP5n6VyvQ9qXMsyu2ls1pt9NZqTItQbxi10p/w/fU9GJGtc1xALC4tBOyDou053jmStt9XiV6tt7t9dPPT+WUFUyeISRcg9ocwkEhzS0jfoQq3KMhp8WsVTfKqF8rKfiAxni5znBrR83VwXMHYI/6kMc/+Jsg/7zKuhdWqeeqwK4xU0L5Xh9O/iwbni2ZhJ/kAT/JczjWpvaPhuo1OnjNdFFdVO2d4pmY29d1rRWqL2pt27nyzVET9Jndh0Ov76iZlPBikkksjgxjGz7lzidgANupVdetY7xj0scN5wmamdKC5nKpaQ7Y7HqNxuD4jxC0zaayss12pbpTw7y0k7ZWh7TsSDvsVk2e3K1z0VDZ7Q2KR0M09VUPp3SPiEkpHotc8AuHT2bfT4roW5mqmJlWqjEzDcOn2o9JnYrIWUD6Ooo+DnMc4ODmO32IP0jqPoWYrRGhFhrpsiqb67vIaejg7rqwgSufv6O/zcdz4+IW91mgREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQWKbAsIqJZJ6nELNNLNUPq5Hy0Mb3Omd8aQkjcuOw3PzK42uzWmyQy01nttNRRTTPqJI6eIRtdK87ueQOm5PUlViIJVXSUtfSy0VbTxz087DHLFI0OY9pGxBB6EEKmsljs2NWqmsWPWulttuo2d3T0tLE2OKJvsa1vQBVyIJdRTU9XC6nqoI5onbcmSNDmnY7jofnAKtcuGYhNI+aXF7U6R7S1zzRx8iCSSN9t9tyferwiCkprPaaOsmuNJa6SGrqABNPHC1skgHhycBuf5qrREEqWjpJ5oameliklpyTDI5gLoyRseJPUbjp0Xx9FRy1cVfJSQuqYGuZFM5gL2NdtyAd4gHYb/AEKciC05LiWMZlQx2zLMfoLvSRSidkFbTtmY2QAgPAcCAQHOG/zlWus0q00uFA2112B2KopGVL6xsElDG5gneAHybEbciAAT4nZZUiCCGGKnhZTwRtjjiaGMY0bBrQNgAPZsrTBhmJUppTTY1bIvIaqStpuFKwdzUSb85W9PRe7c7uHU7q8ogt9px6xWGlZQ2Sz0dBTxySSsip4Wxsa95Je4ADbckkk+vdXAgEbEbhEQSDQUBO5ooP7bfsTzfQfoNP8A2m/Yp6IIY4ooW8Io2sb7GjYKJEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBFJrK6it8PlFfWQU0W4HOaQMbv7Nz0UVNU01ZC2ppKiOeF43bJG8Oa4fMR0KCYiIgIiICIiAiIgIiIOBMr+ET1AtmS3S22rCbIKSkq5aeHvpJHSFrHFoLiCBudlaP/AEkeqH6lY775f/EumK3sGdn26V1Rcaq03czVcr5pCLi8AucST0+kq1XrsI9nKzwRzmw3qbvH8OLbm/fwJ3/5Ljay5f0dqq/duYpp3n1/lD7Rp+OeAJim39xqmraOnr/5ufP/AEkWqP6lY775f/EthaB9uXM9UdVbLgGQ4jaaemvL5YhPSveHxubG54OziQR6BH81sKz9g7s53ajFX5ivUW73N4Oub9+iyrCexnolprlNvzjGLZc47panukp3S1z3sDnMcw7tPj0cVlpK7+poov2680VYn6x+StxTjXgWrS3rOn0VVN2aaopnHSrE4n556ThuRERdd8gEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEUFRUQUkElVUysihhY6SR7zs1jQNySfUAEHmp8LbqHfcsyfTbsu4PLJLd8groa6amheQ6SWaTyekYdva4yH+S1nqP8I/qR2Zsol7Pui1lxKvxjT6CGwR1lwpZpZqmpgYG1EhLJWjrN3nTbx3WQdlCOr7YPwhmcdoO4tkdYsSdO+0OLdxC0A01DsD05CMOlI+Wd1be0r8Fjf5NQ8exrs80OQXiW7MqLhkeQZFWRsoaYvkAZvIGhzpCRI5zWhzti07etB0x2Lu31aNWtO7rlPaM1O0pw26MurqS22918p7fO+mZGwulfDUTl+xe4hp6b8T9K60wzUPANR6CW66eZzj+UUUEncy1NmucFbFHJtvxc+FzgHbddid1xZoB8Efovp2Ka9au3SbPbyzZ7qYtNPbY3+wRg85B87j1+SPBdx2DHbBilpp7DjFlobTbaRvCCkoqdsMMbfY1jQAEFwREQEREBERAREQeDGdfCBdsWz5vkNppdbL3TwUV0q6e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Lnabwzp7VM+ZVvM0/LHJ8ueXaOs5nP1xiIxCpa4Paoieed9unw/LnHT65/LpiGg9K7LqoKTUuJ8tHR1NbcLmKd4hfG59e4EMmjLundctiCsQNJi0mnceHUWl16j1EDWsbUebXCdlby3NQar5G/pb8vD1etdVotdXhimbNNmLsziKqc1RFW1U5mYz8tUek7/RjVwambcW4r6RMbxnaZztnpPv+ijs0VdBaKKG6SiSsjp42zvB35SBo5H37rXOTdm/TfML5V5FfxdqmtrJC+R5rTsPY1o26NA6AeoLaSLuarh2l11um1qqIrpjpzb/AI/V0r2ks6miKL1MVRHfdjVHi1FieDVGNWeSrmpqajmjgFRKZZAC07NBPXYeACwbR291uJab4Pj9fjN3knuctVTvdHTnjSff5XB0u+xaCNlt5Fqr4dEXqL1irk5KZoiMZjEzTP8AKnH4+zXVpIi5Tctzy8scsRj0maZ/0x+LVmDW6vp9VtSqueinjgqjR9xI6Mhsm0Ox4nwOx9ii0HjqMe0wnlu9HU05p7hcZ3RvicJCzvnOBDdtzuPD2raKLVp+ExprlN2mvenzPT/qVRV+mMe7C1oYs1xXFXTn/wDec/o55qLfl1ZDDqpkUd2tzMhukcVayhbJ5VbbK3l3TBwBe3k7Z7y0b+l/JbJ0fqb1U2e5vr57lPbRcpRZ5riH+USUmw2LuYDyOXLYu67bLPUWvRcG+5X4vRcme+eszPWZ3xiZ3xjr642Y6fh/3e5FyK5nv7zPWfpM74x1ERF23REREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARG8nu4xtL3D1D1KaKSpI34sH0uQSkU7yKp/Z+8p5FU/s/eUElFO8iqf2fvKeRVP7P3lBJRTvIqn9n7ynkVT+z95QSUU7yKp/Z+8p5FU/s/eUElFO8iqf2fvKeRVP7P3lBJRTvIqn9n7yvhpKkfksP0OQSkQ8mO4SNLXew+tEBERARF9YHyHaJhft47eA/mg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DXgjfYkboOGl7j/A/wCZ5PmHZTrIsmvVVcvMWVVlqoHVEhe6GlbTUsjYgT14h0r9vYDt6l5+/CtYdimEdrGqtWH45brLRS2G31L6agp2wRGVweHP4tAG52G5+Zd0fAtf+yvkf/x1Xf8AcaFB32iIgIiICIiAiIgIiICIiAiIgIiINYZF2d8Av97q8ghmvNoqrhIZavzXcH07J5D4vc1vTc+srIcb0qwbFsVq8NttlY+23EvNa2dxkfVOcNnOkcerjsB9HqWXIg08Oyzpp0p31eRPtwI2tzrtIabiPyeHyfmW2bfb6K00FPbLbSx01LSxthhijGzWMaNgB/JVCICIiAiIgIiICIiCgvtitOTWiqsN9oo6uhrYzFPDIOjmn6vpWrW9l/BoQIqLIsupYGdI4Ib1K1kbfU1o9QC3CiDT/wBzHh/63Zp//XJVT0PZL0ppax9XUm91zZpBLUQ1Nxe6OocDvvIBsXdfaVuhEEEMMNNDHT08TIoomhjGMaA1rQNgAB4ABRoiAiIgIiICIiAiIgIiIMLyLS6z3rM7Vn9BVz2m9254bNUUuw8sp/XDKPBw9h8R7lmiIgIiICIiAiIgIiINY9oLs56XdprCosF1UtM9XQ01W2upZqacwz007WubyY8b7btc4EEEEH5htgnZx7CWhXZdymvzHTWC9uudwpPIZJLhXd+1kXIOIaOI2JIHVdEog5q7QvwfugHaXzpmomosF9ZeW0cdC59BcO5Y+KMnhu0tPUcj1W09C9CdOezpgMGm+mFqlorTFPJVvM0plmnnfsHSSPPxnENaPoaB6lsJEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERBJrGCSlljdVPpg5hBmYQHM/wAwJBAI+cLEfMlF/wC9S9f/AM9S/wDlLK7j5N5BUeWUpqYO7d3kIhMpkbt1bwAPLf2bdVr7lpf/AO6Wq/8Ak2T/AMlBl+O0MNG6cw5ZXXnkG7ipnik7rx6ju2N23+f2K9rGMOOKl9V/hvEJbI7Znel9ldQd6Ou3VzG89uvt23+dZOgIiICIiAiIgIiICIiDD6CkuuVVVyrpsnudDBTV81HT01EYmNa2J3EucXMc5zi4E+OwGw2X2qp7nitztE7MkuVwpa+tbQz09aY3gc2PLXtc1jSCHNHrIIJ+lSbdeH4lUXS3XWyXmRs9xqKyCejt8tVHJHK7mOsTXFpBJBBA8N/Woqy6Py65Walttmu8MVFXtraietoJaVjGMY8ADvWtLnFzmjYA+soMzREQEREBERAREQEREBWm65JRWyobb44Z6yvewSNpadnJ/EkgOcfBrdweriPAq7KzXTHGVlb54t1fPbrl3bYjPEd2ysaSWtkYfReAXO2PiNzsQgsWR1eaUlpmyKevhtjaR0b46CnY2UyAyNBE0jh1BBPRgG3yis2WEZO7LKyyT4/WWLyqardFHFV0TgYj98aSZGuIdH0BO/UfOs3QEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf//Z";
-
-
 
         function openActivityDetailModal(logId) {
 
@@ -27406,13 +24633,9 @@ ${stocksUniverseContext}
 
             if (!log) return;
 
-
-
             const modal = document.getElementById('activityDetailModal');
 
             if (!modal) return;
-
-
 
             // Header & Badges
 
@@ -27430,8 +24653,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const iconEl = document.getElementById('actModalTypeIcon');
 
             if (iconEl) {
@@ -27447,8 +24668,6 @@ ${stocksUniverseContext}
                 else iconEl.innerText = '🔄';
 
             }
-
-
 
             // Exact Time down to the second (الوقت الدقيق بالثانية)
 
@@ -27476,8 +24695,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Attached Image (مرفق الصورة نفسها)
 
             const imgSec = document.getElementById('actModalImageSection');
@@ -27485,8 +24702,6 @@ ${stocksUniverseContext}
             const imgEl = document.getElementById('actModalImage');
 
             const imageSrc = log.meta?.imageUri || (log.type === 'ocr' ? (window.location.protocol === 'file:' ? 'thndr_verified_capture.jpg' : THNDR_VERIFIED_CAPTURE_DATA_URI) : null);
-
-            
 
             if (imageSrc && imgSec && imgEl) {
 
@@ -27500,23 +24715,17 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Breakdown Statement (بيان تفصيلي لما تم تحديثه)
 
             const tbody = document.getElementById('actModalAssetsTableBody');
 
             if (tbody) tbody.innerHTML = '';
 
-
-
             const summaryCards = document.getElementById('actModalSummaryCards');
 
             const countBadge = document.getElementById('actModalAssetsCountBadge');
 
             const notesText = document.getElementById('actModalNotesText');
-
-
 
             if (log.type === 'ocr') {
 
@@ -27525,8 +24734,6 @@ ${stocksUniverseContext}
                 if (countBadge) countBadge.innerText = '13 أصلاً مدققاً';
 
                 if (notesText) notesText.innerText = '✓ تم مسح ومطابقة كافة تفاصيل لقطة الشاشة مع الأصول الـ 13 بدقة 100% وإجمالي محفظة مطابق عند 86,645.19 ج.م.';
-
-
 
                 // Populate 13 assets from THNDR_ACTUAL_HOLDINGS or log.meta.updatedAssets
 
@@ -27537,8 +24744,6 @@ ${stocksUniverseContext}
                 let stocksVal = 0;
 
                 let fundsVal = 0;
-
-
 
                 assets.forEach(a => {
 
@@ -27553,8 +24758,6 @@ ${stocksUniverseContext}
                     else stocksVal += val;
 
                 });
-
-
 
                 const totalWithCash = totalVal + 0;
 
@@ -27573,8 +24776,6 @@ ${stocksUniverseContext}
                 if (fndEl) fndEl.innerText = Math.round(fundsVal).toLocaleString() + ' ج';
 
                 if (cshEl) cshEl.innerText = '0 ج';
-
-
 
                 if (tbody) {
 
@@ -27626,8 +24827,6 @@ ${stocksUniverseContext}
 
                 if (notesText) notesText.innerText = log.description;
 
-
-
                 if (tbody) {
 
                     const tr = document.createElement('tr');
@@ -27645,8 +24844,6 @@ ${stocksUniverseContext}
                     const newB = log.meta?.newBuy !== undefined ? log.meta.newBuy.toFixed(2) + ' ج' : (log.meta?.price ? log.meta.price.toFixed(2) + ' ج' : '-');
 
                     const tot = log.meta?.total || log.meta?.impact || '-';
-
-
 
                     tr.innerHTML = `
 
@@ -27668,13 +24865,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             modal.classList.remove('hidden');
 
         }
-
-
 
         function closeActivityDetailModal() {
 
@@ -27685,8 +24878,6 @@ ${stocksUniverseContext}
             if (modal) modal.classList.add('hidden');
 
         }
-
-
 
         function openActivityImageZoom() {
 
@@ -27706,8 +24897,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function closeActivityImageZoom() {
 
             const zoomModal = document.getElementById('activityImageZoomModal');
@@ -27715,8 +24904,6 @@ ${stocksUniverseContext}
             if (zoomModal) zoomModal.classList.add('hidden');
 
         }
-
-
 
         window.openActivityDetailModal = openActivityDetailModal;
 
@@ -27726,8 +24913,6 @@ ${stocksUniverseContext}
 
         window.closeActivityImageZoom = closeActivityImageZoom;
 
-
-
         function renderUserActivityLog(filter = 'all') {
 
             const container = document.getElementById('userActivityFeedContainer');
@@ -27736,11 +24921,7 @@ ${stocksUniverseContext}
 
             container.innerHTML = '';
 
-
-
             const logs = getUserActivityLogs();
-
-
 
             // Compute counts
 
@@ -27751,8 +24932,6 @@ ${stocksUniverseContext}
             const ocr = logs.filter(l => l.type === 'ocr').length;
 
             const trade = logs.filter(l => l.type === 'trade' || l.type === 'buy' || l.type === 'sell').length;
-
-
 
             const tEl = document.getElementById('actTotalCount');
 
@@ -27770,8 +24949,6 @@ ${stocksUniverseContext}
 
             if (rEl) rEl.innerText = `${trade}`;
 
-
-
             const filtered = logs.filter(l => {
 
                 if (filter === 'all') return true;
@@ -27787,8 +24964,6 @@ ${stocksUniverseContext}
                 return true;
 
             });
-
-
 
             if (filtered.length === 0) {
 
@@ -27810,8 +24985,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             filtered.forEach(log => {
 
                 const card = document.createElement('div');
@@ -27819,8 +24992,6 @@ ${stocksUniverseContext}
                 card.className = "glass-card rounded-xl p-3 sm:p-3.5 border border-slate-800 space-y-2 hover:border-indigo-500/80 hover:bg-slate-900/60 transition select-none shadow-sm cursor-pointer group active:scale-[0.99]";
 
                 card.onclick = () => openActivityDetailModal(log.id);
-
-                
 
                 let metaHtml = '';
 
@@ -27880,8 +25051,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 card.innerHTML = `
 
                     <div class="flex items-center justify-between text-[10px]">
@@ -27906,15 +25075,11 @@ ${stocksUniverseContext}
 
                     </div>
 
-
-
                     <h4 class="text-xs font-bold text-white leading-snug group-hover:text-indigo-300 transition">${log.title}</h4>
 
                     <p class="text-[11px] text-slate-300 leading-relaxed">${log.description}</p>
 
                     ${metaHtml}
-
-
 
                     <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-indigo-400 group-hover:text-indigo-300 font-medium transition">
 
@@ -27938,8 +25103,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function exportUserActivityLog() {
 
             triggerHaptic('medium');
@@ -27953,8 +25116,6 @@ ${stocksUniverseContext}
                 return;
 
             }
-
-
 
             let csv = "\uFEFFالتاريخ,الوقت,نوع الحركة,العنوان,التفاصيل,الأصل\n";
 
@@ -27975,8 +25136,6 @@ ${stocksUniverseContext}
                 csv += `${date},${time},${type},${title},${desc},${ticker}\n`;
 
             });
-
-
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
@@ -28000,8 +25159,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function clearUserActivityLog() {
             triggerHaptic('medium');
             if (confirm("هل أنت متأكد من رغبتك في مسح سجل حركات وتعديلات المحفظة بالكامل؟")) {
@@ -28014,35 +25171,19 @@ ${stocksUniverseContext}
             }
         }
 
-
-
-
-
-        
-
-
-
-    
-
 // =========================================================================
 
         // v15 PROFESSIONAL ENGINES: LIVE TICKER, PERFORMANCE, NEWS HUB & AUDIT TOOL
 
         // =========================================================================
 
-
-
         // 1. LIVE TICKER BAR ENGINE (Updates USD, Gold, EGX30, EGX70, EGX33, TASI, SPX, CBE)
-
-        
 
         // =========================================================================
 
         // UNIFIED SOURCE OF TRUTH FOR INDICES & COMMODITIES (TradingView / EGX Official)
 
         // =========================================================================
-
-        
 
         // Official EGX 12-character ISIN Directory
 
@@ -28102,8 +25243,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         window.OFFICIAL_UNIFIED_MARKET_INDEXES = {
 
             egx30:  { price: 54120.40, open: 53911.10, chg: 0.39, name: "EGX30 الرئيسي", source: "TradingView / EGX" },
@@ -28121,8 +25260,6 @@ ${stocksUniverseContext}
             gold:   { price: 7015.00,  open: 7015.00,  chg: 0.00,  name: "ذهب عيار 24 الصافي", source: "TradingView / Thndr Bullion" }
 
         };
-
-
 
         let _liveTickerCache = {
 
@@ -28147,8 +25284,6 @@ ${stocksUniverseContext}
             cbe: { price: 19.00, chg: 0 }
 
         };
-
-
 
         async function fetchGlobalTickerQuotesDirect() {
 
@@ -28222,8 +25357,6 @@ ${stocksUniverseContext}
 
                         });
 
-
-
                         // Calculate Live Gold 24K Gram in EGP (Pure 24K Gold Rate - Thndr Verified 7,015.00 EGP)
 
                         _liveTickerCache.gold.price = (typeof getLiveGoldGramRate === 'function') ? getLiveGoldGramRate() : 7015.00;
@@ -28248,8 +25381,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Fallback safety guard for gold 24K
 
             if (!_liveTickerCache.gold.price || _liveTickerCache.gold.price < 3000) {
@@ -28257,8 +25388,6 @@ ${stocksUniverseContext}
                 _liveTickerCache.gold.price = 7015.00;
 
             }
-
-
 
             // Sync official EGX33 Sharia from verified market_data.json without synthetic averaging
 
@@ -28276,13 +25405,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             updateLiveTickerBarDOM();
 
         }
-
-
 
         function updateLiveTickerBarDOM() {
 
@@ -28291,8 +25416,6 @@ ${stocksUniverseContext}
             const formatC = (chg) => (chg >= 0 ? `+${chg.toFixed(2)}%` : `${chg.toFixed(2)}%`);
 
             const getCol = (chg) => (chg >= 0 ? 'text-emerald-400' : 'text-rose-400');
-
-
 
             // USD
 
@@ -28306,8 +25429,6 @@ ${stocksUniverseContext}
 
             });
 
-
-
             // Gold 24K
 
             document.querySelectorAll('.ticker-gold-val').forEach(el => el.innerText = `${formatP(_liveTickerCache.gold.price, 2)} ج`);
@@ -28319,8 +25440,6 @@ ${stocksUniverseContext}
                 el.className = `text-[10px] font-bold ticker-gold-chg ${getCol(_liveTickerCache.gold.chg)}`;
 
             });
-
-
 
             // EGX 33
 
@@ -28348,8 +25467,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // EGX 30
 
             document.querySelectorAll('.ticker-egx30-val').forEach(el => el.innerText = formatP(_liveTickerCache.egx30.price, 2));
@@ -28376,8 +25493,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // EGX 70
 
             document.querySelectorAll('.ticker-egx70-val').forEach(el => el.innerText = formatP(_liveTickerCache.egx70.price, 2));
@@ -28389,8 +25504,6 @@ ${stocksUniverseContext}
                 el.className = `text-[10px] font-bold ticker-egx70-chg ${getCol(_liveTickerCache.egx70.chg)}`;
 
             });
-
-
 
             // SAR
 
@@ -28406,15 +25519,9 @@ ${stocksUniverseContext}
 
         }
 
-
-
-
-
         // 2. PERFORMANCE TAB ENGINE (Calculates KPIs, asset class breakdown & rankings)
 
         let currentPerfPeriod = '1M';
-
-
 
         function setPerformancePeriodPreset(period, btn) {
 
@@ -28438,11 +25545,7 @@ ${stocksUniverseContext}
 
         }
 
-
-
                 // =========================================================================
-
-        
 
         // =========================================================================
 
@@ -28460,19 +25563,13 @@ ${stocksUniverseContext}
 
             let rate = guess;
 
-
-
             const t0 = new Date(cashFlows[0].date).getTime();
-
-            
 
             for (let i = 0; i < maxIter; i++) {
 
                 let npv = 0;
 
                 let dNpv = 0;
-
-
 
                 for (let j = 0; j < cashFlows.length; j++) {
 
@@ -28484,15 +25581,11 @@ ${stocksUniverseContext}
 
                     if (denom === 0 || isNaN(denom)) continue;
 
-                    
-
                     npv += cf.amount / denom;
 
                     dNpv -= (t * cf.amount) / (denom * (1 + rate));
 
                 }
-
-
 
                 if (Math.abs(dNpv) < 1e-10) break;
 
@@ -28514,8 +25607,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         // COMPREHENSIVE PERFORMANCE SUITE (v15 SOCPA / IFRS Performance Analytics)
 
         // =========================================================================
@@ -28531,8 +25622,6 @@ ${stocksUniverseContext}
                 let goldVal = 0, goldCost = 0;
 
                 const activeHoldings = (userHoldings && Array.isArray(userHoldings)) ? userHoldings : [];
-
-
 
                 activeHoldings.forEach(h => {
 
@@ -28551,8 +25640,6 @@ ${stocksUniverseContext}
                     const cost = buy * qty;
 
                     const val = cur * qty;
-
-
 
                     const isGold = (h.ticker === 'THNDR_GOLD' || h.ticker === 'AZG' || (h.sector && (h.sector.includes('الذهب') || h.sector.includes('ذهب'))));
                     if (isGold) {
@@ -28717,8 +25804,6 @@ ${stocksUniverseContext}
                 const goldSub = document.getElementById('perf_gold_subtext');
                 if (goldSub) goldSub.innerText = 'أزيموت جولد: 259.25 ج • سبائك ثندر: 56.82 ج';
 
-
-
                 // Populate Detailed SOCPA / IFRS Holdings Statement Table
 
                 const tableBody = document.getElementById('perfHoldingsDetailedTableBody');
@@ -28756,8 +25841,6 @@ ${stocksUniverseContext}
                             const ret = cost > 0 ? (pnl / cost) * 100 : 0;
 
                             const isWin = pnl >= 0;
-
-
 
                             rowsHtml += `
 
@@ -28799,8 +25882,6 @@ ${stocksUniverseContext}
 
                 }
 
-
-
                 // Best & Worst Asset Rankings
 
                 const ranked = activeHoldings.map(h => {
@@ -28828,8 +25909,6 @@ ${stocksUniverseContext}
                     return { ticker: h.ticker, name: (st ? st.name : h.name) || h.ticker, pnl, ret, val };
 
                 }).sort((a, b) => b.ret - a.ret);
-
-
 
                 const container = document.getElementById('perfBestWorstContainer');
 
@@ -28907,10 +25986,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
-
-
         // =========================================================================
 
         // R33: USER FEES & REALIZED P&L LEDGER STORAGE ENGINE
@@ -28918,8 +25993,6 @@ ${stocksUniverseContext}
         // =========================================================================
 
         const USER_FEES_LEDGER_KEY = 'egx_sharia_user_fees_ledger_v1';
-
-
 
         function getUserFeesLedger() {
             try {
@@ -28947,8 +26020,6 @@ ${stocksUniverseContext}
             };
         }
 
-
-
         function recordFeeTransaction(tx) {
 
             try {
@@ -28970,10 +26041,6 @@ ${stocksUniverseContext}
             }
 
         }
-
-
-
-
 
                 // ════════════════════════════════════════════════════════════════
         // 3. ENHANCED NEWS HUB & REGULATORY ALERTS ENGINE (STOCKS, FUNDS, ALERTS)
@@ -29587,8 +26654,6 @@ ${stocksUniverseContext}
 
             const reportContainer = document.getElementById('auditReportContainer');
 
-
-
             if (startBtn) startBtn.disabled = true;
 
             if (progressContainer) progressContainer.classList.remove('hidden');
@@ -29603,8 +26668,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const findings = [];
 
             const autoFixes = [];
@@ -29616,8 +26679,6 @@ ${stocksUniverseContext}
             let accountingQuality = 100;
 
             let analysisQuality = 100;
-
-
 
             const setStepState = (stepId, status, label) => {
 
@@ -29637,11 +26698,7 @@ ${stocksUniverseContext}
 
             };
 
-
-
             const sleep = ms => new Promise(res => setTimeout(res, ms));
-
-
 
             // ==========================================
 
@@ -29657,15 +26714,11 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             const isOnline = navigator.onLine;
 
             const currentHost = window.location.hostname || '';
 
             const isLocal = currentHost === 'localhost' || currentHost === '127.0.0.1' || window.location.protocol === 'file:';
-
-
 
             if (!isOnline) {
 
@@ -29693,8 +26746,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ==========================================
 
             // STEP 2: Google Gemini AI Real Engine Ping Audit (User Item 3)
@@ -29709,13 +26760,9 @@ ${stocksUniverseContext}
 
             await sleep(250);
 
-
-
             const geminiKey = localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || '';
 
             let aiStatusOk = false;
-
-
 
             if (!geminiKey || geminiKey.trim() === '') {
 
@@ -29767,8 +26814,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ==========================================
 
             // STEP 3: Section 14.4 Mutual Fund Persistence Lock Audit
@@ -29783,8 +26828,6 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             const overrides = getUserHoldingOverrides();
 
             const overridesCount = Object.keys(overrides).length;
@@ -29792,8 +26835,6 @@ ${stocksUniverseContext}
             autoFixes.push(`🔒 ثبات بيانات الصناديق (Section 14.4): محرك الحفظ المفصول نشط (${overridesCount} أصول مثبتة)، ويمنع تماماً مسح أو استرجاع تعديلاتك عند تحديث السوق.`);
 
             setStepState('funds_nav', 'ok', 'قفل ثبات تعديلات المستخدم نشط ومحمي ✓');
-
-
 
             // ==========================================
 
@@ -29808,8 +26849,6 @@ ${stocksUniverseContext}
             if (progressPct) progressPct.innerText = '50%';
 
             await sleep(200);
-
-
 
             const currentGold = _liveTickerCache.gold.price;
 
@@ -29829,8 +26868,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ==========================================
 
             // STEP 5: Direct News & Disclosures Links Audit (User Item 1 & 8)
@@ -29845,8 +26882,6 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             const nList = (typeof NEWS_DATA !== 'undefined') ? NEWS_DATA : [];
 
             let brokenLinks = 0;
@@ -29860,8 +26895,6 @@ ${stocksUniverseContext}
                 }
 
             });
-
-
 
             if (brokenLinks > 0) {
 
@@ -29879,8 +26912,6 @@ ${stocksUniverseContext}
 
             setStepState('news_links', 'ok', 'روابط الأخبار المباشرة مفحوصة بنجاح ✓');
 
-
-
             // ==========================================
 
             // STEP 6: CPA Mathematical Balance Audit (0.00 EGP)
@@ -29895,15 +26926,11 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             let stockCost = 0, stockVal = 0;
 
             let fundCost = 0, fundVal = 0;
 
             let goldCost = 0, goldVal = 0;
-
-
 
             const activeH = (userHoldings && userHoldings.length > 0) ? userHoldings : THNDR_ACTUAL_HOLDINGS;
 
@@ -29918,8 +26945,6 @@ ${stocksUniverseContext}
                 const cost = buy * qty;
 
                 const val = cur * qty;
-
-
 
                 if (h.ticker === 'THNDR_GOLD' || h.type === 'gold') {
 
@@ -29937,15 +26962,11 @@ ${stocksUniverseContext}
 
             });
 
-
-
             const totalCost = stockCost + fundCost + goldCost;
 
             const totalVal = stockVal + fundVal + goldVal;
 
             const totalPnl = totalVal - totalCost;
-
-
 
             // F14 Audit Fix: Real verification checking asset validity and non-negativity
 
@@ -29960,8 +26981,6 @@ ${stocksUniverseContext}
                 if (q < 0 || b < 0) invalidAssets++;
 
             });
-
-
 
             if (invalidAssets > 0) {
 
@@ -29979,8 +26998,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // ==========================================
 
             // STEP 7: Technical & Valuation Sanity
@@ -29995,13 +27012,9 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             autoFixes.push('📐 المحلل المالي: مؤشرات القوة النسبية RSI(14) محسوبة وفق البيانات الفعلية بدون مولدات وهمية.');
 
             setStepState('analysis_rsi', 'ok', 'التحليل الفني والقيم العادلة مدققة ✓');
-
-
 
             // ==========================================
 
@@ -30017,13 +27030,9 @@ ${stocksUniverseContext}
 
             await sleep(200);
 
-
-
             autoFixes.push('🕌 المدقق الشرعي: كافة أسهم المحفظة ومؤشر EGX33 متوافقة 100% مع الضوابط الشرعية المعتمدة.');
 
             setStepState('sharia_governance', 'ok', 'الضوابط الشرعية مكتملة بنجاح ✓');
-
-
 
             // ==========================================
 
@@ -30035,17 +27044,11 @@ ${stocksUniverseContext}
 
             const overallScore = Math.max(0, Math.round((codeQuality + accountingQuality + analysisQuality) / 3));
 
-
-
             if (progressContainer) progressContainer.classList.add('hidden');
 
             if (startBtn) startBtn.disabled = false;
 
-
-
             const isHealthy = overallScore >= 90 && criticalErrors.length === 0;
-
-
 
             if (statusBadge) {
 
@@ -30054,8 +27057,6 @@ ${stocksUniverseContext}
                 statusBadge.className = `text-[10px] font-bold px-3 py-1 rounded-full border shadow-sm ${isHealthy ? 'bg-emerald-950 text-emerald-300 border-emerald-700' : 'bg-rose-950 text-rose-300 border-rose-700'}`;
 
             }
-
-
 
             // Fill Pillar Scores
 
@@ -30067,25 +27068,17 @@ ${stocksUniverseContext}
 
                 : `تم رصد ${criticalErrors.length} أخطاء حرجة و ${findings.length} ملاحظات تحتاج إلى انتباهك.`;
 
-
-
             document.getElementById('auditPillarCodePct').innerText = `${Math.max(0, codeQuality)}%`;
 
             document.getElementById('auditPillarCodeBar').style.width = `${Math.max(0, codeQuality)}%`;
-
-
 
             document.getElementById('auditPillarAccountingPct').innerText = `${Math.max(0, accountingQuality)}%`;
 
             document.getElementById('auditPillarAccountingBar').style.width = `${Math.max(0, accountingQuality)}%`;
 
-
-
             document.getElementById('auditPillarAnalysisPct').innerText = `${Math.max(0, analysisQuality)}%`;
 
             document.getElementById('auditPillarAnalysisBar').style.width = `${Math.max(0, analysisQuality)}%`;
-
-
 
             // Display Critical Errors Banner if any
 
@@ -30114,8 +27107,6 @@ ${stocksUniverseContext}
                 </div>`;
 
             }
-
-
 
             // Auto-Fix / Verified Items List
 
@@ -30161,13 +27152,9 @@ ${stocksUniverseContext}
 
             }
 
-
-
             if (reportContainer) reportContainer.classList.remove('hidden');
 
         }
-
-    
 
         // UX-01 & P1-08 Deep Linking Hash Router
 
@@ -30185,15 +27172,11 @@ ${stocksUniverseContext}
         window.addEventListener('DOMContentLoaded', applyHashRoute);
         window.addEventListener('hashchange', applyHashRoute);
 
-
-
         // ════════════════════════════════════════════════════════════════
 
         // 14-POINT MAJOR UPGRADE: GLOBAL JAVASCRIPT COPILOT & FEE ENGINES
 
         // ════════════════════════════════════════════════════════════════
-
-
 
         // Point 5: Thndr Fee Policy Modal Handlers
 
@@ -30207,8 +27190,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function closeThndrFeePolicyModal() {
 
             triggerHaptic('light');
@@ -30218,8 +27199,6 @@ ${stocksUniverseContext}
             if (m) m.classList.add('hidden');
 
         }
-
-
 
         // Point 6: Fund NAV Live Sync Engine (Direct Alias to window.syncLiveFundsEngine)
         async function syncFundsNavLive() {
@@ -30231,8 +27210,6 @@ ${stocksUniverseContext}
                 return refreshData();
             }
         }
-
-
 
         // Point 14: Universal Gemini AI Consultation Copilot
 
@@ -30280,8 +27257,6 @@ ${stocksUniverseContext}
 
             const body = document.getElementById('geminiConsultationBody');
 
-
-
             if (!modal) return;
 
             if (tEl) tEl.innerText = title;
@@ -30300,17 +27275,11 @@ ${stocksUniverseContext}
 
             }
 
-
-
             modal.classList.remove('hidden');
-
-
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 
             const mState = typeof resolveMarketState === 'function' ? resolveMarketState() : { isLive: false };
-
-
 
             try {
 
@@ -30352,8 +27321,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // High-precision algorithmic fallback if cloud is slow
 
             if (loading) loading.classList.add('hidden');
@@ -30388,8 +27355,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function closeGeminiConsultation() {
 
             triggerHaptic('light');
@@ -30399,8 +27364,6 @@ ${stocksUniverseContext}
             if (modal) modal.classList.add('hidden');
 
         }
-
-
 
         function copyGeminiConsultationText() {
 
@@ -30421,8 +27384,6 @@ ${stocksUniverseContext}
             }
 
         }
-
-
 
         // Specific Copilot Triggers (Points 4, 8, 12, 13, 14)
 
@@ -30446,8 +27407,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function askGeminiPortfolioReview() {
 
             openGeminiConsultation(
@@ -30461,8 +27420,6 @@ ${stocksUniverseContext}
             );
 
         }
-
-
 
         function askGeminiPulseOverview() {
 
@@ -30478,8 +27435,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function analyzeNewsWithGemini(title, summary, ticker, source) {
 
             openGeminiConsultation(
@@ -30494,8 +27449,6 @@ ${stocksUniverseContext}
 
         }
 
-
-
         function askGeminiRecommendationCheck(ticker, name, recLabel) {
 
             openGeminiConsultation(
@@ -30509,8 +27462,6 @@ ${stocksUniverseContext}
             );
 
         }
-
-
 
         async function diagnoseAuditWithGemini() {
 
@@ -30538,8 +27489,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             const prompt = `أنت المدقق البرمجي والمحاسبي المعتمد لمنصة البورصة المصرية الشريعة.
 
 قم بفحص وتدقيق النظام بالكامل:
@@ -30553,8 +27502,6 @@ ${stocksUniverseContext}
 4. دقق في احتساب رسوم ثندر بنسبة 7 في الألف (0.7%).
 
 5. قدم تقرير تدقيق نهائي معتمد وحالة سلامة النظام.`;
-
-
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 
@@ -30594,8 +27541,6 @@ ${stocksUniverseContext}
 
             }
 
-
-
             // Algorithmic instant audit report fallback
 
             if (txt) {
@@ -30625,7 +27570,5 @@ ${stocksUniverseContext}
             showToast('✓ اكتمل التدقيق الذكي بنجاح', 'success');
 
         }
-
-
 
     
