@@ -10559,12 +10559,10 @@ const THNDR_ACTUAL_HOLDINGS = [
             triggerHaptic('medium');
 
             const input = document.getElementById('aiChatInput');
-
-            const q = input.value.trim();
-
-            if (!q) return;
-
             const box = document.getElementById('aiChatOutput');
+            if (!input || !box) return;
+            const q = input.value.trim();
+            if (!q) return;
 
             box.classList.remove('hidden');
 
@@ -14098,7 +14096,7 @@ async function syncMubasherDirectAll() {
 
         function deleteCustomAlert(id) {
             triggerHaptic('selection');
-            userCustomAlerts = userCustomAlerts.filter(a => a.id !== id);
+            userCustomAlerts = userCustomAlerts.filter(a => String(a.id) !== String(id));
             try {
                 localStorage.setItem('egx_custom_alerts', JSON.stringify(userCustomAlerts));
                 localStorage.setItem('egx_custom_alerts_cleared', 'true');
@@ -20016,7 +20014,23 @@ ${stocksUniverseContext}
 
             let isPerfRoute = false;
 
-            if (tabId === 'performance') {
+            if (tabId === 'market' || tabId === 'pulse') {
+
+                actualTabId = 'radar';
+
+            } else if (tabId === 'funds') {
+
+                actualTabId = 'radar';
+
+                subTarget = 'pulse';
+
+                setTimeout(() => { if (typeof setAssetSlicer === 'function') setAssetSlicer('funds'); }, 50);
+
+            } else if (tabId === 'news') {
+
+                actualTabId = 'news_hub';
+
+            } else if (tabId === 'performance') {
 
                 actualTabId = 'portfolio';
 
@@ -21271,13 +21285,12 @@ ${stocksUniverseContext}
 
             triggerHaptic('medium');
 
-            const tradeVal = parseFloat(document.getElementById('fee_trade_val').value) || 0;
-
-            const tradeType = document.getElementById('fee_trade_type').value;
-
-            const capitalGain = parseFloat(document.getElementById('fee_capital_gain').value) || 0;
-
-            const out = document.getElementById('fee_tax_output');
+            if (typeof calculateBrokerageFees === 'function') return calculateBrokerageFees();
+            const tradeVal = parseFloat(document.getElementById('fee_trade_val')?.value) || 0;
+            const tradeType = document.getElementById('fee_trade_type')?.value || 'buy';
+            const capitalGain = parseFloat(document.getElementById('fee_capital_gain')?.value) || 0;
+            const out = document.getElementById('fee_tax_output') || document.getElementById('feeResultCard');
+            if (!out) return;
 
             const thndrComm = Math.max(2.0, tradeVal * 0.002);
 
@@ -21371,13 +21384,13 @@ ${stocksUniverseContext}
 
             triggerHaptic('medium');
 
-            const target = parseFloat(document.getElementById('goal_target').value) || 1000000;
+            const target = parseFloat(document.getElementById('goal_target')?.value) || 1000000;
 
-            const current = parseFloat(document.getElementById('goal_current').value) || 87736;
+            const current = parseFloat(document.getElementById('goal_current')?.value) || 87736;
 
-            const monthly = parseFloat(document.getElementById('goal_monthly').value) || 5000;
+            const monthly = parseFloat(document.getElementById('goal_monthly')?.value) || 5000;
 
-            const annualRate = (parseFloat(document.getElementById('goal_rate').value) || 22) / 100;
+            const annualRate = (parseFloat(document.getElementById('goal_rate')?.value) || 22) / 100;
 
             const annualVol = (parseFloat(document.getElementById('goal_volatility')?.value) || 18) / 100;
 
@@ -25161,14 +25174,12 @@ ${stocksUniverseContext}
 
         function clearUserActivityLog() {
             triggerHaptic('medium');
-            if (confirm("هل أنت متأكد من رغبتك في مسح سجل حركات وتعديلات المحفظة بالكامل؟")) {
-                try {
-                    localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify([]));
-                    localStorage.setItem('egx_activity_cleared', 'true');
-                } catch(e) {}
-                renderUserActivityLog('all');
-                showToast("✓ تم مسح سجل الحركات بالكامل", "warning");
-            }
+            try {
+                localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify([]));
+                localStorage.setItem('egx_activity_cleared', 'true');
+            } catch(e) {}
+            renderUserActivityLog('all');
+            showToast("✓ تم مسح سجل الحركات بالكامل", "warning");
         }
 
 // =========================================================================
@@ -27060,25 +27071,25 @@ ${stocksUniverseContext}
 
             // Fill Pillar Scores
 
-            document.getElementById('auditOverallScoreVal').innerText = `${overallScore}%`;
+            const _scEl = document.getElementById('auditOverallScoreVal'); if (_scEl) _scEl.innerText = `${overallScore}%`;
 
-            document.getElementById('auditReportSummary').innerText = isHealthy 
+            const _repSumEl = document.getElementById('auditReportSummary'); if (_repSumEl) _repSumEl.innerText = isHealthy 
 
                 ? 'تم تدقيق كافة محاور البرنامج بنجاح، وجميع الخدمات والاتصالات السحابية تعمل بكفاءة تامة.' 
 
                 : `تم رصد ${criticalErrors.length} أخطاء حرجة و ${findings.length} ملاحظات تحتاج إلى انتباهك.`;
 
-            document.getElementById('auditPillarCodePct').innerText = `${Math.max(0, codeQuality)}%`;
+            const _cpEl = document.getElementById('auditPillarCodePct'); if (_cpEl) _cpEl.innerText = `${Math.max(0, codeQuality)}%`;
 
-            document.getElementById('auditPillarCodeBar').style.width = `${Math.max(0, codeQuality)}%`;
+            const _cbEl = document.getElementById('auditPillarCodeBar'); if (_cbEl) _cbEl.style.width = `${Math.max(0, codeQuality)}%`;
 
-            document.getElementById('auditPillarAccountingPct').innerText = `${Math.max(0, accountingQuality)}%`;
+            const _apEl = document.getElementById('auditPillarAccountingPct'); if (_apEl) _apEl.innerText = `${Math.max(0, accountingQuality)}%`;
 
-            document.getElementById('auditPillarAccountingBar').style.width = `${Math.max(0, accountingQuality)}%`;
+            const _abEl = document.getElementById('auditPillarAccountingBar'); if (_abEl) _abEl.style.width = `${Math.max(0, accountingQuality)}%`;
 
-            document.getElementById('auditPillarAnalysisPct').innerText = `${Math.max(0, analysisQuality)}%`;
+            const _anpEl = document.getElementById('auditPillarAnalysisPct'); if (_anpEl) _anpEl.innerText = `${Math.max(0, analysisQuality)}%`;
 
-            document.getElementById('auditPillarAnalysisBar').style.width = `${Math.max(0, analysisQuality)}%`;
+            const _anbEl = document.getElementById('auditPillarAnalysisBar'); if (_anbEl) _anbEl.style.width = `${Math.max(0, analysisQuality)}%`;
 
             // Display Critical Errors Banner if any
 
