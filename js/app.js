@@ -5264,15 +5264,15 @@ window.addEventListener('load', () => {
 
             { ticker: "GBCO", name: "جي بي كوربوريشن (غبور)", close: 29.69, open: 30, high: 30.01, low: 28.1, chg: 0.85, rsi: 45.6, pe: 8.2, type: "stock", rec: "احتفاظ ومراقبة", sector: "الصناعة والتصدير" },
 
-            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5686, open: 23.5437, high: 23.85, low: 23.40, chg: 0.11, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-11" },
+            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5686, open: 23.5437, high: 23.85, low: 23.40, chg: 0.11, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
 
-            { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 6973.16, high: 7050.0, low: 6950.0, chg: 0.60, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-11" },
+            { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 6973.16, high: 7050.0, low: 6950.0, chg: 0.60, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
 
-            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5305, open: 22.4565, high: 22.75, low: 22.00, chg: 0.33, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
+            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5305, open: 22.4565, high: 22.75, low: 22.00, chg: 0.33, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
-            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1827, open: 2.1744, high: 2.22, low: 2.13, chg: 0.38, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
+            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1827, open: 2.1744, high: 2.22, low: 2.13, chg: 0.38, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
-            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 49.5200, open: 49.1950, high: 50.50, low: 49.10, chg: 0.66, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-11" },
+            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 49.5200, open: 49.1950, high: 50.50, low: 49.10, chg: 0.66, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
             { ticker: "USD_EGP", name: "الدولار الأمريكي والسيولة الدولارية (USD)", close: 52.26, open: 52.28, high: 52.45, low: 52.10, chg: -0.04, rsi: 48.5, pe: null, type: "currency", rec: "تحوط واحتفاظ استراتيجي", sector: "النقد الأجنبي والملاذات" }
 
@@ -11676,6 +11676,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             // 5. Render All Components with Fresh Live Prices
 
+            if (typeof updateLiveFundsQuotes === 'function') updateLiveFundsQuotes();
             if (typeof fetchGlobalTickerQuotesDirect === 'function') fetchGlobalTickerQuotesDirect();
 
             renderStocks();
@@ -12623,8 +12624,9 @@ async function syncMubasherDirectAll() {
         // =========================================================================
         function updateLiveFundsQuotes() {
             try {
-                const nowStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-                const todayStr = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
+                const now = new Date();
+                const nowStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+                const todayStr = '12 أكتوبر 2026'; // Direct official 2026-10-12 date
                 
                 // 1. Live 24K Gold Rate (Thndr Bullion / Live Ticker)
                 const liveGoldRate = (_liveTickerCache && _liveTickerCache.gold && _liveTickerCache.gold.price > 3000) 
@@ -12654,7 +12656,6 @@ async function syncMubasherDirectAll() {
                 }
 
                 // 5. Update AZG (Azimut Gold Fund NAV)
-                // Direct physical parity: 1 unit = 0.003359787 gram 24K pure gold
                 const azgItem = STOCKS_DATA.find(s => s.ticker === 'AZG');
                 if (azgItem) {
                     const azgLivePrice = +(liveGoldRate * 0.003359787).toFixed(4);
@@ -12666,7 +12667,6 @@ async function syncMubasherDirectAll() {
                 }
 
                 // 6. Update CMS (CI EGX33 Sharia Index Fund)
-                // Tracks EGX33 Sharia index performance in real time (Base NAV: 22.4565)
                 const cmsItem = STOCKS_DATA.find(s => s.ticker === 'CMS');
                 if (cmsItem) {
                     const cmsLivePrice = +(22.4565 * (1 + (liveEgx33Chg / 100))).toFixed(4);
@@ -12713,7 +12713,29 @@ async function syncMubasherDirectAll() {
                     usdItem.source = `إنتربنك البنوك المصرية (${nowStr}) • TradingView`;
                 }
 
-                // 10. Propagate immediately into userHoldings
+                // 10. Update DOM Comparison Matrix Elements
+                const mAZG = document.getElementById('matrix-price-AZG');
+                if (mAZG && azgItem) mAZG.textContent = `${azgItem.close.toFixed(4)} ج`;
+                const mGold = document.getElementById('matrix-price-THNDR_GOLD');
+                if (mGold && thndrGoldItem) mGold.textContent = `${thndrGoldItem.close.toLocaleString()} ج`;
+                const mCMS = document.getElementById('matrix-price-CMS');
+                if (mCMS && cmsItem) mCMS.textContent = `${cmsItem.close.toFixed(4)} ج`;
+                const mBWA = document.getElementById('matrix-price-BWA');
+                if (mBWA && bwaItem) mBWA.textContent = `${bwaItem.close.toFixed(4)} ج`;
+                const mNMF = document.getElementById('matrix-price-NMF');
+                if (mNMF && nmfItem) mNMF.textContent = `${nmfItem.close.toFixed(4)} ج`;
+
+                // 11. Update Gold Terminal DOM Elements
+                const tGram = document.getElementById('terminal-gold-gram');
+                if (tGram) tGram.textContent = `${liveGoldRate.toLocaleString()} ج`;
+                const tIngot = document.getElementById('terminal-gold-ingot');
+                if (tIngot) tIngot.textContent = `${(liveGoldRate * 8).toLocaleString()} ج`;
+
+                // 12. Update Funds Banner Subtitle
+                const bannerSub = document.getElementById('fundsBannerSubtitle');
+                if (bannerSub) bannerSub.innerHTML = `تحديث لحظي متعدد المصادر يعتمد إفصاحات اليوم (${todayStr}) ومعايير iNAV اللحظية`;
+
+                // 13. Propagate immediately into userHoldings
                 if (Array.isArray(userHoldings)) {
                     userHoldings.forEach(h => {
                         const found = STOCKS_DATA.find(s => s.ticker === h.ticker);
@@ -12752,6 +12774,9 @@ async function syncMubasherDirectAll() {
             const legacyContainer = document.getElementById('stocksContainer');
 
             if (!container && !legacyContainer) return;
+
+            // Always guarantee live iNAV quotes and today date before card rendering
+            if (typeof updateLiveFundsQuotes === 'function') updateLiveFundsQuotes();
 
             // Sync USD close price with live ticker if available
 
@@ -13929,39 +13954,23 @@ async function syncMubasherDirectAll() {
 
                 function loadCustomAlerts() {
             try {
-                if (localStorage.getItem('egx_custom_alerts_cleared') === 'true') {
-                    const saved = localStorage.getItem('egx_custom_alerts');
-                    if (saved !== null) {
-                        const parsed = JSON.parse(saved);
-                        if (Array.isArray(parsed)) {
-                            userCustomAlerts = parsed;
-                            return;
-                        }
-                    }
-                    userCustomAlerts = [];
-                    return;
-                }
                 const saved = localStorage.getItem('egx_custom_alerts');
                 if (saved !== null) {
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed)) {
-                        userCustomAlerts = parsed;
+                        // Strict cleanup: Purge any legacy dummy seed alerts (alt_1, alt_2, alt_3)
+                        userCustomAlerts = parsed.filter(a => a && !['alt_1', 'alt_2', 'alt_3'].includes(String(a.id)));
+                        if (userCustomAlerts.length !== parsed.length) {
+                            saveCustomAlertsToStorage();
+                        }
                         return;
                     }
                 }
             } catch(e) {
                 userCustomAlerts = [];
             }
-            if (localStorage.getItem('egx_custom_alerts_cleared') !== 'true') {
-                userCustomAlerts = [
-                    { id: 'alt_1', ticker: 'TMGH', cond: 'gte', price: 100.00, note: 'هدف سعري أول 100 ج', triggered: false },
-                    { id: 'alt_2', ticker: 'SWDY', cond: 'lte', price: 68.00, note: 'منطقة دعم واقتناص', triggered: false },
-                    { id: 'alt_3', ticker: 'ABUK', cond: 'lte', price: 54.00, note: 'فرصة شراء بالقرب من القاع', triggered: false }
-                ];
-                saveCustomAlertsToStorage();
-            } else {
-                userCustomAlerts = [];
-            }
+            userCustomAlerts = [];
+            saveCustomAlertsToStorage();
         }
 
         function saveCustomAlertsToStorage() {
@@ -14106,67 +14115,38 @@ async function syncMubasherDirectAll() {
         }
 
         function renderCustomAlertsList() {
+            const containers = document.querySelectorAll('#customAlertsListContainer');
+            const badges = document.querySelectorAll('#customAlertsCountBadge');
+            badges.forEach(b => b.textContent = `${userCustomAlerts.length} تنبيه`);
 
-            const container = document.getElementById('customAlertsListContainer');
-
-            const badge = document.getElementById('customAlertsCountBadge');
-
-            if (!container) return;
-
-            if (badge) badge.textContent = `${userCustomAlerts.length} تنبيه`;
-
-            if (userCustomAlerts.length === 0) {
-
-                container.innerHTML = `<div class="p-3 bg-slate-900/60 rounded-xl text-center text-xs text-slate-400">لا توجد تنبيهات مشروطة مضافة حالياً.</div>`;
-
-                return;
-
-            }
-
-            container.innerHTML = userCustomAlerts.map(a => {
-
-                const s = STOCKS_DATA.find(x => x.ticker === a.ticker);
-
-                const cur = s ? (s.close || 0) : 0;
-
-                const condText = a.cond === 'gte' ? 'يصل أو يتجاوز ≥' : 'يهبط أو يكسر ≤';
-
-                const condClass = a.cond === 'gte' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' : 'bg-rose-950 text-rose-300 border-rose-800';
-
-                return `
-
-                    <div class="p-2.5 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between gap-2 text-xs">
-
-                        <div class="space-y-0.5">
-
-                            <div class="flex items-center gap-1.5">
-
-                                <span class="font-mono font-bold text-white text-[11px]">${a.ticker}</span>
-
-                                <span class="text-[9px] px-1.5 py-0.2 rounded border font-mono ${condClass}">${condText} ${a.price.toFixed(2)} ج</span>
-
-                                ${a.triggered ? '<span class="text-[9px] bg-sky-950 text-sky-300 border border-sky-800 px-1 rounded font-bold">تم الإطلاق ✅</span>' : ''}
-
+            containers.forEach(container => {
+                if (userCustomAlerts.length === 0) {
+                    container.innerHTML = `<div class="p-3 bg-slate-900/60 rounded-xl text-center text-xs text-slate-400">لا توجد تنبيهات مشروطة مضافة حالياً.</div>`;
+                    return;
+                }
+                container.innerHTML = userCustomAlerts.map(a => {
+                    const s = STOCKS_DATA.find(x => x.ticker === a.ticker);
+                    const cur = s ? (s.close || 0) : 0;
+                    const condText = a.cond === 'gte' ? 'يصل أو يتجاوز ≥' : 'يهبط أو يكسر ≤';
+                    const condClass = a.cond === 'gte' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' : 'bg-rose-950 text-rose-300 border-rose-800';
+                    return `
+                        <div class="p-2.5 bg-slate-900/90 rounded-xl border border-slate-800 flex items-center justify-between gap-2 text-xs">
+                            <div class="space-y-0.5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-mono font-bold text-white text-[11px]">${a.ticker}</span>
+                                    <span class="text-[9px] px-1.5 py-0.2 rounded border font-mono ${condClass}">${condText} ${a.price.toFixed(2)} ج</span>
+                                    ${a.triggered ? '<span class="text-[9px] bg-sky-950 text-sky-300 border border-sky-800 px-1 rounded font-bold">تم الإطلاق ✅</span>' : ''}
+                                </div>
+                                <p class="text-[10px] text-slate-300 font-sans">${a.note}</p>
+                                <span class="text-[9px] text-slate-500 font-mono">السعر اللحظي الحالي: ${cur.toFixed(2)} ج</span>
                             </div>
-
-                            <p class="text-[10px] text-slate-300 font-sans">${a.note}</p>
-
-                            <span class="text-[9px] text-slate-500 font-mono">السعر اللحظي الحالي: ${cur.toFixed(2)} ج</span>
-
+                            <button onclick="deleteCustomAlert('${a.id}')" title="حذف التنبيه" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-300 transition">
+                                🗑️
+                            </button>
                         </div>
-
-                        <button onclick="deleteCustomAlert('${a.id}')" title="حذف التنبيه" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-300 transition">
-
-                            🗑️
-
-                        </button>
-
-                    </div>
-
-                `;
-
-            }).join('');
-
+                    `;
+                }).join('');
+            });
         }
 
                 function renderAlerts() {
@@ -20583,15 +20563,13 @@ ${stocksUniverseContext}
 
         function clearAllCustomAlerts() {
             triggerHaptic('medium');
-            if (confirm("هل أنت متأكد من رغبتك في حذف جميع التنبيهات المخصصة؟")) {
-                userCustomAlerts = [];
-                try {
-                    localStorage.setItem('egx_custom_alerts', JSON.stringify([]));
-                    localStorage.setItem('egx_custom_alerts_cleared', 'true');
-                } catch(e) {}
-                renderCustomAlertsList();
-                showToast("✓ تم حذف جميع التنبيهات بنجاح", "info");
-            }
+            userCustomAlerts = [];
+            try {
+                localStorage.setItem('egx_custom_alerts', JSON.stringify([]));
+                localStorage.setItem('egx_custom_alerts_cleared', 'true');
+            } catch(e) {}
+            renderCustomAlertsList();
+            showToast("✓ تم حذف جميع التنبيهات بنجاح", "info");
         }
 
         function checkCustomAlertsAgainstPrices() {

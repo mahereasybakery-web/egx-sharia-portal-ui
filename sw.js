@@ -1,5 +1,5 @@
 // EGX Sharia Portal - Network-First Ultra-Fresh Service Worker (v16.4)
-const CACHE_NAME = 'egx-sharia-portal-v16.5';
+const CACHE_NAME = 'egx-sharia-portal-v16.6';
 const STATIC_ASSETS = [
   './',
   './index.html',
