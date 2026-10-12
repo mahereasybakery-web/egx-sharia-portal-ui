@@ -725,22 +725,22 @@
                 if (boxDaily) boxDaily.classList.remove('hidden');
                 if (dateBar) dateBar.classList.remove('hidden');
                 if (slicerBar) slicerBar.classList.remove('hidden');
-                if (headerTitle) headerTitle.innerText = "التقارير اليومية المعتمدة (جلسات التداول)";
-                if (headerSub) headerSub.innerText = "تصدر رسمياً الساعة 4:00 عصراً بعد ظهور جميع الإفصاحات والإقفالات والتسويات";
+                if (headerTitle) headerTitle.innerText = "التقرير اليومي لجلسات التداول";
+                if (headerSub) headerSub.innerText = "يعتمد بعد نهاية الجلسة اليومية الساعة 4:00 عصراً بعد اكتمال الإقفالات والمزادات والتسويات";
                 renderDailyReport(_drSelectedDate);
             } else if (freq === 'weekly') {
                 if (boxWeekly) boxWeekly.classList.remove('hidden');
                 if (dateBar) dateBar.classList.add('hidden');
                 if (slicerBar) slicerBar.classList.add('hidden');
-                if (headerTitle) headerTitle.innerText = "التقارير الأسبوعية الشاملة (الأحد - الخميس)";
-                if (headerSub) headerSub.innerText = "ملخص إجمالي لحركة أسبوع عمل البورصة المصرية ومؤشر الشريعة والمحفظة";
+                if (headerTitle) headerTitle.innerText = "التقرير الأسبوعي الشامل";
+                if (headerSub) headerSub.innerText = "يصدر رسمياً كل يوم خميس الساعة 5:00 مساءً عن الأسبوع السابق بالكامل (من الأحد إلى الخميس)";
                 renderWeeklyReport();
             } else if (freq === 'monthly') {
                 if (boxMonthly) boxMonthly.classList.remove('hidden');
                 if (dateBar) dateBar.classList.add('hidden');
                 if (slicerBar) slicerBar.classList.add('hidden');
-                if (headerTitle) headerTitle.innerText = "التقارير الشهرية الاستراتيجية (ملخص الأسابيع)";
-                if (headerSub) headerSub.innerText = "حصاد الشهر الكامل والأداء الاقتصادي الكلي وتوزيعات الأرباح ونمو رأس المال";
+                if (headerTitle) headerTitle.innerText = "التقرير الشهري الاستراتيجي";
+                if (headerSub) headerSub.innerText = "يصدر رسمياً يوم 30 أو 31 بعد نهاية الشهر السابق في الساعة 5:00 مساءً مع تحليل كامل للعمليات";
                 renderMonthlyReport();
             } else if (freq === 'holidays') {
                 if (boxHolidays) boxHolidays.classList.remove('hidden');
@@ -771,11 +771,11 @@
                         <div class="flex items-center gap-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                             <div>
-                                <b class="text-white">📊 تقرير أسبوعي معتمد (الأحد إلى الخميس):</b>
-                                <span class="text-[11px] text-emerald-300/90">${rpt.period} — إقفال رسمي الخميس 4:00 عصراً</span>
+                                <b class="text-white">📊 تقرير أسبوعي معتمد عن الأسبوع السابق بالكامل:</b>
+                                <span class="text-[11px] text-emerald-300/90">${rpt.period} — إصدار رسمي معتمد: الخميس الساعة 5:00 مساءً</span>
                             </div>
                         </div>
-                        <span class="px-2.5 py-1 rounded-xl bg-emerald-900 border border-emerald-700 text-emerald-300 text-[10px] font-bold font-mono shrink-0">معتمد أسبوعياً ✓</span>
+                        <span class="px-2.5 py-1 rounded-xl bg-emerald-900 border border-emerald-700 text-emerald-300 text-[10px] font-bold font-mono shrink-0">معتمد الخميس 5:00 م ✓</span>
                     </div>
 
                     <!-- Headline Banner -->
@@ -890,11 +890,11 @@
                         <div class="flex items-center gap-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></span>
                             <div>
-                                <b class="text-white">📆 تقرير شهري استراتيجي شامل:</b>
-                                <span class="text-[11px] text-purple-300/90">${rpt.period} — معتمد رسمياً بنهاية الشهر</span>
+                                <b class="text-white">📆 تقرير شهري استراتيجي شامل عن الشهر السابق بالكامل:</b>
+                                <span class="text-[11px] text-purple-300/90">${rpt.period} — إصدار رسمي معتمد: نهاية الشهر (يوم 30 أو 31) الساعة 5:00 مساءً</span>
                             </div>
                         </div>
-                        <span class="px-2.5 py-1 rounded-xl bg-purple-900 border border-purple-700 text-purple-300 text-[10px] font-bold font-mono shrink-0">معتمد شهرياً ✓</span>
+                        <span class="px-2.5 py-1 rounded-xl bg-purple-900 border border-purple-700 text-purple-300 text-[10px] font-bold font-mono shrink-0">معتمد نهاية الشهر 5:00 م ✓</span>
                     </div>
 
                     <!-- Headline Card -->
@@ -1620,17 +1620,11 @@
                     <div class="px-4 py-3.5 border-b border-slate-700/60 flex items-center justify-between flex-wrap gap-2" style="background:linear-gradient(90deg,rgba(16,185,129,0.15),transparent)">
 
                         <div>
-
                             <div class="flex items-center gap-2 mb-1">
-
-                                <span class="text-lg">📌</span>
-
-                                <span class="text-xs font-bold text-emerald-400">${rpt.title}</span>
-
+                                <span class="text-base font-bold text-emerald-400">${rpt.title}</span>
+                                <span class="text-[9px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 px-2 py-0.5 rounded-full font-mono font-bold">🔒 معتمد 4:00 عصراً</span>
                             </div>
-
-                            <div class="flex items-center gap-2 flex-wrap mt-1"><p class="text-[10px] text-slate-400">${rpt.subtitle} • إعداد: ${rpt.preparedBy}</p><span class="text-[9px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/80 px-2 py-0.5 rounded-full font-mono font-bold flex items-center gap-1"><span>🔒</span><span>تقرير نهاية اليوم المعتمد (بروتوكول 4:00 عصراً)</span></span></div>
-
+                            <p class="text-[10.5px] text-slate-400">${rpt.subtitle || 'تحليل معتمد لحركة البورصة ومؤشر الشريعة ومحفظة الاستثمار'} • إعداد: ${rpt.preparedBy}</p>
                         </div>
 
                         <button onclick="askGeminiDailyReportSummary()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition active:scale-95">
@@ -4727,7 +4721,7 @@
 
 window.addEventListener('load', () => {
 
-                navigator.serviceWorker.register('sw.js?v=20261012_v16_9')
+                navigator.serviceWorker.register('sw.js?v=20261012_v17_0')
 
                     .then(reg => {
 
@@ -7007,16 +7001,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             if (investedElem) investedElem.innerText = (totalInvestedVal / 1000).toFixed(2) + 'k ج';
 
-            // Thndr estimated execution fees (0.7% / 7 in a thousand) - Audited operational expense at bottom of portfolio
-
+            // Thndr fixed execution fees (Fixed at user set amount, default 593.82 EGP)
             const feesCardElem = document.getElementById('p_thndr_fees_card');
-
             if (feesCardElem) {
-
-                const estFees = totalInvestedVal * 0.007; // 7 in a thousand
-
-                feesCardElem.innerText = estFees.toFixed(2) + ' ج';
-
+                const curFee = (typeof getUserConfiguredFees === 'function') ? getUserConfiguredFees() : 593.82;
+                feesCardElem.innerText = curFee.toFixed(2) + ' ج';
             }
 
             const isGrandP = grandPnl >= 0;
@@ -21213,6 +21202,12 @@ ${stocksUniverseContext}
 
             if (typeof loadCustomAlerts === 'function') loadCustomAlerts();
 
+            // Initialize custom/fixed fees card
+            const feesCard = document.getElementById('p_thndr_fees_card');
+            if (feesCard && typeof getUserConfiguredFees === 'function') {
+                feesCard.innerText = getUserConfiguredFees().toFixed(2) + ' ج';
+            }
+
             renderAlerts();
 
             renderNewsFeed();
@@ -25832,38 +25827,83 @@ ${stocksUniverseContext}
 
         const USER_FEES_LEDGER_KEY = 'egx_sharia_user_fees_ledger_v1';
 
-        function getFirstPageFeesValue() {
+        const USER_CONFIGURED_FEES_KEY = 'egx_sharia_user_configured_fees_v1';
+        const DEFAULT_FIXED_FEES = 593.82;
+
+        function getUserConfiguredFees() {
+            try {
+                const stored = localStorage.getItem(USER_CONFIGURED_FEES_KEY);
+                if (stored !== null) {
+                    const parsed = parseFloat(stored);
+                    if (!isNaN(parsed) && parsed >= 0) return Math.round(parsed * 100) / 100;
+                }
+            } catch(e) {}
+            return DEFAULT_FIXED_FEES;
+        }
+
+        function setUserConfiguredFees(amount) {
+            const num = Math.round(parseFloat(amount) * 100) / 100;
+            if (isNaN(num) || num < 0) return false;
+            try {
+                localStorage.setItem(USER_CONFIGURED_FEES_KEY, num.toString());
+                
+                // Update ledger
+                const ledger = getUserFeesLedger();
+                ledger.totalPaidFees = num;
+                if (Array.isArray(ledger.transactions) && ledger.transactions.length > 0) {
+                    ledger.transactions[0].fee = num;
+                    ledger.transactions[0].desc = `إجمالي رسوم وعمولات التداول (${num.toFixed(2)} ج.م مخصصة يدوياً)`;
+                }
+                localStorage.setItem(USER_FEES_LEDGER_KEY, JSON.stringify(ledger));
+            } catch(e) {}
+
+            // Update first page card immediately
             const cardEl = document.getElementById('p_thndr_fees_card');
-            if (cardEl && cardEl.innerText) {
-                const parsed = parseFloat(cardEl.innerText.replace(/[^\d.]/g, ''));
-                if (!isNaN(parsed) && parsed > 0) return Math.round(parsed * 100) / 100;
+            if (cardEl) cardEl.innerText = num.toFixed(2) + ' ج';
+
+            // Re-render performance tab if available
+            if (typeof renderPerformanceTab === 'function') {
+                renderPerformanceTab();
             }
-            // Strict Fallback: Thndr comprehensive rate 0.70% (7 in a thousand) across active holdings
-            const holdings = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
-            let totalInvestedVal = 0;
-            holdings.forEach(h => {
-                const cur = (h.valuation_mode === 'manual' && h.manual_valuation_price && h.manual_valuation_price > 0)
-                    ? h.manual_valuation_price
-                    : (h.cur || h.buy || 0);
-                const qty = h.qty_owned !== undefined ? h.qty_owned : (h.qty || 0);
-                totalInvestedVal += (cur * qty);
-            });
-            const est = Math.round(totalInvestedVal * 0.007 * 100) / 100;
-            return est > 0 ? est : 594.23;
+            return true;
+        }
+
+        function editUserCustomFees() {
+            if (typeof triggerHaptic === 'function') triggerHaptic('selection');
+            const current = getUserConfiguredFees();
+            const input = prompt('أدخل قيمة رسوم وعمولات التداول بالجنيه المصري (ج.م):', current.toFixed(2));
+            if (input === null) return; // User cancelled
+            const val = parseFloat(input.trim());
+            if (isNaN(val) || val < 0) {
+                if (typeof showToast === 'function') showToast('يرجى إدخال مبلغ صحيح للرسوم', 'warning');
+                else alert('يرجى إدخال مبلغ صحيح للرسوم');
+                return;
+            }
+            setUserConfiguredFees(val);
+            if (typeof showToast === 'function') {
+                showToast(`تم تحديث الرسوم بنجاح إلى ${val.toFixed(2)} ج.م وعكسها في صفحة الأداء`, 'success');
+            }
+        }
+        window.editUserCustomFees = editUserCustomFees;
+        window.getUserConfiguredFees = getUserConfiguredFees;
+        window.setUserConfiguredFees = setUserConfiguredFees;
+
+        function getFirstPageFeesValue() {
+            return getUserConfiguredFees();
         }
 
         function getUserFeesLedger() {
-            const currentFees = getFirstPageFeesValue();
+            const currentFees = getUserConfiguredFees();
             try {
                 const raw = localStorage.getItem(USER_FEES_LEDGER_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    // Purge legacy 0.15% (e.g. ~129 EGP) or synchronize if first page fee differs
-                    if (!parsed.totalPaidFees || parsed.totalPaidFees < (currentFees * 0.5) || Math.abs(parsed.totalPaidFees - currentFees) > 5) {
+                    // Synchronize if totalPaidFees differs from user configured fee
+                    if (parsed.totalPaidFees !== currentFees) {
                         parsed.totalPaidFees = currentFees;
                         if (Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
                             parsed.transactions[0].fee = currentFees;
-                            parsed.transactions[0].desc = "إجمالي رسوم وعمولات التداول (مطابقة لمحفظة ثندر 0.70% ورسوم البورصة والرقابة)";
+                            parsed.transactions[0].desc = `إجمالي رسوم وعمولات التداول (${currentFees.toFixed(2)} ج.م)`;
                         }
                         localStorage.setItem(USER_FEES_LEDGER_KEY, JSON.stringify(parsed));
                     }
@@ -25875,7 +25915,7 @@ ${stocksUniverseContext}
                 totalPaidFees: currentFees,
                 realizedPnl: 0,
                 transactions: [
-                    { id: "tx_base_thndr", desc: "إجمالي رسوم وعمولات التداول (مطابقة لمحفظة ثندر 0.70% ورسوم البورصة والرقابة)", fee: currentFees, date: "2026-10-12" }
+                    { id: "tx_base_thndr", desc: `إجمالي رسوم وعمولات التداول (${currentFees.toFixed(2)} ج.م)`, fee: currentFees, date: "2026-10-12" }
                 ]
             };
             try {

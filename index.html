@@ -1892,19 +1892,19 @@
                     </div>
                 </div>
 
-                <!-- Master Report Frequency Switcher Bar: Daily (4 PM) | Weekly (Sun-Thu) | Monthly | EGX Holidays -->
+                <!-- Master Report Frequency Switcher Bar: Daily (4 PM) | Weekly (Thu 5 PM) | Monthly (End of Month 5 PM) | EGX Holidays -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 border-t border-slate-800/80 no-scrollbar" dir="rtl">
                     <button id="reportFreqBtn_daily" onclick="switchReportFrequency('daily')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 bg-emerald-600 text-white shadow-md active:scale-95">
                         <span>📅</span>
-                        <span>التقارير اليومية (4:00 عصراً)</span>
+                        <span>اليومي (جلسات التداول)</span>
                     </button>
                     <button id="reportFreqBtn_weekly" onclick="switchReportFrequency('weekly')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 active:scale-95 border border-slate-800">
                         <span>📊</span>
-                        <span>التقرير الأسبوعي (أحد - خميس)</span>
+                        <span>الأسبوعي (يصدر الخميس 5:00 م)</span>
                     </button>
                     <button id="reportFreqBtn_monthly" onclick="switchReportFrequency('monthly')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 active:scale-95 border border-slate-800">
                         <span>📆</span>
-                        <span>التقرير الشهري (ملخص الشهر)</span>
+                        <span>الشهري (يصدر نهاية الشهر 5:00 م)</span>
                     </button>
                     <button id="reportFreqBtn_holidays" onclick="switchReportFrequency('holidays')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 active:scale-95 border border-slate-800">
                         <span>🏖️</span>
@@ -4637,11 +4637,16 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
 
-                    <div class="p-3 rounded-xl bg-slate-950/80 border border-indigo-900/40 text-center">
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-indigo-900/40 text-center relative group">
 
-                        <span class="text-[10px] text-slate-400 block mb-0.5">إجمالي الرسوم المدفوعة</span>
+                        <div class="flex items-center justify-center gap-1.5 mb-0.5">
+                            <span class="text-[10px] text-slate-400">إجمالي الرسوم المدفوعة</span>
+                            <button onclick="editUserCustomFees()" title="تعديل قيمة الرسوم يدوياً" class="text-indigo-400 hover:text-indigo-200 text-xs px-1.5 py-0.5 rounded bg-indigo-950/70 border border-indigo-800/60 transition active:scale-95 inline-flex items-center gap-1">
+                                ✏️ <span class="text-[9px]">تعديل</span>
+                            </button>
+                        </div>
 
-                        <b id="p_thndr_fees_card" class="text-indigo-400 font-mono text-base font-bold">609.90 ج</b>
+                        <b id="p_thndr_fees_card" class="text-indigo-400 font-mono text-base font-bold cursor-pointer" onclick="editUserCustomFees()" title="اضغط لتعديل الرسوم">593.82 ج</b>
 
                         <span class="text-[9px] text-slate-500 block mt-0.5">محسوبة بدقة 0.00 ج</span>
 
@@ -8564,13 +8569,13 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js?v=20261012_v16_9"></script>
-    <script src="js/data-news.js?v=20261012_v16_9"></script>
-    <script src="js/data-valuation.js?v=20261012_v16_9"></script>
-    <script src="js/data-ai-prompts.js?v=20261012_v16_9"></script>
-    <script src="js/app.js?v=20261012_v16_9"></script>
-    <script src="js/gemini-ai.js?v=20261012_v16_9"></script>
-    <script src="js/universal-export.js?v=20261012_v16_9"></script>
+    <script src="js/data-reports.js?v=20261012_v17_0"></script>
+    <script src="js/data-news.js?v=20261012_v17_0"></script>
+    <script src="js/data-valuation.js?v=20261012_v17_0"></script>
+    <script src="js/data-ai-prompts.js?v=20261012_v17_0"></script>
+    <script src="js/app.js?v=20261012_v17_0"></script>
+    <script src="js/gemini-ai.js?v=20261012_v17_0"></script>
+    <script src="js/universal-export.js?v=20261012_v17_0"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار الذكاء الاصطناعي المزدوج)
