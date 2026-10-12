@@ -5168,7 +5168,16 @@ window.addEventListener('load', () => {
 
             const container = document.getElementById('toastContainer');
 
-            if (!container) return;
+            if (!container || !msg) return;
+
+            // Anti-spam guard: prevent displaying identical messages at the same time
+            const existing = Array.from(container.children).find(c => c.innerText && c.innerText.includes(msg));
+            if (existing) return;
+
+            // Strict capping: never stack more than 2 toasts simultaneously
+            while (container.children.length >= 2) {
+                container.removeChild(container.firstChild);
+            }
 
             const toast = document.createElement('div');
 
@@ -5737,8 +5746,6 @@ const THNDR_ACTUAL_HOLDINGS = [
             window.userHoldings = userHoldings;
 
             renderHoldingsTable();
-
-            checkUserAlerts();
 
         }
 
@@ -14155,8 +14162,7 @@ async function syncMubasherDirectAll() {
         window.renderAlerts = renderAlerts;
 
         function checkUserAlerts() {
-            if (typeof checkCustomAlertsAgainstPrices === 'function') checkCustomAlertsAgainstPrices();
-            else if (typeof checkCustomAlerts === 'function') checkCustomAlerts();
+            if (typeof checkCustomAlerts === 'function') checkCustomAlerts();
         }
         window.checkUserAlerts = checkUserAlerts;
 
@@ -20572,7 +20578,7 @@ ${stocksUniverseContext}
             showToast("✓ تم حذف جميع التنبيهات بنجاح", "info");
         }
 
-        function checkCustomAlertsAgainstPrices() {
+        function checkCustomAlertsAgainstPrices(isManual = false) {
             triggerHaptic('medium');
             let hitCount = 0;
             if (Array.isArray(userCustomAlerts) && Array.isArray(STOCKS_DATA)) {
@@ -20590,7 +20596,13 @@ ${stocksUniverseContext}
                 saveCustomAlertsToStorage();
                 renderCustomAlertsList();
             }
-            showToast(hitCount > 0 ? `🚨 تم إطلاق ${hitCount} تنبيهات متحققة الآن` : "✓ لا توجد شروط تنبيهات متحققة حالياً", hitCount > 0 ? "warning" : "info");
+            if (isManual) {
+                if (hitCount > 0) {
+                    showToast(`🚨 تم إطلاق ${hitCount} تنبيهات متحققة الآن`, "warning");
+                } else {
+                    showToast("✓ لا توجد شروط تنبيهات متحققة حالياً", "info");
+                }
+            }
         }
 
         // =========================================================================
