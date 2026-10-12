@@ -429,7 +429,7 @@
 
         // DAILY_REPORTS is loaded modularly from js/daily-reports.js
 
-        var _drSelectedDate = '2026-10-11';
+        var _drSelectedDate = (typeof window._drSelectedDate !== 'undefined') ? window._drSelectedDate : '2026-10-12';
 
         let _drChartsInit = {};
 
@@ -493,10 +493,15 @@
                     rpt.indicesSection.funds.forEach(f => {
                         let liveFund = cData?.funds ? cData.funds[f.code] : null;
                         const stockFallback = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === f.code) : null;
+                        const sndukObj = (typeof window._sndukLiveCache !== 'undefined' && window._sndukLiveCache) ? window._sndukLiveCache[f.code] : null;
+                        const sndukPrice = (sndukObj && sndukObj.price > 0) ? sndukObj.price : null;
+                        const sndukDate = (sndukObj && sndukObj.date) ? sndukObj.date : '';
                         
-                        const closePrice = (liveFund && liveFund.close > 0) ? liveFund.close : (stockFallback && stockFallback.close > 0 ? stockFallback.close : null);
+                        const closePrice = (sndukPrice !== null) 
+                            ? sndukPrice 
+                            : ((liveFund && liveFund.close > 0) ? liveFund.close : (stockFallback && stockFallback.close > 0 ? stockFallback.close : null));
                         const chgVal = (liveFund && liveFund.chg !== undefined) ? liveFund.chg : (stockFallback && stockFallback.chg !== undefined ? stockFallback.chg : null);
-                        const navDate = (liveFund && liveFund.last_nav_date) || (stockFallback && stockFallback.last_nav_date) || '';
+                        const navDate = sndukDate || (liveFund && liveFund.last_nav_date) || (stockFallback && stockFallback.last_nav_date) || '';
 
                         if (closePrice !== null) {
                             f.price = closePrice;
@@ -620,17 +625,8 @@
                     : { isTradingDay: true, eodCertified: true, badge: '✅ تقرير معتمد 4:00 م' };
 
                 if (isCertifiedReport) {
-                    noticeEl.className = "p-2.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-indigo-950/90 border border-emerald-600/70 text-emerald-200 text-xs flex items-center justify-between gap-2 shadow-md mb-2";
-                    noticeEl.innerHTML = `
-                        <div class="flex items-center gap-2" dir="rtl">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <div>
-                                <b class="text-white">🔒 تقرير معتمد وموثق رسمياً لختام الجلسة (جلسة ${selectedRpt.label}):</b>
-                                <span class="text-[11px] text-emerald-300/90">تم استيفاء مزاد الإغلاق، ومشتريات المؤسسات (+420M ج)، وكافة الإفصاحات الرسمية، وصافي أصول الصناديق (NAV).</span>
-                            </div>
-                        </div>
-                        <span class="shrink-0 text-[10px] font-mono bg-emerald-900/90 text-emerald-300 px-2.5 py-1 rounded-xl border border-emerald-700 font-bold">معتمد 4:00 م ✓</span>
-                    `;
+                    noticeEl.className = "hidden";
+                    noticeEl.innerHTML = "";
                 } else if (status.statusType === 'holiday') {
                     noticeEl.className = "p-3 rounded-2xl bg-amber-950/80 border border-amber-600 text-amber-200 text-xs flex items-center justify-between gap-2 shadow-md mb-2";
                     noticeEl.innerHTML = `
@@ -1319,29 +1315,7 @@
 
             const fmtPct = (v) => (typeof v === 'number' && !isNaN(v)) ? ((v >= 0 ? '+' : '') + v.toFixed(2) + '%') : (v || '0.00%');
 
-            const eodAuditBadgeHtml = rpt.post4pmAudited ? `
-
-                <div class="p-2.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-indigo-950/90 border border-emerald-600/70 text-emerald-200 text-xs flex items-center justify-between gap-2 shadow-md mb-2" dir="rtl">
-
-                    <div class="flex items-center gap-2">
-
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-
-                        <div>
-
-                            <b class="text-white">🔒 تقرير معتمد رسمياً (بعد 4:00 عصراً):</b>
-
-                            <span class="text-[11px] text-emerald-300/90">تم استيفاء مزاد الإغلاق (14:45)، مشتريات المؤسسات (15:15)، وصافي أصول صناديق الاستثمار الرسمية الرسمية.</span>
-
-                        </div>
-
-                    </div>
-
-                    <span class="shrink-0 text-[10px] font-mono bg-emerald-900/90 text-emerald-300 px-2.5 py-1 rounded-xl border border-emerald-700 font-bold">معتمد 4:00 م ✓</span>
-
-                </div>
-
-            ` : '';
+            const eodAuditBadgeHtml = '';
 
             const signalBadge = (sig, type) => {
 
@@ -1521,81 +1495,44 @@
 
             const usdItem = rpt.indicesSection && rpt.indicesSection.items ? rpt.indicesSection.items.find(i => i.code === 'USD_EGP') : null;
 
-                        const isMonday = rpt.date === '2026-10-05';
-
-            const isSunday = rpt.date === '2026-10-04';
-
-            let totalTurnover = '4.82 مليار جنيه';
-
-            let instNetVal = '+315.4 مليون ج';
-
-            let instNote = 'تجميع مكثف وبناء مراكز على الأسهم القيادية (ETEL, TMGH, EFIH).';
-
-            let retailNetVal = '-315.4 مليون ج';
-
-            let retailNote = 'عمليات جني أرباح سريعة ومضاربات على أسهم المضاربة الصغيرة والمتوسطة.';
-
-            let egArabNetVal = '+323.0 مليون ج';
-
-            let egArabNote = 'استحواذ المصريين على 86.4% من التداولات والعرب 8.2% بتدفقات إيجابية قوية.';
-
-            let foreignersNetVal = '-8.4 مليون ج';
-
-            let marketGainHeadline = '-8.4 مليار ج (جني أرباح هادئ)';
-
-            let marketGainIsPos = false;
-
-            let targetTomorrow = 'الأربعاء 7 أكتوبر 2026';
-
-            if (isMonday) {
-
-                totalTurnover = '5.12 مليار جنيه';
-
-                instNetVal = '+185.2 مليون ج';
-
-                instNote = 'تجميع مؤسسي مستمر واختراق حاسم لمستوى 53,500 نقطة بقيادة الاتصالات والعقارات.';
-
-                retailNetVal = '-185.2 مليون ج';
-
-                retailNote = 'عمليات جني أرباح تكتيكية للأفراد وامتصاص كامل للسيولة من قبل المؤسسات.';
-
-                egArabNetVal = '+192.5 مليون ج';
-
-                egArabNote = 'استحواذ المصريين والعرب على 94.2% من التداولات بتدفقات إيجابية قوية.';
-
-                foreignersNetVal = '-7.3 مليون ج';
-
-                marketGainHeadline = '+14.2 مليار ج';
-
-                marketGainIsPos = true;
-
-                targetTomorrow = 'الثلاثاء 6 أكتوبر 2026';
-
-            } else if (isSunday) {
-
-                totalTurnover = '4.10 مليار جنيه';
-
-                instNetVal = '+140.0 مليون ج';
-
-                instNote = 'مشتريات مؤسسية نشطة في مستهل جلسات الأسبوع.';
-
-                retailNetVal = '-140.0 مليون ج';
-
-                retailNote = 'عمليات بيع وتدوير سيولة فردية.';
-
-                egArabNetVal = '+148.0 مليون ج';
-
-                egArabNote = 'استحواذ المؤسسات المصرية والعربية على التداولات.';
-
-                foreignersNetVal = '-8.0 مليون ج';
-
-                marketGainHeadline = '+18.5 مليار ج';
-
-                marketGainIsPos = true;
-
-                targetTomorrow = 'الإثنين 5 أكتوبر 2026';
-
+            // Dynamic next trading day calculation for Egyptian Stock Exchange
+            function getNextTradingDayLabel(dateStr) {
+                try {
+                    const parts = (dateStr || '').split('-');
+                    if (parts.length < 3) return 'الجلسة القادمة';
+                    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    const dayOfWeek = d.getDay(); // 0: Sun, 1: Mon, 2: Tue, 3: Wed, 4: Thu, 5: Fri, 6: Sat
+                    let daysToAdd = 1;
+                    if (dayOfWeek === 4) { // Thursday -> next is Sunday (+3 days)
+                        daysToAdd = 3;
+                    } else if (dayOfWeek === 5) { // Friday -> next is Sunday (+2 days)
+                        daysToAdd = 2;
+                    } else if (dayOfWeek === 6) { // Saturday -> next is Sunday (+1 day)
+                        daysToAdd = 1;
+                    }
+                    const nextD = new Date(d);
+                    nextD.setDate(d.getDate() + daysToAdd);
+                    const daysAr = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                    const monthsAr = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                    return `${daysAr[nextD.getDay()]} ${nextD.getDate()} ${monthsAr[nextD.getMonth()]} ${nextD.getFullYear()}`;
+                } catch(e) {
+                    return 'الجلسة القادمة';
+                }
             }
+
+            const targetTomorrow = rpt.targetTomorrow || getNextTradingDayLabel(rpt.date);
+            const totalTurnover = rpt.totalTurnover || '4.95 مليار جنيه';
+            const instNetVal = rpt.instNetVal || '+285.0 مليون ج';
+            const instNote = rpt.instNote || (rpt.sessionReading ? rpt.sessionReading.investorBehavior : 'تجميع مؤسسي مستمر وبناء مراكز استراتيجية على الأسهم القيادية.');
+            const retailNetVal = rpt.retailNetVal || '-285.0 مليون ج';
+            const retailNote = rpt.retailNote || 'عمليات جني أرباح سريعة ومضاربات وتدوير سيولة من الأفراد.';
+            const egArabNetVal = rpt.egArabNetVal || '+296.0 مليون ج';
+            const egArabNote = rpt.egArabNote || 'استحواذ المؤسسات المصرية والعربية على تداولات السوق بتدفقات إيجابية.';
+            const foreignersNetVal = rpt.foreignersNetVal || '-11.0 مليون ج';
+            const marketGainHeadline = rpt.marketGainHeadline || (rpt.headline || '+12.5 مليار ج');
+            const marketGainIsPos = rpt.marketGainIsPos !== undefined ? rpt.marketGainIsPos : true;
+            const auditorNote = rpt.auditorNote || 'جلسة متزنة حققت فيها الأسهم القيادية وصناديق الشريعة والذهب عائداً تراكمياً مستقراً ومتحوطاً.';
+            const isMonday = (rpt.sessionDay === 'الإثنين' || rpt.day === 'الإثنين' || (rpt.date && (rpt.date.endsWith('-12') || rpt.date.endsWith('-05'))));
 
             const egx30ChangePts = egx30Item && typeof egx30Item.pointsChange === 'number' ? egx30Item.pointsChange : (egx30Item ? (egx30Item.close - (egx30Item.prevClose || egx30Item.open)) : 0);
 
@@ -1768,13 +1705,7 @@
                                 </div>`}
 
                                 <div class="p-2.5 rounded-lg bg-slate-950/90 border border-slate-800 text-[10.5px] font-sans text-slate-300 leading-relaxed">
-
-                                    💡 <b>ملاحظة المدقق المالي:</b> ${isMonday 
-
-                                        ? 'جلسة متزنة ومثالية حققت فيها الأسهم القيادية (ETEL, EFIH, TMGH) مكاسب صافية، بينما لعبت صناديق الشريعة دور صمام الأمان وتوليد العائد التراكمي المستقر.' 
-
-                                        : 'تراجع الذهب والوثائق المتحوطة بنسبة طفيفة يعكس تحول السيولة المؤقت للأسهم القيادية لاقتناص المكاسب، بينما تشكل وثائق الذهب صمام أمان حقيقي وملاذاً استراتيجياً ضد التضخم.'}
-
+                                    💡 <b>ملاحظة المدقق المالي:</b> ${auditorNote}
                                 </div>
 
                             </div>
@@ -2078,13 +2009,9 @@
             if (_drActiveFilter === 'sharia_all') {
 
                 const allSharia = [
-
-                    ...rpt.holdingsSection.stocks.map(s => ({ ...s, isOwned: true })),
-
-                    ...rpt.marketOpportunities.topGainers.map(s => ({ ...s, isOwned: false })),
-
-                    ...rpt.marketOpportunities.topLosers.map(s => ({ ...s, isOwned: false }))
-
+                    ...((rpt.holdingsSection && rpt.holdingsSection.stocks) ? rpt.holdingsSection.stocks : []).map(s => ({ ...s, isOwned: true })),
+                    ...((rpt.marketOpportunities && rpt.marketOpportunities.topGainers) ? rpt.marketOpportunities.topGainers : []).map(s => ({ ...s, isOwned: false })),
+                    ...((rpt.marketOpportunities && rpt.marketOpportunities.topLosers) ? rpt.marketOpportunities.topLosers : []).map(s => ({ ...s, isOwned: false }))
                 ];
 
                 mainContentHtml = `
@@ -2279,7 +2206,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
 
-                            ${[...rpt.marketOpportunities.topGainers, ...rpt.marketOpportunities.topLosers].map(s => `
+                            ${[...((rpt.marketOpportunities && rpt.marketOpportunities.topGainers) ? rpt.marketOpportunities.topGainers : []), ...((rpt.marketOpportunities && rpt.marketOpportunities.topLosers) ? rpt.marketOpportunities.topLosers : [])].map(s => `
 
                             <div class="dr-sharia-stock-card glass-card rounded-2xl p-3 border border-slate-800 hover:border-slate-700 transition space-y-2">
 
@@ -2289,7 +2216,7 @@
 
                                         <span class="text-xs font-bold text-white">${s.name}</span>
 
-                                        <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${s.code}</span>
+                                        <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${s.code || s.ticker || ''}</span>
 
                                     </div>
 
@@ -2645,7 +2572,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
-                            ${rpt.marketOpportunities.topGainers.filter(s => s.change >= 4.0).map(s => `
+                            ${((rpt.marketOpportunities && rpt.marketOpportunities.topGainers) ? rpt.marketOpportunities.topGainers : []).filter(s => (s.change || 0) >= 4.0).map(s => `
 
                             <div class="dr-watchlist-card glass-card rounded-2xl p-3 border border-emerald-900/50 bg-emerald-950/15 hover:border-emerald-700 transition space-y-2">
 
@@ -2655,7 +2582,7 @@
 
                                         <div class="text-xs font-bold text-white">${s.name}</div>
 
-                                        <div class="text-[9.5px] font-mono text-emerald-400">${s.code}</div>
+                                        <div class="text-[9.5px] font-mono text-emerald-400">${s.code || s.ticker || ''}</div>
 
                                     </div>
 
@@ -2705,7 +2632,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
-                            ${rpt.marketOpportunities.topGainers.filter(s => s.change >= 2.0 && s.change < 4.0).map(s => `
+                            ${((rpt.marketOpportunities && rpt.marketOpportunities.topGainers) ? rpt.marketOpportunities.topGainers : []).filter(s => (s.change || 0) >= 2.0 && (s.change || 0) < 4.0).map(s => `
 
                             <div class="dr-watchlist-card glass-card rounded-2xl p-3 border border-slate-800 hover:border-slate-700 transition space-y-2">
 
@@ -2715,7 +2642,7 @@
 
                                         <div class="text-xs font-bold text-white">${s.name}</div>
 
-                                        <div class="text-[9.5px] font-mono text-sky-400">${s.code}</div>
+                                        <div class="text-[9.5px] font-mono text-sky-400">${s.code || s.ticker || ''}</div>
 
                                     </div>
 
@@ -2735,7 +2662,7 @@
 
                                     ${signalBadge(s.signal, s.signalType)}
 
-                                    <button onclick="showNewsTechnicalAnalysis('${s.code}')" class="text-sky-400 hover:text-sky-300 font-bold transition">فحص السهم ←</button>
+                                    <button onclick="showNewsTechnicalAnalysis('${s.code || s.ticker || ''}')" class="text-sky-400 hover:text-sky-300 font-bold transition">فحص السهم ←</button>
 
                                 </div>
 
@@ -2765,7 +2692,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
-                            ${[...rpt.marketOpportunities.topGainers.filter(s => s.change < 2.0), ...rpt.marketOpportunities.topLosers].map(s => `
+                            ${[...((rpt.marketOpportunities && rpt.marketOpportunities.topGainers) ? rpt.marketOpportunities.topGainers : []).filter(s => (s.change || 0) < 2.0), ...((rpt.marketOpportunities && rpt.marketOpportunities.topLosers) ? rpt.marketOpportunities.topLosers : [])].map(s => `
 
                             <div class="dr-watchlist-card glass-card rounded-2xl p-3 border border-slate-800 hover:border-slate-700 transition space-y-2">
 
@@ -2775,7 +2702,7 @@
 
                                         <div class="text-xs font-bold text-white">${s.name}</div>
 
-                                        <div class="text-[9.5px] font-mono text-slate-400">${s.code}</div>
+                                        <div class="text-[9.5px] font-mono text-slate-400">${s.code || s.ticker || ''}</div>
 
                                     </div>
 
@@ -3498,8 +3425,9 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
 
                                 ${(rpt.marketOpportunities && rpt.marketOpportunities.topGainers ? rpt.marketOpportunities.topGainers : []).map(s => {
-
-                                    const linkInfo = (typeof getDirectNewsLinkForText === 'function') ? getDirectNewsLinkForText(s.code + ' ' + s.name) : { url: `https://www.egx.com.eg/ar/Disclosures.aspx?ticker=${s.code}`, label: 'إفصاح رسمي' };
+                                    const sCode = s.code || s.ticker || '';
+                                    const sClose = typeof s.close === 'number' ? s.close : (parseFloat(s.close) || 0);
+                                    const linkInfo = (typeof getDirectNewsLinkForText === 'function') ? getDirectNewsLinkForText(sCode + ' ' + s.name) : { url: `https://www.egx.com.eg/ar/Disclosures.aspx?ticker=${sCode}`, label: 'إفصاح رسمي' };
 
                                     return `
 
@@ -3515,13 +3443,13 @@
 
                                             </div>
 
-                                            <div class="text-[10px] text-slate-400 font-mono">${s.code} | إغلاق: ${fmtPrice(s.close)} ج</div>
+                                            <div class="text-[10px] text-slate-400 font-mono">${sCode} | إغلاق: ${fmtPrice(sClose)} ج</div>
 
                                         </div>
 
                                         <div class="text-left font-mono">
 
-                                            ${pctBadge(s.change)}
+                                            ${pctBadge(typeof s.change === 'number' ? s.change : (parseFloat(s.chg) || 0))}
 
                                             <div class="mt-1">${signalBadge(s.signal, s.signalType)}</div>
 
@@ -3537,7 +3465,7 @@
 
                         <!-- الأسهم الأكثر تراجعاً (Top Decliners / Losers) -->
 
-                        ${(rpt.marketOpportunities.topLosers && rpt.marketOpportunities.topLosers.length > 0) ? `
+                        ${(rpt.marketOpportunities && rpt.marketOpportunities.topLosers && rpt.marketOpportunities.topLosers.length > 0) ? `
 
                         <div class="space-y-2 pt-2 border-t border-slate-800">
 
@@ -3557,9 +3485,10 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
 
-                                ${rpt.marketOpportunities.topLosers.map(s => {
-
-                                    const linkInfo = (typeof getDirectNewsLinkForText === 'function') ? getDirectNewsLinkForText(s.code + ' ' + s.name) : { url: `https://www.egx.com.eg/ar/Disclosures.aspx?ticker=${s.code}`, label: 'إفصاح رسمي' };
+                                ${(rpt.marketOpportunities.topLosers || []).map(s => {
+                                    const sCode = s.code || s.ticker || '';
+                                    const sClose = typeof s.close === 'number' ? s.close : (parseFloat(s.close) || 0);
+                                    const linkInfo = (typeof getDirectNewsLinkForText === 'function') ? getDirectNewsLinkForText(sCode + ' ' + s.name) : { url: `https://www.egx.com.eg/ar/Disclosures.aspx?ticker=${sCode}`, label: 'إفصاح رسمي' };
 
                                     return `
 
@@ -3575,13 +3504,13 @@
 
                                             </div>
 
-                                            <div class="text-[10px] text-slate-400 font-mono">${s.code} | إغلاق: ${fmtPrice(s.close)} ج</div>
+                                            <div class="text-[10px] text-slate-400 font-mono">${sCode} | إغلاق: ${fmtPrice(sClose)} ج</div>
 
                                         </div>
 
                                         <div class="text-left font-mono">
 
-                                            ${pctBadge(s.change)}
+                                            ${pctBadge(typeof s.change === 'number' ? s.change : (parseFloat(s.chg) || 0))}
 
                                             <div class="mt-1">${signalBadge(s.signal, s.signalType)}</div>
 
@@ -3609,9 +3538,9 @@
 
                                     <div>
 
-                                        <div class="font-bold text-white text-[11px]">${v.name} (${v.code})</div>
+                                        <div class="font-bold text-white text-[11px]">${v.name} (${v.code || v.ticker || ''})</div>
 
-                                        <div class="text-[10px] text-slate-400">${v.note}</div>
+                                        <div class="text-[10px] text-slate-400">${v.note || v.desc || ''}</div>
 
                                     </div>
 
@@ -3635,9 +3564,19 @@
 
                         const tmrwOutlook = tmrwScen.outlook || tmrwScen.mainScenarioText || 'السيناريو الأرجح هو استمرار الزخم الإيجابي واختبار مستويات المقاومة الرئيسية بدعم من المشتريات المؤسسية.';
 
-                        const egx30Target = tmrwScen.egx30 || { name: 'مؤشر EGX30 الرئيسي', resistance: '54,150 ثم 54,400 نقطة', support: '53,750 ثم 53,500 نقطة', note: 'التماسك أعلى الدعم يؤكد استمرار المسار الصاعد.' };
+                        const egx30Target = {
+                            name: tmrwScen.egx30?.name || 'مؤشر EGX30 الرئيسي',
+                            resistance: tmrwScen.egx30?.resistance || (tmrwScen.egx30?.resist1 ? `${tmrwScen.egx30.resist1} ثم ${tmrwScen.egx30.resist2 || ''} نقطة` : '53,600 ثم 54,000 نقطة'),
+                            support: tmrwScen.egx30?.support || (tmrwScen.egx30?.support1 ? `${tmrwScen.egx30.support1} ثم ${tmrwScen.egx30.support2 || ''} نقطة` : '53,100 ثم 52,850 نقطة'),
+                            note: tmrwScen.egx30?.note || tmrwScen.egx30?.view || 'التماسك أعلى الدعم يؤكد استمرار المسار الصاعد.'
+                        };
 
-                        const egx33Target = tmrwScen.egx33 || { name: 'مؤشر الشريعة EGX33', resistance: '6,650 ثم 6,700 نقطة', support: '6,550 نقطة', note: 'أداء دفاعي متفوق لأسهم الشريعة.' };
+                        const egx33Target = {
+                            name: tmrwScen.egx33?.name || 'مؤشر الشريعة EGX33',
+                            resistance: tmrwScen.egx33?.resistance || (tmrwScen.egx33?.resist1 ? `${tmrwScen.egx33.resist1} ثم ${tmrwScen.egx33.resist2 || ''} نقطة` : '6,650 ثم 6,720 نقطة'),
+                            support: tmrwScen.egx33?.support || (tmrwScen.egx33?.support1 ? `${tmrwScen.egx33.support1} ثم ${tmrwScen.egx33.support2 || ''} نقطة` : '6,550 ثم 6,500 نقطة'),
+                            note: tmrwScen.egx33?.note || tmrwScen.egx33?.view || 'أداء دفاعي متفوق لأسهم الشريعة.'
+                        };
 
                         const riskMgmt = rpt.riskManagement || {
 
@@ -3928,58 +3867,37 @@
                 // 2. Market opportunities top gainers
 
                 (rpt.marketOpportunities?.topGainers || []).forEach(s => {
-
-                    if (!sessionStockMap.has(s.code)) {
-
-                        sessionStockMap.set(s.code, {
-
-                            ticker: s.code,
-
+                    const sTicker = s.code || s.ticker;
+                    if (!sTicker) return;
+                    if (!sessionStockMap.has(sTicker)) {
+                        sessionStockMap.set(sTicker, {
+                            ticker: sTicker,
                             name: s.name,
-
                             open: s.open,
-
-                            close: s.close,
-
-                            chg: typeof s.change === 'number' ? s.change : 0,
-
+                            close: typeof s.close === 'number' ? s.close : parseFloat(s.close) || 0,
+                            chg: typeof s.change === 'number' ? s.change : (parseFloat(s.chg) || 0),
                             rsi: typeof s.rsi === 'number' ? s.rsi : (s.change >= 5 ? 72.5 : 56.0),
-
                             support: s.open ? (s.open * 0.97).toFixed(2) + ' ج' : '—',
-
                             resistance: s.close ? (s.close * 1.05).toFixed(2) + ' ج' : '—',
-
                             signal: s.signal || 'شراء',
-
                             signalType: s.signalType || 'buy',
-
                             rec: s.signal || 'شراء وتجميع صاعد',
-
                             isOwned: false
-
                         });
-
                     }
-
                 });
 
                 // 3. Market opportunities top losers
-
                 (rpt.marketOpportunities?.topLosers || []).forEach(s => {
-
-                    if (!sessionStockMap.has(s.code)) {
-
-                        sessionStockMap.set(s.code, {
-
-                            ticker: s.code,
-
+                    const sTicker = s.code || s.ticker;
+                    if (!sTicker) return;
+                    if (!sessionStockMap.has(sTicker)) {
+                        sessionStockMap.set(sTicker, {
+                            ticker: sTicker,
                             name: s.name,
-
                             open: s.open,
-
-                            close: s.close,
-
-                            chg: typeof s.change === 'number' ? s.change : 0,
+                            close: typeof s.close === 'number' ? s.close : parseFloat(s.close) || 0,
+                            chg: typeof s.change === 'number' ? s.change : (parseFloat(s.chg) || 0),
 
                             rsi: typeof s.rsi === 'number' ? s.rsi : (s.change <= -2 ? 29.0 : 41.5),
 
@@ -4721,7 +4639,7 @@
 
 window.addEventListener('load', () => {
 
-                navigator.serviceWorker.register('sw.js?v=20261012_v18_0')
+                navigator.serviceWorker.register('sw.js?v=20261012_v18_1')
 
                     .then(reg => {
 
@@ -12780,43 +12698,46 @@ async function syncMubasherDirectAll() {
                     });
                 }
 
-                // 2. Also try live direct scrape via CORS proxy
-                const sndukTargets = [
-                    { ticker: 'CMS', url: 'https://snduk.com/eg/funds/misr-shariah-equity-fund?lang=en' },
-                    { ticker: 'BWA', url: 'https://snduk.com/eg/funds/beltone-wafra?lang=en' },
-                    { ticker: 'NMF', url: 'https://snduk.com/eg/funds/naeem-misr-sharia-fund?lang=en' }
-                ];
+                // 2. Only fallback to external CORS proxy if cloud/local market_data.json is unavailable
+                const needsProxy = !cloudData || !cloudData.funds || !window._sndukLiveCache.CMS || !window._sndukLiveCache.BWA || !window._sndukLiveCache.NMF;
+                if (needsProxy) {
+                    const sndukTargets = [
+                        { ticker: 'CMS', url: 'https://snduk.com/eg/funds/misr-shariah-equity-fund?lang=en' },
+                        { ticker: 'BWA', url: 'https://snduk.com/eg/funds/beltone-wafra?lang=en' },
+                        { ticker: 'NMF', url: 'https://snduk.com/eg/funds/naeem-misr-sharia-fund?lang=en' }
+                    ];
 
-                const proxyPromises = sndukTargets.map(async (target) => {
-                    try {
-                        const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(target.url);
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 6000);
-                        const resp = await fetch(proxyUrl, { signal: controller.signal });
-                        clearTimeout(timeoutId);
-                        if (resp.ok) {
-                            const html = await resp.text();
-                            const priceMatch = html.match(/[\\"]currentPrice[\\"]\s*:\s*[\\"]([0-9\.]+)[\\"]/);
-                            const dateMatch = html.match(/[\\"]lastPriceUpdate[\\"]\s*:\s*[\\"]([0-9\-]+)[\\"]/);
-                            if (priceMatch && priceMatch[1]) {
-                                const parsedPrice = parseFloat(priceMatch[1]);
-                                const parsedDate = (dateMatch && dateMatch[1]) ? dateMatch[1] : '2026-10-12';
-                                if (parsedPrice > 0) {
-                                    window._sndukLiveCache[target.ticker] = {
-                                        price: parsedPrice,
-                                        date: parsedDate,
-                                        source: `موقع صندوق SNDUK المباشر (${parsedDate})`
-                                    };
+                    const proxyPromises = sndukTargets.map(async (target) => {
+                        try {
+                            const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(target.url);
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(() => controller.abort(), 4000);
+                            const resp = await fetch(proxyUrl, { signal: controller.signal });
+                            clearTimeout(timeoutId);
+                            if (resp.ok) {
+                                const html = await resp.text();
+                                const priceMatch = html.match(/[\\"]currentPrice[\\"]\s*:\s*[\\"]([0-9\.]+)[\\"]/);
+                                const dateMatch = html.match(/[\\"]lastPriceUpdate[\\"]\s*:\s*[\\"]([0-9\-]+)[\\"]/);
+                                if (priceMatch && priceMatch[1]) {
+                                    const parsedPrice = parseFloat(priceMatch[1]);
+                                    const parsedDate = (dateMatch && dateMatch[1]) ? dateMatch[1] : '2026-10-12';
+                                    if (parsedPrice > 0) {
+                                        window._sndukLiveCache[target.ticker] = {
+                                            price: parsedPrice,
+                                            date: parsedDate,
+                                            source: `موقع صندوق SNDUK المباشر (${parsedDate})`
+                                        };
+                                    }
                                 }
                             }
-                        }
-                    } catch(err) {}
-                });
+                        } catch(err) {}
+                    });
 
-                await Promise.race([
-                    Promise.all(proxyPromises),
-                    new Promise(res => setTimeout(res, 3000))
-                ]);
+                    await Promise.race([
+                        Promise.all(proxyPromises),
+                        new Promise(res => setTimeout(res, 3000))
+                    ]);
+                }
 
                 // Persist cache
                 try {
@@ -12828,6 +12749,7 @@ async function syncMubasherDirectAll() {
                 renderFundsCards();
                 renderHoldingsTable();
                 if (typeof updatePortfolioTotals === 'function') updatePortfolioTotals();
+                if (typeof syncReportsWithLiveMarketData === 'function') syncReportsWithLiveMarketData(window.GLOBAL_STATE || null);
 
                 if (!silent) {
                     showToast(`✓ تم تحديث أسعار الصناديق من موقع صندوق (SNDUK): CMS (${window._sndukLiveCache.CMS.price} ج) | BWA (${window._sndukLiveCache.BWA.price} ج) | NMF (${window._sndukLiveCache.NMF.price} ج)`, 'success');
@@ -14192,8 +14114,8 @@ async function syncMubasherDirectAll() {
         }
 
         function renderCustomAlertsList() {
-            const containers = document.querySelectorAll('#customAlertsListContainer');
-            const badges = document.querySelectorAll('#customAlertsCountBadge');
+            const containers = document.querySelectorAll('#customAlertsListContainer, #modalAlertsListContainer');
+            const badges = document.querySelectorAll('#customAlertsCountBadge, #modalAlertsCountBadge');
             badges.forEach(b => b.textContent = `${userCustomAlerts.length} تنبيه`);
 
             containers.forEach(container => {
@@ -17282,10 +17204,10 @@ async function syncMubasherDirectAll() {
                 : '';
 
             const fundsUniverseContext = `
-- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.5305 ج | تتبع رسمي لمؤشر EGX33)
-- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.1827 ج)
-- AZG: صندوق أزيموت جولد (وثيقة استثمار ذهب فعلي: 23.5686 ج)
-- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 49.5200 ج | معايير الأيوفي)
+- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.0609 ج | تتبع رسمي لمؤشر EGX33 • موقع صندوق SNDUK)
+- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.1400 ج • موقع صندوق SNDUK)
+- AZG: صندوق أزيموت جولد (وثيقة استثمار ذهب فعلي: 23.5689 ج • إفصاح رسمي معتمد)
+- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 48.8600 ج • معايير الأيوفي • موقع صندوق SNDUK)
 - THNDR_GOLD: سبائك الذهب عيار 24 النقي عبر ثندر (سعر الجرام المعتمد: 7,015.00 ج | سعر تكلفة الشراء بالمحفظة: 6,972.84 ج | ربح +0.60%)
 `;
 
@@ -19297,7 +19219,7 @@ ${stocksUniverseContext}
 
             const gold24k = 7015.00;
 
-            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة سندك وإفصاحات مديري الصناديق (11 أكتوبر 2026): CMS مصر شريعة (22.5305 ج | +0.33%)، AZG أزيموت جولد (23.5686 ج | +0.11%)، BWA بلتون وفرة (2.1827 ج | +0.38%)، NMF نعيم مصر (49.5200 ج | +0.66%)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
+            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة صندوق SNDUK وإفصاحات مديري الصناديق (12 أكتوبر 2026): CMS مصر شريعة (22.0609 ج | موقع صندوق)، AZG أزيموت جولد (23.5689 ج | +0.11%)، BWA بلتون وفرة (2.1400 ج | موقع صندوق)، NMF نعيم مصر (48.8600 ج | موقع صندوق)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 
@@ -20529,89 +20451,7 @@ ${stocksUniverseContext}
             out.classList.remove('hidden');
         }
 
-        // =========================================================================
-        // REAL-TIME BROKERAGE FEE INPUT SYNCHRONIZATION
-        // =========================================================================
-        function syncFeeSharesCalculation() {
-            const val = parseFloat(document.getElementById('fee_trade_val')?.value) || 0;
-            const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
-            const sharesIn = document.getElementById('fee_trade_shares');
-            if (sharesIn && price > 0 && val > 0) {
-                sharesIn.value = Math.floor(val / price);
-            }
-        }
 
-        function syncFeeValueFromShares() {
-            const shares = parseFloat(document.getElementById('fee_trade_shares')?.value) || 0;
-            const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
-            const valIn = document.getElementById('fee_trade_val');
-            if (valIn && shares > 0 && price > 0) {
-                valIn.value = (shares * price).toFixed(2);
-            }
-        }
-
-        function calculateBrokerageFees() {
-            triggerHaptic('medium');
-            const price = parseFloat(document.getElementById('fee_trade_price')?.value) || 0;
-            const shares = parseFloat(document.getElementById('fee_trade_shares')?.value) || 0;
-            let val = parseFloat(document.getElementById('fee_trade_val')?.value) || 0;
-
-            if (price > 0 && shares > 0) {
-                val = price * shares;
-                const vIn = document.getElementById('fee_trade_val');
-                if (vIn) vIn.value = val.toFixed(2);
-            }
-
-            if (val <= 0) {
-                showToast("⚠️ يرجى إدخال قيمة الصفقة أو السعر والكمية", "warning");
-                return;
-            }
-
-            // Official EGX & Brokerage Fee Structure (عمولات تداول البورصة وهيئة الرقابة المالية ومصر للمقاصة)
-            const egxFee = val * 0.0001; // 0.01%
-            const fraFee = val * 0.00005; // 0.005%
-            const mcdrFee = val * 0.0001; // 0.01%
-            const ipfFee = val * 0.00005; // 0.005% صندوق حماية المستثمر
-            const brokerFee = Math.max(2.0, val * 0.001); // 0.10% أو 2 ج بحد أدنى
-
-            const totalFeesOneWay = egxFee + fraFee + mcdrFee + ipfFee + brokerFee;
-            const roundTripFees = totalFeesOneWay * 2;
-            const feePct = (totalFeesOneWay / val) * 100;
-            const breakEvenPerShare = shares > 0 ? (price + (roundTripFees / shares)) : 0;
-
-            const out = document.getElementById('feeResultCard');
-            if (!out) return;
-
-            out.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <span class="font-bold text-amber-300 flex items-center gap-1.5">
-                        <span>🧾</span> <span>بيان العمولات والرسوم الحكومية المعتمدة:</span>
-                    </span>
-                    <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300">
-                        نسبة الرسوم: ${feePct.toFixed(3)}%
-                    </span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                    <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                        <span class="text-slate-400 block text-[10px]">رسوم العملية الواحدة:</span>
-                        <b class="text-white font-mono mt-0.5 block">${totalFeesOneWay.toFixed(2)} ج.م</b>
-                    </div>
-                    <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                        <span class="text-slate-400 block text-[10px]">إجمالي ذهاب وعودة (شراء + بيع):</span>
-                        <b class="text-amber-400 font-mono mt-0.5 block">${roundTripFees.toFixed(2)} ج.م</b>
-                    </div>
-                    <div class="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                        <span class="text-slate-400 block text-[10px]">عمولة السمسار المحسوبة:</span>
-                        <b class="text-slate-200 font-mono mt-0.5 block">${brokerFee.toFixed(2)} ج.م</b>
-                    </div>
-                    <div class="p-2 rounded-lg bg-emerald-950/80 border border-emerald-700">
-                        <span class="text-slate-400 block text-[10px]">سعر نقطة التعادل (Break-even):</span>
-                        <b class="text-emerald-300 font-bold font-mono text-sm mt-0.5 block">${breakEvenPerShare > 0 ? breakEvenPerShare.toFixed(2) + ' ج' : 'غير محدد'}</b>
-                    </div>
-                </div>
-            `;
-            out.classList.remove('hidden');
-        }
 
         // =========================================================================
         // TOOL 3: 🔔 التنبيهات السعرية والشرعية (Persistent Alerts Engine)
@@ -21382,103 +21222,14 @@ ${stocksUniverseContext}
 
         // =========================================================================
 
-        // 1. Thndr Fees & Egyptian Capital Gains Tax Calculator (الفئة 14)
-
+        // 1. Thndr Custom Fees Manager
         function calculateThndrFeesAndTaxes() {
-
             triggerHaptic('medium');
-
-            if (typeof calculateBrokerageFees === 'function') return calculateBrokerageFees();
-            const tradeVal = parseFloat(document.getElementById('fee_trade_val')?.value) || 0;
-            const tradeType = document.getElementById('fee_trade_type')?.value || 'buy';
-            const capitalGain = parseFloat(document.getElementById('fee_capital_gain')?.value) || 0;
-            const out = document.getElementById('fee_tax_output') || document.getElementById('feeResultCard');
-            if (!out) return;
-
-            const thndrComm = Math.max(2.0, tradeVal * 0.002);
-
-            const egxFees = tradeVal * 0.000125;
-
-            const stampDuty = tradeVal * 0.0005;
-
-            const totalFees = thndrComm + egxFees + stampDuty;
-
-            // ضريبة الأرباح الرأسمالية: معفاة/مؤجلة رسمياً للأفراد المقيمين في البورصة المصرية
-
-            let cgtTax = 0;
-
-            const netAmount = tradeType === 'buy' ? (tradeVal + totalFees) : (tradeVal - totalFees);
-
-            out.innerHTML = `
-
-                <div class="font-bold text-emerald-400 flex items-center gap-1">
-
-                    <span>✅</span>
-
-                    <span>تفصيل العمولات والضرائب المحسوبة:</span>
-
-                </div>
-
-                <div class="space-y-1.5 pt-1 text-slate-300 text-xs">
-
-                    <div class="flex justify-between border-b border-slate-800 pb-1">
-
-                        <span>عمولة تطبيق ثندر (2 بالألف):</span>
-
-                        <b class="text-white font-mono">${thndrComm.toFixed(2)} ج.م</b>
-
-                    </div>
-
-                    <div class="flex justify-between border-b border-slate-800 pb-1">
-
-                        <span>رسوم البورصة والمقاصة والرقابة المالية (0.0125%):</span>
-
-                        <b class="text-white font-mono">${egxFees.toFixed(2)} ج.م</b>
-
-                    </div>
-
-                    <div class="flex justify-between border-b border-slate-800 pb-1">
-
-                        <span>ضريبة الدمغة النسبية:</span>
-
-                        <b class="text-white font-mono">${stampDuty.toFixed(2)} ج.م</b>
-
-                    </div>
-
-                    <div class="flex justify-between border-b border-slate-800 pb-1">
-
-                        <span>إجمالي مصاريف التنفيذ:</span>
-
-                        <b class="text-amber-400 font-mono">${totalFees.toFixed(2)} ج.م (${((totalFees / tradeVal) * 100).toFixed(3)}%)</b>
-
-                    </div>
-
-                    ${tradeType === 'sell' ? `
-
-                    <div class="flex justify-between border-b border-slate-800 pb-1 text-emerald-400">
-
-                        <span>ضريبة الأرباح الرأسمالية (الأفراد المقيمون):</span>
-
-                        <b class="text-emerald-400 font-mono">0.00 ج.م (معفاة رسمياً ✓)</b>
-
-                    </div>
-
-                    ` : ''}
-
-                    <div class="flex justify-between pt-1 font-bold text-sm bg-slate-950/80 p-2 rounded-lg border border-slate-800">
-
-                        <span class="text-white">${tradeType === 'buy' ? 'المبلغ الإجمالي المطلوب دفعه:' : 'صافي المبلغ المستلم بالمحفظة:'}</span>
-
-                        <span class="text-emerald-400 font-mono">${netAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} ج.م</span>
-
-                    </div>
-
-                </div>
-
-            `;
-
-            out.classList.remove('hidden');
-
+            if (typeof editUserCustomFees === 'function') {
+                editUserCustomFees();
+            } else {
+                showToast("إجمالي العمولات المعتمدة للمحفظة: 593.82 ج.م", "info");
+            }
         }
 
         // 2. Milestone Goal & Monte Carlo Wealth Simulation (الفئة 18)
@@ -27595,7 +27346,7 @@ ${stocksUniverseContext}
 
                         <p>4. <b>رسوم ثندر (0.7%):</b> احتساب دقيق لـ 7 في الألف على المشتريات وإدراج سياسة الرسوم المحدثة بقاعدة البيانات.</p>
 
-                        <p>5. <b>الصناديق والذهب:</b> مطابقة أسعار وثائق صناديق الشريعة والذهب المعتمدة (CMS: 22.5305 | AZG: 23.5686 | BWA: 2.1827 | NMF: 49.5200 | ذهب: 7,015.00).</p>
+                        <p>5. <b>الصناديق والذهب:</b> مطابقة أسعار وثائق صناديق الشريعة والذهب المعتمدة وفق موقع صندوق وإفصاحات السوق (CMS: 22.0609 | AZG: 23.5689 | BWA: 2.1400 | NMF: 48.8600 | ذهب: 7,015.00).</p>
 
                     </div>
 

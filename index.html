@@ -4968,47 +4968,6 @@
                     </div>
                 </div>
 
-                <!-- Card B: Brokerage Fee Calculator -->
-                <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 bg-slate-900/90 space-y-4 shadow-xl">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl p-1.5 rounded-xl bg-teal-950 border border-teal-800 text-teal-400">📊</span>
-                            <div>
-                                <h3 class="font-extrabold text-white text-sm sm:text-base">حاسبة عمولات ثندر والبورصة المصرية (Round-Trip Brokerage Fees)</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">تفنيد كافة الرسوم الحكومية ومصر للمقاصة وصندوق حماية المستثمر مع حساب نقطة التعادل</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                            <label class="block text-slate-300 font-bold">قيمة الصفقة الإجمالية (ج.م):</label>
-                            <input type="number" id="fee_trade_val" value="10000" oninput="syncFeeSharesCalculation()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-indigo-500">
-                            <span class="text-[10px] text-slate-500 block">إجمالي مبلغ الشراء أو البيع</span>
-                        </div>
-
-                        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                            <label class="block text-slate-300 font-bold">أو أدخل: عدد الأسهم:</label>
-                            <input type="number" id="fee_trade_shares" placeholder="مثال: 100" oninput="syncFeeValueFromShares()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-indigo-500">
-                            <span class="text-[10px] text-slate-500 block">الكمية المنفذة</span>
-                        </div>
-
-                        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                            <label class="block text-slate-300 font-bold">سعر تنفيذ السهم (ج.م):</label>
-                            <input type="number" step="0.01" id="fee_trade_price" placeholder="مثال: 100.00" oninput="syncFeeValueFromShares()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-indigo-500">
-                            <span class="text-[10px] text-slate-500 block">سعر تنفيذ العملية</span>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 flex-wrap gap-2">
-                        <button onclick="calculateBrokerageFees()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-2 shadow-md transition active:scale-95">
-                            <span>⚡ حساب تفصيل العمولات ورسوم الشراء والبيع</span>
-                        </button>
-                    </div>
-
-                    <div id="feeResultCard" class="hidden p-4 rounded-xl bg-slate-950 border border-teal-800/80 space-y-3 animate-fadeIn">
-                        <!-- Populated by calculateBrokerageFees() -->
-                    </div>
                 </div>
             </div>
 
@@ -5049,7 +5008,7 @@
                                     <option value="EKHO">EKHO • القابضة المصرية الكويتية</option>
                                     <option value="ISPH">ISPH • ابن سينا فارما</option>
                                     <option value="AZG">AZG • صندوق أزيموت جولد للذهب</option>
-                                    <option value="BWA">BWA • صندوق بشائر المتوافق</option>
+                                    <option value="BWA">BWA • صندوق بلتون وفرة للشريعة</option>
                                 </select>
                             </div>
 
@@ -6765,11 +6724,11 @@
 
                     <span class="font-bold text-slate-200">التنبيهات النشطة الحالية:</span>
 
-                    <span id="customAlertsCountBadge" class="text-[10px] text-slate-400 font-mono">0 تنبيه</span>
+                    <span id="modalAlertsCountBadge" class="text-[10px] text-slate-400 font-mono">0 تنبيه</span>
 
                 </div>
 
-                <div id="customAlertsListContainer" class="space-y-1.5 max-h-48 overflow-y-auto">
+                <div id="modalAlertsListContainer" class="space-y-1.5 max-h-48 overflow-y-auto">
 
                     <!-- Populated dynamically via renderCustomAlertsList() -->
 
@@ -8567,13 +8526,13 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js?v=20261012_v18_0"></script>
-    <script src="js/data-news.js?v=20261012_v18_0"></script>
-    <script src="js/data-valuation.js?v=20261012_v18_0"></script>
-    <script src="js/data-ai-prompts.js?v=20261012_v18_0"></script>
-    <script src="js/app.js?v=20261012_v18_0"></script>
-    <script src="js/gemini-ai.js?v=20261012_v18_0"></script>
-    <script src="js/universal-export.js?v=20261012_v18_0"></script>
+    <script src="js/data-reports.js?v=20261012_v18_1"></script>
+    <script src="js/data-news.js?v=20261012_v18_1"></script>
+    <script src="js/data-valuation.js?v=20261012_v18_1"></script>
+    <script src="js/data-ai-prompts.js?v=20261012_v18_1"></script>
+    <script src="js/app.js?v=20261012_v18_1"></script>
+    <script src="js/gemini-ai.js?v=20261012_v18_1"></script>
+    <script src="js/universal-export.js?v=20261012_v18_1"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار الذكاء الاصطناعي المزدوج)
