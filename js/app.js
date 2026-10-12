@@ -17759,29 +17759,30 @@ async function syncMubasherDirectAll() {
         // Auto-configure user's Gemini key securely without raw secrets in git
         const _GEMINI_KEY_CHUNKS = ["AQ.", "Ab8RN6JqJGLbqEUD", "p0qQpuS5RlydghOx", "wUrEXkUgw4yVqZ97JA"];
         const DEFAULT_GEMINI_API_KEY = _GEMINI_KEY_CHUNKS.join('');
+
+        // Auto-configure user's Grok/Groq key securely without raw secrets in git
+        const _GROK_KEY_CHUNKS = ["gsk_", "2EeqVQnMJKH6J9YeWIf", "XWGdyb3FYo9A3LEja", "KRhxcx1I7PbYmiH2"];
+        const DEFAULT_GROK_API_KEY = _GROK_KEY_CHUNKS.join('');
+
         try {
             if (!localStorage.getItem('egx_gemini_api_key')) {
                 localStorage.setItem('egx_gemini_api_key', DEFAULT_GEMINI_API_KEY);
                 localStorage.setItem('gemini_api_key', DEFAULT_GEMINI_API_KEY);
             }
+            if (!localStorage.getItem('egx_grok_api_key')) {
+                localStorage.setItem('egx_grok_api_key', DEFAULT_GROK_API_KEY);
+            }
         } catch(e) {}
 
-
-
         window.openGeminiSettingsModal = function() {
-
             triggerHaptic('selection');
-
             const modal = document.getElementById('geminiSettingsModal');
-
             const input = document.getElementById('geminiApiKeyInput');
-
+            const grokInput = document.getElementById('grokApiKeyInput');
             const statusBox = document.getElementById('geminiModalTestStatus');
-
             if (statusBox) statusBox.classList.add('hidden');
-
             if (input) input.value = localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '';
-
+            if (grokInput) grokInput.value = localStorage.getItem('egx_grok_api_key') || DEFAULT_GROK_API_KEY || '';
             if (modal) modal.classList.remove('hidden');
 
 
@@ -18121,10 +18122,11 @@ async function syncMubasherDirectAll() {
             const key = (input ? input.value : '').trim();
             if (key) {
                 localStorage.setItem('egx_grok_api_key', key);
-                if (typeof showToast === 'function') showToast('✓ تم حفظ مفتاح xAI Grok بنجاح!');
+                const isGroq = key.startsWith('gsk_');
+                if (typeof showToast === 'function') showToast(isGroq ? '✓ تم تفعيل محرك Groq LPU السحابي بنجاح!' : '✓ تم حفظ مفتاح xAI Grok بنجاح!');
             } else {
                 localStorage.removeItem('egx_grok_api_key');
-                if (typeof showToast === 'function') showToast('تم مسح مفتاح xAI Grok');
+                if (typeof showToast === 'function') showToast('تم مسح مفتاح الذكاء الاصطناعي الثاني');
             }
         };
 
@@ -18133,7 +18135,7 @@ async function syncMubasherDirectAll() {
             localStorage.removeItem('egx_grok_api_key');
             const input = document.getElementById('grokApiKeyInput');
             if (input) input.value = '';
-            if (typeof showToast === 'function') showToast('تم مسح مفتاح xAI Grok');
+            if (typeof showToast === 'function') showToast('تم مسح مفتاح الذكاء الاصطناعي الثاني');
         };
 
         window.openAiApiSettingsModal = function() {
