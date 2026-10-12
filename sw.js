@@ -1,17 +1,17 @@
-// EGX Sharia Portal - Network-First Ultra-Fresh Service Worker (v16.4)
-const CACHE_NAME = 'egx-sharia-portal-v16.7';
+// EGX Sharia Portal - Network-First Ultra-Fresh Service Worker (v16.8)
+const CACHE_NAME = 'egx-sharia-portal-v16.8';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
-  './js/data-reports.js?v=20261012_v16_5',
-  './js/data-news.js?v=20261012_v16_5',
-  './js/data-valuation.js?v=20261012_v16_5',
-  './js/data-ai-prompts.js?v=20261012_v16_5',
-  './js/app.js?v=20261012_v16_5',
-  './js/gemini-ai.js?v=20261012_v16_5',
-  './js/universal-export.js?v=20261012_v16_5',
+  './js/data-reports.js?v=20261012_v16_8',
+  './js/data-news.js?v=20261012_v16_8',
+  './js/data-valuation.js?v=20261012_v16_8',
+  './js/data-ai-prompts.js?v=20261012_v16_8',
+  './js/app.js?v=20261012_v16_8',
+  './js/gemini-ai.js?v=20261012_v16_8',
+  './js/universal-export.js?v=20261012_v16_8',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'

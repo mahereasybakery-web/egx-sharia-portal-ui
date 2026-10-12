@@ -812,9 +812,9 @@
     "CMS": {
       "name": "مصر شريعة إكويتي (CMS)",
       "manager": "CI Capital Asset Management",
-      "close": 22.5305,
+      "close": 22.5710,
       "open": 22.4565,
-      "chg": 0.33,
+      "chg": 0.51,
       "type": "equity_sharia",
       "valuation_cycle": "يومي معتمد / إقفال الجلسة",
       "last_nav_date": "2026-10-12",
@@ -823,7 +823,7 @@
     "AZG": {
       "name": "أزيموت جولد (AZG)",
       "manager": "Azimut Egypt",
-      "close": 23.5686,
+      "close": 23.5689,
       "open": 23.5437,
       "chg": 0.11,
       "type": "gold_bullion",
@@ -845,9 +845,9 @@
     "NMF": {
       "name": "نعيم مصر للشريعة (NMF)",
       "manager": "Naeem Financial Investments",
-      "close": 49.52,
-      "open": 49.195,
-      "chg": 0.66,
+      "close": 48.3833,
+      "open": 48.3100,
+      "chg": 0.15,
       "type": "equity_sharia",
       "valuation_cycle": "دوري معتمد / إفصاح الصندوق",
       "last_nav_date": "2026-10-12",

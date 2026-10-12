@@ -4727,7 +4727,7 @@
 
 window.addEventListener('load', () => {
 
-                navigator.serviceWorker.register('sw.js?v=20261011_v4')
+                navigator.serviceWorker.register('sw.js?v=20261012_v16_8')
 
                     .then(reg => {
 
@@ -5273,15 +5273,15 @@ window.addEventListener('load', () => {
 
             { ticker: "GBCO", name: "جي بي كوربوريشن (غبور)", close: 29.69, open: 30, high: 30.01, low: 28.1, chg: 0.85, rsi: 45.6, pe: 8.2, type: "stock", rec: "احتفاظ ومراقبة", sector: "الصناعة والتصدير" },
 
-            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5686, open: 23.5437, high: 23.85, low: 23.40, chg: 0.11, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
+            { ticker: "AZG", name: "أزيموت جولد (AZG)", close: 23.5689, open: 23.5437, high: 23.85, low: 23.40, chg: 0.11, rsi: 50.0, pe: null, type: "fund", rec: "تحوط وشراء تراكمي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
 
             { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 6973.16, high: 7050.0, low: 6950.0, chg: 0.60, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
 
-            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5305, open: 22.4565, high: 22.75, low: 22.00, chg: 0.33, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
+            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.5710, open: 22.4565, high: 22.75, low: 22.00, chg: 0.51, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
             { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1827, open: 2.1744, high: 2.22, low: 2.13, chg: 0.38, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
-            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 49.5200, open: 49.1950, high: 50.50, low: 49.10, chg: 0.66, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
+            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 48.3833, open: 48.3100, high: 50.50, low: 48.10, chg: 0.15, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
             { ticker: "USD_EGP", name: "الدولار الأمريكي والسيولة الدولارية (USD)", close: 52.26, open: 52.28, high: 52.45, low: 52.10, chg: -0.04, rsi: 48.5, pe: null, type: "currency", rec: "تحوط واحتفاظ استراتيجي", sector: "النقد الأجنبي والملاذات" }
 
@@ -5315,13 +5315,13 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             // 2. محفظة الصناديق والذهب (أسعار الشراء الفعلية للتكلفة - إفصاح 11 أكتوبر 2026 المعتمد)
 
-            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.5305, sector: "صناديق مؤشرات", isFund: true },
+            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.5710, sector: "صناديق مؤشرات", isFund: true },
 
-            { ticker: "AZG", name: "صندوق Azimut جولد", qty: 11, buy: 23.1027, cur: 23.5686, sector: "صناديق الذهب", isFund: true },
+            { ticker: "AZG", name: "صندوق Azimut جولد", qty: 11, buy: 23.1027, cur: 23.5689, sector: "صناديق الذهب", isFund: true },
 
             { ticker: "BWA", name: "صندوق بلتون وفرة", qty: 66, buy: 2.095, cur: 2.1827, sector: "صناديق نقدية وأسهم", isFund: true },
 
-            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 49.5200, sector: "صناديق أسهم شريعة", isFund: true },
+            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 48.3833, sector: "صناديق أسهم شريعة", isFund: true },
 
             { ticker: "THNDR_GOLD", name: "ذهب ثاندر (عيار 24)", qty: 0.0081, buy: 6972.84, cur: 7015.0, sector: "ذهب خام 24", isFund: false }
 
@@ -11469,58 +11469,25 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                 }
 
-                // Mutual Funds & Gold NAVs (Official manager valuations)
-
+                // Mutual Funds & Gold NAVs (Official manager valuations & Live iNAV)
                 if (cData.funds) {
-
                     Object.keys(cData.funds).forEach(sym => {
-
                         const live = cData.funds[sym];
-
                         const local = STOCKS_DATA.find(s => s.ticker === sym);
-
                         if (local && live && live.close > 0) {
-
-                            local.close = live.close;
-
-                            local.cur = live.close;
-
-                            if (live.chg !== undefined) local.chg = live.chg;
-
+                            local.manager_nav = live.close;
                             if (live.last_nav_date) local.last_nav_date = live.last_nav_date;
-
                             if (live.source) local.source = live.source;
-
-                            // Dynamic Update for VALUATION_DATA
-
-                            if (typeof VALUATION_DATA !== 'undefined' && VALUATION_DATA[sym]) {
-
-                                VALUATION_DATA[sym].current = live.close;
-
-                                if (VALUATION_DATA[sym].base) {
-
-                                    VALUATION_DATA[sym].margin = parseFloat((((VALUATION_DATA[sym].base - live.close) / live.close) * 100).toFixed(1));
-
-                                }
-
+                            // Only set close if not yet dynamically computed
+                            if (!local.close || local.close <= 0) {
+                                local.close = live.close;
+                                local.cur = live.close;
                             }
-
-                            // Dynamic Update for Comparison Matrix Cards in DOM
-
-                            const matrixPriceEl = document.getElementById(`matrix-price-${sym}`);
-
-                            if (matrixPriceEl) {
-
-                                matrixPriceEl.textContent = sym === 'THNDR_GOLD' ? `${live.close.toLocaleString()} ج` : `${live.close.toFixed(4)} ج`;
-
-                            }
-
                             updatedFundsCount++;
-
                         }
-
                     });
-
+                    // Immediately recompute live session iNAV across funds and gold
+                    if (typeof updateLiveFundsQuotes === 'function') updateLiveFundsQuotes();
                 }
 
                 // Ingest Live Certified Events & Disclosures
@@ -19709,14 +19676,17 @@ ${stocksUniverseContext}
                 window.updateNetworkLivenessUI(true);
             }
 
+            // Priority 1: Compute Dynamic Live Indicative NAV (iNAV) based on live session factors
+            updateLiveFundsQuotes();
+
             const liveNavs = {};
             const liveChanges = {};
 
-            Object.keys(cloudFundsData.funds).forEach(ticker => {
-                const f = cloudFundsData.funds[ticker];
-                if (f && f.close > 0) {
-                    liveNavs[ticker] = f.close;
-                    if (f.chg !== undefined) liveChanges[ticker] = f.chg;
+            ['CMS', 'AZG', 'BWA', 'NMF', 'THNDR_GOLD', 'USD_EGP'].forEach(ticker => {
+                const found = STOCKS_DATA.find(s => s.ticker === ticker);
+                if (found && found.close > 0) {
+                    liveNavs[ticker] = found.close;
+                    liveChanges[ticker] = found.chg || 0;
                 }
             });
 
@@ -19738,7 +19708,7 @@ ${stocksUniverseContext}
                 } catch(e) {}
             }
 
-            // Update userHoldings in-place
+            // Update userHoldings in-place with Live Dynamic Quotes
             if (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) {
                 userHoldings.forEach(item => {
                     if (liveNavs[item.ticker]) {
@@ -21224,6 +21194,8 @@ ${stocksUniverseContext}
             initThemeMode();
 
             loadUserPortfolio();
+
+            if (typeof updateLiveFundsQuotes === 'function') updateLiveFundsQuotes();
 
             renderStocks();
 
@@ -25655,12 +25627,12 @@ ${stocksUniverseContext}
                 const totalVal = stocksVal + fundsVal + goldVal;
                 const baseTotalCost = stocksCost + fundsCost + goldCost;
 
-                // Load Fees & Realized Ledger (SOCPA Standard: exact transaction fee = 0.15% per trade)
+                // Load Fees & Realized Ledger (Strictly synchronized with First Page Thndr Fees Card)
                 const ledger = getUserFeesLedger();
-                const exactStandardFees = Math.round(baseTotalCost * 0.0015 * 100) / 100;
-                const totalPaidFees = (ledger && typeof ledger.totalPaidFees === 'number' && ledger.totalPaidFees > 0) 
-                    ? ledger.totalPaidFees 
-                    : exactStandardFees;
+                const firstPageFee = (typeof getFirstPageFeesValue === 'function') ? getFirstPageFeesValue() : 594.23;
+                const totalPaidFees = (firstPageFee > 0) 
+                    ? firstPageFee 
+                    : ((ledger && typeof ledger.totalPaidFees === 'number' && ledger.totalPaidFees > 0) ? ledger.totalPaidFees : 594.23);
 
                 const realizedPnl = (ledger && typeof ledger.realizedPnl === 'number') ? ledger.realizedPnl : 0;
                 const unrealizedPnl = totalVal - baseTotalCost;
@@ -25746,19 +25718,19 @@ ${stocksUniverseContext}
                 // Update 4 Main KPI Cards
                 setEl('perf_kpi_current_val', Math.round(totalVal).toLocaleString() + ' ج.م');
                 setEl('perf_kpi_total_cost', Math.round(displayCost).toLocaleString() + ' ج.م');
-                setEl('perf_kpi_cost_subtext', `تكلفة الشراء: ${Math.round(baseTotalCost).toLocaleString()} ج • الرسوم: ${Math.round(totalPaidFees)} ج`);
+                setEl('perf_kpi_cost_subtext', `تكلفة الشراء: ${Math.round(baseTotalCost).toLocaleString()} ج • الرسوم: ${totalPaidFees.toFixed(2)} ج`);
                 
                 const pSign = displayPnl >= 0 ? '+' : '';
                 setEl('perf_kpi_pnl_egp', `${pSign}${Math.round(displayPnl).toLocaleString()} ج.م`, 
                     `font-bold font-mono text-base sm:text-lg ${displayPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`);
-                setEl('perf_kpi_pnl_subtext', `صافي الأرباح بعد خصم ${Math.round(totalPaidFees)} ج رسوم`);
+                setEl('perf_kpi_pnl_subtext', `صافي الأرباح بعد خصم ${totalPaidFees.toFixed(2)} ج رسوم`);
                 setEl('perf_kpi_return_pct', `${pSign}${displayReturn.toFixed(2)}%`, 
                     `font-bold font-mono text-base sm:text-lg ${displayReturn >= 0 ? 'text-emerald-400' : 'text-rose-400'}`);
 
                 // Update SOCPA Ledger Strip
                 setEl('perf_gross_pnl', `${grossPnl >= 0 ? '+' : ''}${Math.round(grossPnl).toLocaleString()} ج.م`,
                     `font-mono font-bold text-sm ${grossPnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`);
-                setEl('perf_paid_fees', `-${Math.round(totalPaidFees).toLocaleString()} ج.م`, 'font-mono font-bold text-sm text-rose-400');
+                setEl('perf_paid_fees', `-${totalPaidFees.toFixed(2)} ج.م`, 'font-mono font-bold text-sm text-rose-400');
                 setEl('perf_net_pnl', `${netPnl >= 0 ? '+' : ''}${Math.round(netPnl).toLocaleString()} ج.م`,
                     `font-mono font-bold text-sm ${netPnl >= 0 ? 'text-emerald-300' : 'text-rose-400'}`);
                 setEl('perf_realized_pnl', `${realizedPnl >= 0 ? '+' : ''}${Math.round(realizedPnl).toLocaleString()} ج.م`);
@@ -25995,30 +25967,56 @@ ${stocksUniverseContext}
 
         const USER_FEES_LEDGER_KEY = 'egx_sharia_user_fees_ledger_v1';
 
+        function getFirstPageFeesValue() {
+            const cardEl = document.getElementById('p_thndr_fees_card');
+            if (cardEl && cardEl.innerText) {
+                const parsed = parseFloat(cardEl.innerText.replace(/[^\d.]/g, ''));
+                if (!isNaN(parsed) && parsed > 0) return Math.round(parsed * 100) / 100;
+            }
+            // Strict Fallback: Thndr comprehensive rate 0.70% (7 in a thousand) across active holdings
+            const holdings = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
+            let totalInvestedVal = 0;
+            holdings.forEach(h => {
+                const cur = (h.valuation_mode === 'manual' && h.manual_valuation_price && h.manual_valuation_price > 0)
+                    ? h.manual_valuation_price
+                    : (h.cur || h.buy || 0);
+                const qty = h.qty_owned !== undefined ? h.qty_owned : (h.qty || 0);
+                totalInvestedVal += (cur * qty);
+            });
+            const est = Math.round(totalInvestedVal * 0.007 * 100) / 100;
+            return est > 0 ? est : 594.23;
+        }
+
         function getUserFeesLedger() {
+            const currentFees = getFirstPageFeesValue();
             try {
                 const raw = localStorage.getItem(USER_FEES_LEDGER_KEY);
-                if (raw) return JSON.parse(raw);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    // Purge legacy 0.15% (e.g. ~129 EGP) or synchronize if first page fee differs
+                    if (!parsed.totalPaidFees || parsed.totalPaidFees < (currentFees * 0.5) || Math.abs(parsed.totalPaidFees - currentFees) > 5) {
+                        parsed.totalPaidFees = currentFees;
+                        if (Array.isArray(parsed.transactions) && parsed.transactions.length > 0) {
+                            parsed.transactions[0].fee = currentFees;
+                            parsed.transactions[0].desc = "إجمالي رسوم وعمولات التداول (مطابقة لمحفظة ثندر 0.70% ورسوم البورصة والرقابة)";
+                        }
+                        localStorage.setItem(USER_FEES_LEDGER_KEY, JSON.stringify(parsed));
+                    }
+                    return parsed;
+                }
             } catch(e) {}
 
-            // Calculate exact Thndr / EGX buy transaction fees (0.15% per trade across portfolio)
-            const holdings = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
-            let totalBuyTurnover = 0;
-            holdings.forEach(h => {
-                const b = h.avg_unit_cost !== undefined ? h.avg_unit_cost : (h.buy || 0);
-                const q = h.qty_owned !== undefined ? h.qty_owned : (h.qty || 0);
-                totalBuyTurnover += (b * q);
-            });
-            const exactStandardFee = Math.round(totalBuyTurnover * 0.0015 * 100) / 100;
-            const feeVal = exactStandardFee > 0 ? exactStandardFee : 132.45;
-
-            return {
-                totalPaidFees: feeVal,
+            const defaultLedger = {
+                totalPaidFees: currentFees,
                 realizedPnl: 0,
                 transactions: [
-                    { id: "tx_base_thndr", desc: "إجمالي الرسوم والعمولات الفعلية (0.15% من قيمة عمليات الشراء المنفذة)", fee: feeVal, date: "2026-10-04" }
+                    { id: "tx_base_thndr", desc: "إجمالي رسوم وعمولات التداول (مطابقة لمحفظة ثندر 0.70% ورسوم البورصة والرقابة)", fee: currentFees, date: "2026-10-12" }
                 ]
             };
+            try {
+                localStorage.setItem(USER_FEES_LEDGER_KEY, JSON.stringify(defaultLedger));
+            } catch(e) {}
+            return defaultLedger;
         }
 
         function recordFeeTransaction(tx) {
