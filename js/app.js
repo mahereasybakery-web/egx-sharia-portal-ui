@@ -4727,7 +4727,7 @@
 
 window.addEventListener('load', () => {
 
-                navigator.serviceWorker.register('sw.js?v=20261012_v16_8')
+                navigator.serviceWorker.register('sw.js?v=20261012_v16_9')
 
                     .then(reg => {
 
@@ -13934,6 +13934,7 @@ async function syncMubasherDirectAll() {
                     if (Array.isArray(parsed)) {
                         // Strict cleanup: Purge any legacy dummy seed alerts (alt_1, alt_2, alt_3)
                         userCustomAlerts = parsed.filter(a => a && !['alt_1', 'alt_2', 'alt_3'].includes(String(a.id)));
+                        window.userCustomAlerts = userCustomAlerts;
                         if (userCustomAlerts.length !== parsed.length) {
                             saveCustomAlertsToStorage();
                         }
@@ -13944,17 +13945,15 @@ async function syncMubasherDirectAll() {
                 userCustomAlerts = [];
             }
             userCustomAlerts = [];
+            window.userCustomAlerts = userCustomAlerts;
             saveCustomAlertsToStorage();
         }
 
         function saveCustomAlertsToStorage() {
-
             try {
-
+                window.userCustomAlerts = userCustomAlerts;
                 localStorage.setItem('egx_custom_alerts', JSON.stringify(userCustomAlerts));
-
             } catch(e){}
-
         }
 
         function openCustomAlertModal(preselectedTicker = null) {
@@ -14605,13 +14604,21 @@ async function syncMubasherDirectAll() {
 
             if (institutionalBox) {
 
-                const ownedTickers = (Array.isArray(userHoldings) && userHoldings.length > 0) ? userHoldings.map(h => h.ticker) : [];
-
-            if (currentFilter === 'portfolio') {
-
-                filtered = filtered.filter(s => ownedTickers.includes(s.ticker));
-
-            } else if (currentFilter === 'opportunities') {
+                if (currentFilter === 'portfolio') {
+                    institutionalBox.innerHTML = `
+                        <div class="glass-card rounded-2xl p-4 space-y-2 border-amber-800/80 bg-gradient-to-br from-slate-900 to-amber-950/40">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                                    💼 <span>نبض أصول وأسهم المحفظة اللحظي (متابعة حية للأسهم والصناديق المملوكة)</span>
+                                </h3>
+                                <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-mono font-bold">محفظتي الحالية</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed font-sans">
+                                كشف ومتابعة نبض السوق المباشر للأسهم والصناديق المملوكة في محفظتك الاستثمارية فقط مع مراقبة أهدافها وهوامش الربح والخسارة اللحظية.
+                            </p>
+                        </div>
+                    `;
+                } else if (currentFilter === 'opportunities') {
 
                     institutionalBox.innerHTML = `
 
@@ -14868,6 +14875,11 @@ async function syncMubasherDirectAll() {
                 const matchSearch = s.name.toLowerCase().includes(search) || s.ticker.toLowerCase().includes(search);
 
                 if (!matchSearch) return false;
+
+                if (currentFilter === 'portfolio') {
+                    const ownedTickers = (Array.isArray(userHoldings) && userHoldings.length > 0) ? userHoldings.map(h => h.ticker) : [];
+                    return ownedTickers.includes(s.ticker);
+                }
 
                 if (currentFilter === 'sector') {
 
@@ -21199,6 +21211,8 @@ ${stocksUniverseContext}
 
             renderStocks();
 
+            if (typeof loadCustomAlerts === 'function') loadCustomAlerts();
+
             renderAlerts();
 
             renderNewsFeed();
@@ -24325,169 +24339,20 @@ ${stocksUniverseContext}
 
         function getUserActivityLogs() {
             try {
-                if (localStorage.getItem('egx_activity_cleared') === 'true') {
-                    const raw = localStorage.getItem(ACTIVITY_STORAGE_KEY);
-                    if (raw !== null) {
-                        const parsed = JSON.parse(raw);
-                        if (Array.isArray(parsed)) return parsed;
-                    }
-                    return [];
-                }
                 const raw = localStorage.getItem(ACTIVITY_STORAGE_KEY);
                 if (raw !== null) {
                     const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) return parsed;
+                    if (Array.isArray(parsed)) {
+                        // Strict cleanup: Purge any legacy dummy seed logs
+                        const realLogs = parsed.filter(l => l && !String(l.id).startsWith('act_seed_'));
+                        if (realLogs.length !== parsed.length) {
+                            localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(realLogs));
+                        }
+                        return realLogs;
+                    }
                 }
             } catch(e) {}
-
-            const defaults = [
-
-                {
-
-                    id: 'act_seed_1',
-
-                    type: 'ocr',
-
-                    title: 'رفع ومسح صورة رصيد ثندر 📸',
-
-                    description: 'تم مسح صورة شاشة ثندر بنجاح، مطابقة إجمالي المحفظة عند 86,645.19 ج.م وتحديث 13 أصلاً استثمارياً.',
-
-                    timestamp: new Date(Date.now() - 1800000).toISOString(),
-
-                    displayTime: new Date(Date.now() - 1800000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-
-                    displayDate: new Date(Date.now() - 1800000).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }),
-
-                    ticker: 'THNDR',
-
-                    badge: 'مسح صورة 📸',
-
-                    badgeColor: 'bg-amber-950/80 border-amber-700/60 text-amber-300',
-
-                    meta: { 
-
-                        balance: '86,645.19 ج', 
-
-                        assets: 13,
-
-                        imageUri: 'thndr_verified_capture.jpg',
-
-                        updatedAssets: JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS))
-
-                    }
-
-                },
-
-                {
-
-                    id: 'act_seed_2',
-
-                    type: 'adjust',
-
-                    title: 'تعديل مباشر: سهم طلعت مصطفى (TMGH) ✏️',
-
-                    description: 'تعديل مباشر للكمية إلى 115 سهماً ومتوسط سعر التكلفة إلى 98.76 ج.',
-
-                    timestamp: new Date(Date.now() - 3600000).toISOString(),
-
-                    displayTime: new Date(Date.now() - 3600000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-
-                    displayDate: new Date(Date.now() - 3600000).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }),
-
-                    ticker: 'TMGH',
-
-                    badge: 'تعديل مباشر ✏️',
-
-                    badgeColor: 'bg-sky-950/80 border-sky-700/60 text-sky-300',
-
-                    meta: { oldQty: 110, newQty: 115, oldBuy: 99.50, newBuy: 98.76 }
-
-                },
-
-                {
-
-                    id: 'act_seed_3',
-
-                    type: 'adjust',
-
-                    title: 'تعديل مباشر: النموذج الأول (DEMO1) ✏️',
-
-                    description: 'تعديل مباشر للكمية إلى 74 سهماً ومتوسط التكلفة إلى 50.00 ج.',
-
-                    timestamp: new Date(Date.now() - 7200000).toISOString(),
-
-                    displayTime: new Date(Date.now() - 7200000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-
-                    displayDate: new Date(Date.now() - 7200000).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }),
-
-                    ticker: 'DEMO1',
-
-                    badge: 'تعديل مباشر ✏️',
-
-                    badgeColor: 'bg-sky-950/80 border-sky-700/60 text-sky-300',
-
-                    meta: { oldQty: 70, newQty: 74, oldBuy: 108.50, newBuy: 50.00 }
-
-                },
-
-                {
-
-                    id: 'act_seed_4',
-
-                    type: 'trade',
-
-                    title: 'شراء تجميعي: صندوق أزيموت جولد (AZG) 📥',
-
-                    description: 'تنفيذ شراء 334 وثيقة بسعر 23.96 ج بإجمالي 8,002.64 ج.م للتحوط بالذهب.',
-
-                    timestamp: new Date(Date.now() - 86400000).toISOString(),
-
-                    displayTime: new Date(Date.now() - 86400000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-
-                    displayDate: new Date(Date.now() - 86400000).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }),
-
-                    ticker: 'AZG',
-
-                    badge: 'شراء 📥',
-
-                    badgeColor: 'bg-emerald-950/80 border-emerald-700/60 text-emerald-300',
-
-                    meta: { qty: 334, price: 23.96, total: '8,002.64 ج' }
-
-                },
-
-                {
-
-                    id: 'act_seed_5',
-
-                    type: 'sync',
-
-                    title: 'مزامنة الأسعار اللحظية مع بورصة مصر 🔄',
-
-                    description: 'سحب وتحديث فوري لكافة أسعار الأسهم والصناديق من TradingView بدقة ثانية بلحظة.',
-
-                    timestamp: new Date(Date.now() - 172800000).toISOString(),
-
-                    displayTime: new Date(Date.now() - 172800000).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-
-                    displayDate: new Date(Date.now() - 172800000).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }),
-
-                    ticker: 'EGX33',
-
-                    badge: 'مزامنة حية 🔄',
-
-                    badgeColor: 'bg-indigo-950/80 border-indigo-700/60 text-indigo-300',
-
-                    meta: { status: 'دقة 100%' }
-
-                }
-
-            ];
-
-            localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(defaults));
-
-            return defaults;
-
+            return [];
         }
 
         function logUserActivity(type, title, description, meta = {}) {
