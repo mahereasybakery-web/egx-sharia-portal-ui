@@ -5214,11 +5214,11 @@ window.addEventListener('load', () => {
 
             { ticker: "THNDR_GOLD", name: "سبائك جولد (Thndr)", close: 7015.0, open: 6973.16, high: 7050.0, low: 6950.0, chg: 0.60, rsi: 50.0, pe: null, type: "fund", rec: "شراء سبائك تحوطي", sector: "الذهب وصناديق التحوط", last_nav_date: "2026-10-12" },
 
-            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 22.0609, open: 22.0609, high: 22.75, low: 22.00, chg: 0.00, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
+            { ticker: "CMS", name: "مصر شريعة إكويتي (CMS)", close: 21.6685, open: 21.6685, high: 22.75, low: 22.00, chg: 0.00, rsi: 54.0, pe: null, type: "fund", rec: "استثمار مؤسسي دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
-            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.1400, open: 2.1400, high: 2.22, low: 2.13, chg: 0.00, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
+            { ticker: "BWA", name: "بلتون وفرة (BWA)", close: 2.0992, open: 2.0992, high: 2.22, low: 2.13, chg: 0.00, rsi: 53.0, pe: null, type: "fund", rec: "شراء تراكمي للنمو", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
-            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 48.8600, open: 48.8600, high: 50.50, low: 48.10, chg: 0.00, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
+            { ticker: "NMF", name: "نعيم مصر للشريعة (NMF)", close: 48.11, open: 48.11, high: 50.50, low: 48.10, chg: 0.00, rsi: 52.0, pe: null, type: "fund", rec: "احتفاظ واستثمار دوري", sector: "صناديق الأسهم الشرعية", last_nav_date: "2026-10-12" },
 
             { ticker: "USD_EGP", name: "الدولار الأمريكي والسيولة الدولارية (USD)", close: 52.26, open: 52.28, high: 52.45, low: 52.10, chg: -0.04, rsi: 48.5, pe: null, type: "currency", rec: "تحوط واحتفاظ استراتيجي", sector: "النقد الأجنبي والملاذات" }
 
@@ -5252,13 +5252,13 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             // 2. محفظة الصناديق والذهب (أسعار الشراء الفعلية للتكلفة - أسعار موقع صندوق SNDUK المعتمدة)
 
-            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 22.0609, sector: "صناديق مؤشرات", isFund: true },
+            { ticker: "CMS", name: "صندوق مؤشر CI EGX33 شريعة", qty: 2210, buy: 22.6986, cur: 21.6685, sector: "صناديق مؤشرات", isFund: true },
 
             { ticker: "AZG", name: "صندوق Azimut جولد", qty: 11, buy: 23.1027, cur: 23.5689, sector: "صناديق الذهب", isFund: true },
 
-            { ticker: "BWA", name: "صندوق بلتون وفرة", qty: 66, buy: 2.095, cur: 2.1400, sector: "صناديق نقدية وأسهم", isFund: true },
+            { ticker: "BWA", name: "صندوق بلتون وفرة", qty: 66, buy: 2.095, cur: 2.0992, sector: "صناديق نقدية وأسهم", isFund: true },
 
-            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 48.8600, sector: "صناديق أسهم شريعة", isFund: true },
+            { ticker: "NMF", name: "صندوق NM أسهم شريعة", qty: 2, buy: 48.31, cur: 48.11, sector: "صناديق أسهم شريعة", isFund: true },
 
             { ticker: "THNDR_GOLD", name: "ذهب ثاندر (عيار 24)", qty: 0.0081, buy: 6972.84, cur: 7015.0, sector: "ذهب خام 24", isFund: false }
 
@@ -12399,9 +12399,9 @@ const THNDR_ACTUAL_HOLDINGS = [
         // OFFICIAL SNDUK REAL-TIME MUTUAL FUNDS & GOLD ASSETS ENGINE
         // =========================================================================
         window._sndukLiveCache = window._sndukLiveCache || {
-            CMS: { price: 22.0609, date: '2026-10-12', source: 'موقع صندوق SNDUK المعتمد' },
-            BWA: { price: 2.1400, date: '2026-10-12', source: 'موقع صندوق SNDUK المعتمد' },
-            NMF: { price: 48.8600, date: '2026-10-12', source: 'موقع صندوق SNDUK المعتمد' },
+            CMS: { price: 21.6685, date: '2026-10-13', source: 'موقع صندوق SNDUK المعتمد' },
+            BWA: { price: 2.0992, date: '2026-10-13', source: 'موقع صندوق SNDUK المعتمد' },
+            NMF: { price: 48.11, date: '2026-10-13', source: 'موقع صندوق SNDUK المعتمد' },
             AZG: { price: 23.5689, date: '2026-10-12', source: 'أزيموت مصر الرسمية' }
         };
 
@@ -12461,7 +12461,7 @@ const THNDR_ACTUAL_HOLDINGS = [
                 if (cmsItem) {
                     const cmsPrice = (window._sndukLiveCache && window._sndukLiveCache.CMS && window._sndukLiveCache.CMS.price > 0)
                         ? window._sndukLiveCache.CMS.price
-                        : 22.0609;
+                        : 21.6685;
                     const cmsDate = (window._sndukLiveCache && window._sndukLiveCache.CMS && window._sndukLiveCache.CMS.date)
                         ? window._sndukLiveCache.CMS.date
                         : todayStr;
@@ -12477,7 +12477,7 @@ const THNDR_ACTUAL_HOLDINGS = [
                 if (bwaItem) {
                     const bwaPrice = (window._sndukLiveCache && window._sndukLiveCache.BWA && window._sndukLiveCache.BWA.price > 0)
                         ? window._sndukLiveCache.BWA.price
-                        : 2.1400;
+                        : 2.0992;
                     const bwaDate = (window._sndukLiveCache && window._sndukLiveCache.BWA && window._sndukLiveCache.BWA.date)
                         ? window._sndukLiveCache.BWA.date
                         : todayStr;
@@ -12493,7 +12493,7 @@ const THNDR_ACTUAL_HOLDINGS = [
                 if (nmfItem) {
                     const nmfPrice = (window._sndukLiveCache && window._sndukLiveCache.NMF && window._sndukLiveCache.NMF.price > 0)
                         ? window._sndukLiveCache.NMF.price
-                        : 48.8600;
+                        : 48.11;
                     const nmfDate = (window._sndukLiveCache && window._sndukLiveCache.NMF && window._sndukLiveCache.NMF.date)
                         ? window._sndukLiveCache.NMF.date
                         : todayStr;
@@ -17105,10 +17105,10 @@ const THNDR_ACTUAL_HOLDINGS = [
                 : '';
 
             const fundsUniverseContext = `
-- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 22.0609 ج | تتبع رسمي لمؤشر EGX33 • موقع صندوق SNDUK)
-- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.1400 ج • موقع صندوق SNDUK)
+- CMS: صندوق مصر شريعة إكويتي (وثيقة أسهم شريعة: 21.6685 ج | تتبع رسمي لمؤشر EGX33 • موقع صندوق SNDUK)
+- BWA: صندوق بلتون وفرة للشريعة (وثيقة أسهم وسيولة: 2.0992 ج • موقع صندوق SNDUK)
 - AZG: صندوق أزيموت جولد (وثيقة استثمار ذهب فعلي: 23.5689 ج • إفصاح رسمي معتمد)
-- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 48.8600 ج • معايير الأيوفي • موقع صندوق SNDUK)
+- NMF: صندوق نعيم مصر للأسهم الإسلامية (وثيقة متوازنة: 48.11 ج • معايير الأيوفي • موقع صندوق SNDUK)
 - THNDR_GOLD: سبائك الذهب عيار 24 النقي عبر ثندر (سعر الجرام المعتمد: 7,015.00 ج | سعر تكلفة الشراء بالمحفظة: 6,972.84 ج | ربح +0.60%)
 `;
 
@@ -19120,7 +19120,7 @@ ${stocksUniverseContext}
 
             const gold24k = 7015.00;
 
-            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة صندوق SNDUK وإفصاحات مديري الصناديق (12 أكتوبر 2026): CMS مصر شريعة (22.0609 ج | موقع صندوق)، AZG أزيموت جولد (23.5689 ج | +0.11%)، BWA بلتون وفرة (2.1400 ج | موقع صندوق)، NMF نعيم مصر (48.8600 ج | موقع صندوق)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
+            const fundsSummary = "صناديق الاستثمار الإسلامية المعتمدة رسمياً من منصة صندوق SNDUK وإفصاحات مديري الصناديق (12 أكتوبر 2026): CMS مصر شريعة (21.6685 ج | موقع صندوق)، AZG أزيموت جولد (23.5689 ج | +0.11%)، BWA بلتون وفرة (2.0992 ج | موقع صندوق)، NMF نعيم مصر (48.11 ج | موقع صندوق)، سبائك الذهب ثندر THNDR_GOLD (7,015.00 ج).";
 
             const apiKey = (localStorage.getItem('egx_gemini_api_key') || DEFAULT_GEMINI_API_KEY || '').trim();
 

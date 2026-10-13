@@ -14,6 +14,17 @@ import datetime
 import sys
 
 def sync_tradingview():
+    # 0. Automatically sync SNDUK live mutual funds quotes first
+    try:
+        import sys
+        scripts_dir = os.path.dirname(os.path.abspath(__file__))
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        import sync_snduk_funds
+        sync_snduk_funds.main()
+    except Exception as e:
+        print("Note: sync_snduk_funds call failed:", e)
+
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     file_path = os.path.join(repo_root, 'market_data.json')
     if not os.path.exists(file_path):
