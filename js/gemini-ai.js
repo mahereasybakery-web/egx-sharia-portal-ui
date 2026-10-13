@@ -818,7 +818,7 @@ ${holdingQty > 0 ? `4. **موقف محفظتك:** مسجل لديك **${holdingQ
     // 7. DIRECT CLOUD API CALLERS (Gemini 2.0/1.5 & xAI Grok with History)
     // ─────────────────────────────────────────────────────────────────────────
     async function callCloudGeminiApi(userPrompt, history = []) {
-        const _k = ["AQ.", "Ab8RN6JqJGLbqEUD", "p0qQpuS5RlydghOx", "wUrEXkUgw4yVqZ97JA"].join('');
+        const _k = "";
         const apiKey = (localStorage.getItem('egx_gemini_api_key') || localStorage.getItem('gemini_api_key') || (window.GLOBAL_STATE && window.GLOBAL_STATE.gemini_key) || _k).trim();
         if (!apiKey || apiKey.length < 15) throw new Error('No Gemini API key');
 
@@ -868,7 +868,7 @@ ${holdingQty > 0 ? `4. **موقف محفظتك:** مسجل لديك **${holdingQ
     }
 
     async function callCloudGrokApi(userPrompt, history = []) {
-        const _grokChunks = ["gsk_", "2EeqVQnMJKH6J9YeWIf", "XWGdyb3FYo9A3LEja", "KRhxcx1I7PbYmiH2"];
+        const _grokChunks = [];
         const apiKey = (localStorage.getItem('egx_grok_api_key') || _grokChunks.join('')).trim();
         if (!apiKey || apiKey.length < 15) throw new Error('No Grok/Groq API key');
 
