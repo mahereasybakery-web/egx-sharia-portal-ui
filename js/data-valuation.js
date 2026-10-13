@@ -4,23 +4,23 @@ const VALUATION_DATA = {
 
                 name: "مجموعة طلعت مصطفى",
 
-                current: 88.99,
+                current: 84.76,
 
                 bull: 135.00,
 
                 base: 118.00,
 
-                bear: 88.00,
+                bear: 80.00,
 
-                margin: 32.6,
+                margin: 28.2,
 
                 pe: 12.8,
 
                 pb: 1.45,
 
-                support: 88.00,
+                support: 82.00,
 
-                resistance: 104.50,
+                resistance: 92.50,
 
                 analysis: "مشروع رأس الحكمة ومبيعات مشروع بنان بالرياض (470 مليار ج) يدعمان تدفقات نقدية ضخمة تفوق السعر السوقي الحالي."
 
@@ -108,23 +108,23 @@ const VALUATION_DATA = {
 
                 name: "سوديك للتنمية",
 
-                current: 27.04,
+                current: 25.4,
 
                 bull: 38.00,
 
-                base: 33.50,
+                base: 32.00,
 
-                bear: 25.00,
+                bear: 23.00,
 
-                margin: 23.9,
+                margin: 20.6,
 
                 pe: 9.8,
 
                 pb: 1.10,
 
-                support: 26.50,
+                support: 24.50,
 
-                resistance: 30.50,
+                resistance: 28.00,
 
                 analysis: "مبيعات تعاقدية قوية بلغت 32 مليار جنيه وسيولة نقدية تتجاوز 4.5 مليار جنيه مدعومة بشراكة الدار العقارية."
 
@@ -212,23 +212,23 @@ const VALUATION_DATA = {
 
                 name: "المصرية للاتصالات",
 
-                current: 136.30,
+                current: 144.3,
 
-                bull: 155.00,
+                bull: 195.00,
 
-                base: 140.00,
+                base: 170.00,
 
-                bear: 125.00,
+                bear: 135.00,
 
-                margin: 2.7,
+                margin: 15.1,
 
                 pe: 10.1,
 
                 pb: 1.40,
 
-                support: 129.00,
+                support: 140.00,
 
-                resistance: 139.00,
+                resistance: 155.00,
 
                 analysis: "سهم تشغيلي عملاق؛ أرباح 16.5 مليار ج وتوزيعات فودافون، لكن السعر اقترب من المقاومة التاريخية مما يستوجب جني الأرباح التكتيكي."
 
@@ -264,23 +264,23 @@ const VALUATION_DATA = {
 
                 name: "إيديتا للصناعات الغذائية",
 
-                current: 28.59,
+                current: 18.35,
 
-                bull: 40.00,
+                bull: 32.00,
 
-                base: 35.00,
+                base: 26.00,
 
-                bear: 26.50,
+                bear: 16.50,
 
-                margin: 22.4,
+                margin: 29.4,
 
                 pe: 13.9,
 
                 pb: 2.80,
 
-                support: 27.80,
+                support: 17.50,
 
-                resistance: 32.00,
+                resistance: 21.00,
 
                 analysis: "افتتاح خطوط إنتاج جديدة للمخبوزات ونمو الصادرات للسعودية والعراق بنسبة 35% مع هوامش ربح إجمالية تفوق 34%."
 
@@ -290,23 +290,23 @@ const VALUATION_DATA = {
 
                 name: "مصرف أبوظبي الإسلامي - مصر",
 
-                current: 51.28,
+                current: 44.97,
 
                 bull: 72.00,
 
-                base: 64.00,
+                base: 60.00,
 
-                bear: 47.00,
+                bear: 40.00,
 
-                margin: 24.8,
+                margin: 25.1,
 
                 pe: 5.2,
 
                 pb: 1.15,
 
-                support: 49.00,
+                support: 43.00,
 
-                resistance: 56.50,
+                resistance: 48.50,
 
                 analysis: "ريادة العمل المصرفي الإسلامي بمصر مع أرباح قياسية 6.8 مليار ج (+85%) وعائد حقوق ملكية يفوق 48% ومكرر 5.2x."
 
@@ -316,23 +316,23 @@ const VALUATION_DATA = {
 
                 name: "أوراسكوم للتنمية مصر",
 
-                current: 39.32,
+                current: 10.72,
 
-                bull: 56.00,
+                bull: 17.50,
 
-                base: 48.00,
+                base: 14.50,
 
-                bear: 35.00,
+                bear: 9.50,
 
-                margin: 22.1,
+                margin: 26.1,
 
                 pe: 7.2,
 
                 pb: 0.95,
 
-                support: 38.00,
+                support: 10.20,
 
-                resistance: 44.00,
+                resistance: 12.00,
 
                 analysis: "إيرادات فندقية قوية بالعملات الصعبة بالجونة ومكادي، وسداد مبكر لقروض بقيمة 1.8 مليار ج لخفض تكلفة الفوائد."
 
@@ -342,23 +342,23 @@ const VALUATION_DATA = {
 
                 name: "إي فاينانس للاستثمارات المالية",
 
-                current: 22.60,
+                current: 23.59,
 
-                bull: 32.00,
+                bull: 34.00,
 
                 base: 28.00,
 
-                bear: 20.00,
+                bear: 21.00,
 
-                margin: 23.9,
+                margin: 15.8,
 
                 pe: 12.4,
 
                 pb: 2.30,
 
-                support: 20.20,
+                support: 22.50,
 
-                resistance: 24.80,
+                resistance: 26.00,
 
                 analysis: "الذراع السيادي للتحول الرقمي بمصر، مدفوعات حكومية تفوق 1.2 تريليون جنيه وتوسع بالسوق السعودي بهوامش ربح نقية."
 
@@ -368,23 +368,23 @@ const VALUATION_DATA = {
 
                 name: "مصر للألومنيوم",
 
-                current: 348.01,
+                current: 316.01,
 
-                bull: 480.00,
+                bull: 440.00,
 
-                base: 420.00,
+                base: 380.00,
 
-                bear: 320.00,
+                bear: 290.00,
 
-                margin: 20.7,
+                margin: 16.8,
 
                 pe: 14.2,
 
                 pb: 1.60,
 
-                support: 340.00,
+                support: 305.00,
 
-                resistance: 380.00,
+                resistance: 335.00,
 
                 analysis: "عقود تصدير أوروبية قياسية تغطي 65% من الإنتاج باليورو والدولار وكوبون نقدي سخي بقيمة 18.5 جنيهاً للسهم."
 
@@ -862,23 +862,23 @@ const VALUATION_DATA = {
 
                 name: "صندوق أزيموت جولد (AZG)",
 
-                current: 23.5686,
+                current: 23.5689,
 
-                bull: 30.00,
+                bull: 33.00,
 
                 base: 28.50,
 
                 bear: 22.00,
 
-                margin: 20.9,
+                margin: 17.3,
 
                 pe: null,
 
                 pb: 1.00,
 
-                support: 23.20,
+                support: 23.00,
 
-                resistance: 28.50,
+                resistance: 25.00,
 
                 analysis: "أداة التحوط الأساسية؛ وثيقة مغطاة بذهب فيزيائي عيار 24 صافي 999.9 مودع في خزائن البنك المركزي المصري ومعتمد من الرقابة المالية."
 
@@ -914,23 +914,23 @@ const VALUATION_DATA = {
 
                 name: "صندوق مصر شريعة إكويتي (CMS)",
 
-                current: 22.5305,
+                current: 21.6685,
 
-                bull: 30.00,
+                bull: 32.00,
 
                 base: 27.50,
 
-                bear: 20.50,
+                bear: 20.00,
 
-                margin: 22.1,
+                margin: 21.2,
 
                 pe: null,
 
                 pb: 1.00,
 
-                support: 21.50,
+                support: 21.00,
 
-                resistance: 26.50,
+                resistance: 23.50,
 
                 analysis: "أكبر محفظة أسهم إسلامية مؤسسية بمصر مطابقة لمؤشر EGX33 الشريعة، تدار عبر سي آي كابيتال بتنويع يحد من المخاطر الفردية."
 
@@ -940,23 +940,23 @@ const VALUATION_DATA = {
 
                 name: "صندوق بلتون وفرة للأسهم (BWA)",
 
-                current: 2.1827,
+                current: 2.0992,
 
-                bull: 2.80,
+                bull: 3.00,
 
                 base: 2.60,
 
                 bear: 1.95,
 
-                margin: 19.1,
+                margin: 19.3,
 
                 pe: null,
 
                 pb: 1.00,
 
-                support: 2.08,
+                support: 2.05,
 
-                resistance: 2.50,
+                resistance: 2.25,
 
                 analysis: "محفظة تقتنص الأسهم الدفاعية والسلعية الرابحة بالسوق المصري مع استرداد أسبوعي دوري وتوافق شرعي معتمد."
 
@@ -966,23 +966,23 @@ const VALUATION_DATA = {
 
                 name: "صندوق نعيم مصر للشريعة (NMF)",
 
-                current: 49.5200,
+                current: 48.11,
 
-                bull: 64.00,
+                bull: 65.00,
 
                 base: 58.50,
 
-                bear: 46.00,
+                bear: 45.00,
 
-                margin: 18.1,
+                margin: 17.8,
 
                 pe: null,
 
                 pb: 1.00,
 
-                support: 49.10,
+                support: 47.00,
 
-                resistance: 56.00,
+                resistance: 52.00,
 
                 analysis: "محفظة متوازنة تجمع بين الأسهم الإسلامية عالية التوزيعات والصكوك، مما يمنح عائداً استثمارياً متزناً بتذبذب منخفض."
 

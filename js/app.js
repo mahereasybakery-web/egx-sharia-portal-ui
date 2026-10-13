@@ -10975,11 +10975,8 @@ const THNDR_ACTUAL_HOLDINGS = [
                             local.manager_nav = live.close;
                             if (live.last_nav_date) local.last_nav_date = live.last_nav_date;
                             if (live.source) local.source = live.source;
-                            // Only set close if not yet dynamically computed
-                            if (!local.close || local.close <= 0) {
-                                local.close = live.close;
-                                local.cur = live.close;
-                            }
+                            local.close = live.close;
+                            local.cur = live.close;
                             updatedFundsCount++;
                         }
                     });
