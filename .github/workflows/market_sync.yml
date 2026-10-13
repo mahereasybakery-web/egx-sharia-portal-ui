@@ -21,9 +21,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Scrape Live Fund Prices from SNDUK
+      - name: Scrape Live Fund Prices & Sync TradingView Quotes
         run: |
           python scripts/sync_snduk_funds.py
+          python scripts/sync_tradingview_market_data.py
 
       - name: Run Market Data & Reports Verification
         run: |

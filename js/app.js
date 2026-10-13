@@ -463,13 +463,21 @@
                                     ? liveIdx.chgPct 
                                     : (it.prevClose > 0 ? Math.round(((it.pointsChange / it.prevClose) * 100) * 100) / 100 : 0);
                                 if (it.code === 'EGX33') {
+                                    it.source = "البورصة المصرية الرسمية EGX / إفصاح صندوق مؤشر الشريعة CMS";
+                                    it.sourceUrl = "https://www.egx.com.eg/ar/IndexPerformance.aspx";
                                     it.desc = `مؤشر الشريعة EGX33 يسجل إغلاقاً عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) بتغير قدره ${it.pointsChange >= 0 ? '+' : ''}${it.pointsChange.toFixed(2)} نقطة مع تماسك الأسهم المتوافقة.`;
                                 } else if (it.code === 'EGX30') {
-                                    it.desc = `المؤشر الرئيسي EGX30 يسجل إغلاقاً عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) بتغير قدره ${it.pointsChange >= 0 ? '+' : ''}${it.pointsChange.toFixed(2)} نقطة.`;
+                                    it.source = "TradingView Scanner (EGX:EGX30)";
+                                    it.sourceUrl = "https://www.tradingview.com/symbols/EGX-EGX30/";
+                                    it.desc = `المؤشر الرئيسي EGX30 يسجل إغلاقاً عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) بتغير قدره ${it.pointsChange >= 0 ? '+' : ''}${it.pointsChange.toFixed(2)} نقطة معتمد من TradingView.`;
                                 } else if (it.code === 'EGX70') {
-                                    it.desc = `مؤشر الشركات الصغيرة والمتوسطة EGX70 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) وسط سيولة نشطة.`;
+                                    it.source = "TradingView Scanner (EGX:EGX70EWI)";
+                                    it.sourceUrl = "https://www.tradingview.com/symbols/EGX-EGX70EWI/";
+                                    it.desc = `مؤشر الشركات الصغيرة والمتوسطة EGX70 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) معتمد من TradingView.`;
                                 } else if (it.code === 'EGX100') {
-                                    it.desc = `المؤشر الأوسع نطاقاً EGX100 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%).`;
+                                    it.source = "TradingView Scanner (EGX:EGX100EWI)";
+                                    it.sourceUrl = "https://www.tradingview.com/symbols/EGX-EGX100EWI/";
+                                    it.desc = `المؤشر الأوسع نطاقاً EGX100 يغلق عند ${liveIdx.close.toLocaleString()} نقطة (${it.change >= 0 ? '+' : ''}${it.change.toFixed(2)}%) معتمد من TradingView.`;
                                 }
                             }
                         } else if (it.code === 'USD_EGP' && cData?.fx_gold?.usd_egp) {
@@ -805,6 +813,13 @@
                                         <span class="font-bold text-white">${idx.close.toLocaleString()} نقطة</span>
                                     </div>
                                     <p class="text-[10.5px] text-slate-400 leading-snug">${idx.desc}</p>
+                                    <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
+                                        <span class="text-slate-500">المصدر: <b class="text-slate-300">${idx.source || (idx.code === 'EGX33' ? 'إفصاح EGX' : 'TradingView')}</b></span>
+                                        <a href="${idx.sourceUrl || (idx.code === 'EGX30' ? 'https://www.tradingview.com/symbols/EGX-EGX30/' : (idx.code === 'EGX70' ? 'https://www.tradingview.com/symbols/EGX-EGX70EWI/' : (idx.code === 'EGX100' ? 'https://www.tradingview.com/symbols/EGX-EGX100EWI/' : 'https://www.egx.com.eg/ar/IndexPerformance.aspx')))}" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1">
+                                            <span>${idx.code === 'EGX33' ? 'إفصاح EGX' : 'TradingView'}</span>
+                                            <span>↗</span>
+                                        </a>
+                                    </div>
                                 </div>
                             `}).join('')}
                         </div>
@@ -925,6 +940,13 @@
                                         <span class="font-bold text-white">${pts >= 0 ? '+' : ''}${pts.toLocaleString()} نقطة</span>
                                     </div>
                                     <p class="text-[10.5px] text-slate-400 leading-snug">${idx.desc}</p>
+                                    <div class="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
+                                        <span class="text-slate-500">المصدر: <b class="text-slate-300">${idx.source || (idx.code === 'EGX33' ? 'إفصاح EGX' : 'TradingView')}</b></span>
+                                        <a href="${idx.sourceUrl || (idx.code === 'EGX30' ? 'https://www.tradingview.com/symbols/EGX-EGX30/' : (idx.code === 'EGX70' ? 'https://www.tradingview.com/symbols/EGX-EGX70EWI/' : (idx.code === 'EGX100' ? 'https://www.tradingview.com/symbols/EGX-EGX100EWI/' : 'https://www.egx.com.eg/ar/IndexPerformance.aspx')))}" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1">
+                                            <span>${idx.code === 'EGX33' ? 'إفصاح EGX' : 'TradingView'}</span>
+                                            <span>↗</span>
+                                        </a>
+                                    </div>
                                 </div>
                             `}).join('')}
                         </div>
@@ -1521,17 +1543,17 @@
             }
 
             const targetTomorrow = rpt.targetTomorrow || getNextTradingDayLabel(rpt.date);
-            const totalTurnover = rpt.totalTurnover || '4.95 مليار جنيه';
-            const instNetVal = rpt.instNetVal || '+285.0 مليون ج';
-            const instNote = rpt.instNote || (rpt.sessionReading ? rpt.sessionReading.investorBehavior : 'تجميع مؤسسي مستمر وبناء مراكز استراتيجية على الأسهم القيادية.');
-            const retailNetVal = rpt.retailNetVal || '-285.0 مليون ج';
-            const retailNote = rpt.retailNote || 'عمليات جني أرباح سريعة ومضاربات وتدوير سيولة من الأفراد.';
-            const egArabNetVal = rpt.egArabNetVal || '+296.0 مليون ج';
-            const egArabNote = rpt.egArabNote || 'استحواذ المؤسسات المصرية والعربية على تداولات السوق بتدفقات إيجابية.';
-            const foreignersNetVal = rpt.foreignersNetVal || '-11.0 مليون ج';
-            const marketGainHeadline = rpt.marketGainHeadline || (rpt.headline || '+12.5 مليار ج');
+            const totalTurnover = rpt.totalTurnover || null;
+            const instNetVal = rpt.instNetVal || null;
+            const instNote = rpt.instNote || (rpt.sessionReading ? rpt.sessionReading.investorBehavior : 'تجميع مؤسسي وبناء مراكز استثمارية.');
+            const retailNetVal = rpt.retailNetVal || null;
+            const retailNote = rpt.retailNote || 'عمليات جني أرباح وتدوير سيولة من الأفراد.';
+            const egArabNetVal = rpt.egArabNetVal || null;
+            const egArabNote = rpt.egArabNote || 'تعاملات المستثمرين المصريين والعرب.';
+            const foreignersNetVal = rpt.foreignersNetVal || null;
+            const marketGainHeadline = rpt.marketGainHeadline || null;
             const marketGainIsPos = rpt.marketGainIsPos !== undefined ? rpt.marketGainIsPos : true;
-            const auditorNote = rpt.auditorNote || 'جلسة متزنة حققت فيها الأسهم القيادية وصناديق الشريعة والذهب عائداً تراكمياً مستقراً ومتحوطاً.';
+            const auditorNote = rpt.auditorNote || 'جلسة متزنة ومتحوطة وفق تقييمات السوق المعتمدة.';
             const isMonday = (rpt.sessionDay === 'الإثنين' || rpt.day === 'الإثنين' || (rpt.date && (rpt.date.endsWith('-12') || rpt.date.endsWith('-05'))));
 
             const egx30ChangePts = egx30Item && typeof egx30Item.pointsChange === 'number' ? egx30Item.pointsChange : (egx30Item ? (egx30Item.close - (egx30Item.prevClose || egx30Item.open)) : 0);
@@ -1718,6 +1740,8 @@
 
                 <!-- ── 2. خريطة المتعاملين وأحجام التداول (Market Participants & Volume - النقطة 3) ── -->
 
+                <!-- ── 2. خريطة السيولة وتدفقات المستثمرين (Institutional & Retail Flows) ── -->
+
                 <div class="rounded-2xl border border-sky-800/80 p-4 shadow-xl space-y-3" style="background:linear-gradient(135deg,#061324 0%,#091d36 100%)">
 
                     <div class="flex items-center justify-between flex-wrap gap-2 border-b border-sky-800/50 pb-2">
@@ -1732,7 +1756,7 @@
 
                                     <span>خريطة المتعاملين وأحجام التداول (Volume & Participants)</span>
 
-                                    <span class="text-[9.5px] bg-sky-950 text-sky-300 border border-sky-700 px-2 py-0.5 rounded-full font-mono font-bold flex items-center gap-1"><span>📊</span><span>إغلاق التداولات الرسمي المعتمد</span></span>
+                                    <span class="text-[9.5px] bg-sky-950 text-sky-300 border border-sky-700 px-2 py-0.5 rounded-full font-mono font-bold flex items-center gap-1"><span>📊</span><span>إفصاح رسمي</span></span>
 
                                 </h3>
 
@@ -1742,81 +1766,68 @@
 
                         </div>
 
+                    </div>
+
+                    ${(totalTurnover && instNetVal) ? `
+                    <div class="flex items-center justify-between pb-1 flex-wrap gap-2">
+                        <span class="text-xs text-slate-300">بيانات التداول المعتمدة:</span>
                         <div class="text-xs bg-sky-950/80 text-sky-300 border border-sky-700 px-3 py-1 rounded-xl font-mono font-bold">
-
                             إجمالي قيمة التداول: ${totalTurnover}
-
                         </div>
-
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-emerald-800/60 space-y-1">
-
                             <div class="flex items-center justify-between">
-
                                 <span class="font-bold text-emerald-400">المؤسسات</span>
-
                                 <span class="text-[9.5px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-mono">صافي شراء 🟢</span>
-
                             </div>
-
                             <div class="text-sm font-bold text-emerald-300 font-mono">${instNetVal}</div>
-
                             <p class="text-[10px] text-slate-300">${instNote}</p>
-
+                            <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" rel="noopener noreferrer" class="text-[9.5px] text-sky-400 hover:underline block pt-1 border-t border-slate-800">المصدر: ملخص السوق EGX ↗</a>
                         </div>
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-rose-800/60 space-y-1">
-
                             <div class="flex items-center justify-between">
-
                                 <span class="font-bold text-rose-400">الأفراد</span>
-
                                 <span class="text-[9.5px] bg-rose-950 text-rose-300 px-1.5 py-0.5 rounded font-mono">صافي بيع 🔴</span>
-
                             </div>
-
                             <div class="text-sm font-bold text-rose-300 font-mono">${retailNetVal}</div>
-
                             <p class="text-[10px] text-slate-300">${retailNote}</p>
-
+                            <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" rel="noopener noreferrer" class="text-[9.5px] text-sky-400 hover:underline block pt-1 border-t border-slate-800">المصدر: ملخص السوق EGX ↗</a>
                         </div>
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-sky-800/60 space-y-1">
-
                             <div class="flex items-center justify-between">
-
                                 <span class="font-bold text-sky-300">المصريون والعرب</span>
-
                                 <span class="text-[9.5px] bg-sky-950 text-sky-300 px-1.5 py-0.5 rounded font-mono">شراء مشترك</span>
-
                             </div>
-
                             <div class="text-sm font-bold text-white font-mono">${egArabNetVal}</div>
-
                             <p class="text-[10px] text-slate-300">${egArabNote}</p>
-
+                            <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" rel="noopener noreferrer" class="text-[9.5px] text-sky-400 hover:underline block pt-1 border-t border-slate-800">المصدر: ملخص السوق EGX ↗</a>
                         </div>
-
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-amber-800/60 space-y-1">
-
                             <div class="flex items-center justify-between">
-
                                 <span class="font-bold text-amber-300">الأجانب</span>
-
                                 <span class="text-[9.5px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded font-mono">مبيعات طفيفة</span>
-
                             </div>
-
                             <div class="text-sm font-bold text-amber-200 font-mono">${foreignersNetVal}</div>
-
-                            <p class="text-[10px] text-slate-300">حركة بيعية هامشية غير مؤثرة وسط استقرار كامل لسعر الصرف الرسمي (${usdItem ? usdItem.close.toFixed(2) : '52.24'} ج).</p>
-
+                            <p class="text-[10px] text-slate-300">حركة بيعية هامشية غير مؤثرة وسط استقرار كامل لسعر الصرف الرسمي.</p>
+                            <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" rel="noopener noreferrer" class="text-[9.5px] text-sky-400 hover:underline block pt-1 border-t border-slate-800">المصدر: ملخص السوق EGX ↗</a>
                         </div>
-
-                    </div>
+                    </div>` : `
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-sky-800/60 text-center space-y-3">
+                        <div class="text-xs text-sky-300 font-bold flex items-center justify-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                            <span>غير متاح حالياً — بانتظار صدور التقرير والبيان الرسمي لحركة فئات المستثمرين اليومية</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300 max-w-xl mx-auto leading-relaxed">
+                            بيانات صافي تعاملات (المؤسسات، الأفراد، المصريين، العرب، الأجانب) تصدر رسمياً وتعتمد يومياً من إدارة البورصة المصرية بعد إغلاق الجلسة والتسوية (4:00 عصراً). نلتزم بمبدأ الشفافية والدقة بعدم عرض أي أرقام تقديرية أو غير موثقة.
+                        </p>
+                        <div class="pt-1 flex items-center justify-center gap-2">
+                            <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sky-950 hover:bg-sky-900 border border-sky-700 text-sky-300 text-xs font-bold transition shadow-sm">
+                                <span>🔗</span>
+                                <span>التحقق من تقرير ملخص السوق بموقع البورصة المصرية (EGX) ↗</span>
+                            </a>
+                        </div>
+                    </div>`}
 
                 </div>
 
@@ -1932,7 +1943,10 @@
 
                     <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
 
-                        <div class="text-[10px] text-slate-400 font-medium">مؤشر EGX30</div>
+                        <div class="text-[10px] text-slate-400 font-medium flex items-center justify-center gap-1">
+                            <span>مؤشر EGX30</span>
+                            <a href="https://www.tradingview.com/symbols/EGX-EGX30/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 text-[9.5px]" title="عرض شارت وبيانات TradingView">↗</a>
+                        </div>
 
                         <div class="text-xs font-bold ${egx30IsPos ? 'text-emerald-400' : 'text-rose-400'} font-mono">
 
@@ -1950,7 +1964,10 @@
 
                     <div class="p-2.5 rounded-xl bg-slate-900/90 border ${egx33IsPos ? 'border-emerald-900/50 bg-emerald-950/20' : 'border-rose-900/50 bg-rose-950/20'} text-center space-y-1">
 
-                        <div class="text-[10px] ${egx33IsPos ? 'text-emerald-400' : 'text-rose-400'} font-bold">EGX33 الشريعة ${egx33IsPos ? '🚀' : '⚖️'}</div>
+                        <div class="text-[10px] ${egx33IsPos ? 'text-emerald-400' : 'text-rose-400'} font-bold flex items-center justify-center gap-1">
+                            <span>EGX33 الشريعة ${egx33IsPos ? '🚀' : '⚖️'}</span>
+                            <a href="https://www.egx.com.eg/ar/IndexPerformance.aspx" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 text-[9.5px]" title="عرض بموقع البورصة المصرية EGX">↗</a>
+                        </div>
 
                         <div class="text-xs font-bold ${egx33IsPos ? 'text-emerald-300' : 'text-rose-300'} font-mono">
 
@@ -1970,7 +1987,7 @@
 
                         <div class="text-[10px] text-slate-400 font-medium">شراء المؤسسات</div>
 
-                        <div class="text-xs font-bold text-sky-400 font-mono">${instNetVal}</div>
+                        <div class="text-xs font-bold text-sky-400 font-mono">${instNetVal || 'قيد الإفصاح'}</div>
 
                     </div>
 
@@ -3249,6 +3266,14 @@
                                     </div>
 
                                     <p class="text-[10.5px] text-slate-300 leading-relaxed pt-1 border-t border-slate-800/80">${idx.desc}</p>
+
+                                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10.5px]">
+                                        <span class="text-slate-400">المصدر: <b class="text-slate-200">${idx.source || (idx.code === 'EGX33' ? 'إفصاح EGX' : 'TradingView')}</b></span>
+                                        <a href="${idx.sourceUrl || (idx.code === 'EGX30' ? 'https://www.tradingview.com/symbols/EGX-EGX30/' : (idx.code === 'EGX70' ? 'https://www.tradingview.com/symbols/EGX-EGX70EWI/' : (idx.code === 'EGX100' ? 'https://www.tradingview.com/symbols/EGX-EGX100EWI/' : 'https://www.egx.com.eg/ar/IndexPerformance.aspx')))}" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded bg-sky-950 hover:bg-sky-900 border border-sky-800 text-sky-300 text-[10px] font-bold transition flex items-center gap-1 shadow-sm">
+                                            <span>${idx.code === 'EGX33' ? 'البورصة EGX' : 'TradingView'}</span>
+                                            <span>↗</span>
+                                        </a>
+                                    </div>
 
                                 </div>`;
 
@@ -11418,17 +11443,7 @@ const THNDR_ACTUAL_HOLDINGS = [
                             }
 
                         });
-
                     }
-
-                    archivedNewsCleared = false;
-
-                    try {
-
-                        localStorage.removeItem('egx_news_archive_cleared');
-
-                    } catch(e) {}
-
                 }
 
                 // Sync Indices (EGX33, EGX30, EGX70, EGX100)
@@ -19752,10 +19767,6 @@ ${stocksUniverseContext}
                         }
                     });
                 }
-                archivedNewsCleared = false;
-                try {
-                    localStorage.removeItem('egx_news_archive_cleared');
-                } catch(e) {}
             }
 
             // Update userHoldings in-place with Live Dynamic Quotes
@@ -20065,6 +20076,10 @@ ${stocksUniverseContext}
                 actualTabId = 'recommendations';
 
                 subTarget = 'analysis';
+
+            } else if (tabId === 'reports') {
+
+                actualTabId = 'dailyreport';
 
             }
 
@@ -25009,7 +25024,7 @@ ${stocksUniverseContext}
 
                 const payload = JSON.stringify({
 
-                    symbols: { tickers: ["SP:SPX", "TADAWUL:TASI", "FX_IDC:USDEGP", "EGX:EGX30", "EGX:EGX70EWI", "TVC:GOLD"] },
+                    symbols: { tickers: ["SP:SPX", "TADAWUL:TASI", "FX_IDC:USDEGP", "EGX:EGX30", "EGX:EGX70EWI", "EGX:EGX100EWI", "TVC:GOLD"] },
 
                     columns: ["name", "close", "change"]
 
@@ -25062,6 +25077,8 @@ ${stocksUniverseContext}
                             else if (sym === 'EGX:EGX30') { _liveTickerCache.egx30 = { price: pr, chg }; }
 
                             else if (sym === 'EGX:EGX70EWI') { _liveTickerCache.egx70 = { price: pr, chg }; }
+
+                            else if (sym === 'EGX:EGX100EWI') { _liveTickerCache.egx100 = { price: pr, chg }; }
 
                             else if (sym === 'TVC:GOLD' || sym === 'OANDA:XAUUSD') {
 
@@ -25834,7 +25851,35 @@ ${stocksUniverseContext}
         // ════════════════════════════════════════════════════════════════
 
         let activeNewsSubTab = 'stocks';
-        let archivedNewsCleared = false;
+        let archivedNewsCleared = (function() {
+            try {
+                return localStorage.getItem('egx_news_archive_cleared') === 'true';
+            } catch(e) { return false; }
+        })();
+
+        function getDismissedNewsIds() {
+            try {
+                return JSON.parse(localStorage.getItem('egx_dismissed_news') || '[]');
+            } catch(e) { return []; }
+        }
+
+        window.dismissNewsItem = function(newsId, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            try {
+                let dismissed = getDismissedNewsIds();
+                if (!dismissed.includes(newsId)) {
+                    dismissed.push(newsId);
+                    localStorage.setItem('egx_dismissed_news', JSON.stringify(dismissed));
+                }
+            } catch(e) {}
+            if (typeof showToast === 'function') showToast('تم إخفاء هذا الإفصاح من الأرشيف ✓');
+            renderStocksNews();
+            renderFundsNews();
+            renderAlertsNews();
+        };
 
         function switchNewsSubTab(tab) {
             activeNewsSubTab = tab;
@@ -25980,39 +26025,51 @@ ${stocksUniverseContext}
             return timeStr || 'اليوم';
         }
 
-        function confirmClearNewsArchive() {
+        window.confirmClearNewsArchive = function() {
             const modal = document.getElementById('clearArchiveModal');
-            if (modal) modal.classList.remove('hidden');
-        }
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        };
 
-        function executeClearNewsArchive() {
+        window.closeClearArchiveModal = function() {
+            const modal = document.getElementById('clearArchiveModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+        };
+
+        window.executeClearNewsArchive = function() {
             archivedNewsCleared = true;
             try {
                 localStorage.setItem('egx_news_archive_cleared', 'true');
             } catch(e) {}
-            const modal = document.getElementById('clearArchiveModal');
-            if (modal) modal.classList.add('hidden');
+            window.closeClearArchiveModal();
             if (typeof showToast === 'function') showToast('تم مسح أرشيف الأخبار بنجاح ✓');
             renderStocksNews();
             renderFundsNews();
             renderAlertsNews();
-        }
+        };
 
-        function refreshNewsData() {
+        window.refreshNewsData = function() {
             archivedNewsCleared = false;
             try {
                 localStorage.removeItem('egx_news_archive_cleared');
+                localStorage.removeItem('egx_dismissed_news');
             } catch(e) {}
             const nowTimeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            const nowDateStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             const syncBanner = document.getElementById('newsSyncStatusText');
             if (syncBanner) {
-                syncBanner.innerText = `🟢 سحب لحظي نشط • تم تحديث الإفصاحات رسمياً: ${nowTimeStr} (الأحد 11 أكتوبر 2026)`;
+                syncBanner.innerText = `🟢 سحب لحظي نشط • تم تحديث الإفصاحات رسمياً: ${nowTimeStr} (${nowDateStr})`;
             }
-            if (typeof showToast === 'function') showToast('تم تحديث الأخبار وسحب أحدث الإفصاحات بنجاح 🔄');
+            if (typeof showToast === 'function') showToast('تم تحديث الأخبار وسحب أحدث الإفصاحات الرسمية بنجاح 🔄');
             renderStocksNews();
             renderFundsNews();
             renderAlertsNews();
-        }
+        };
 
         // 1. RENDER STOCKS NEWS (Image 2 Card Layout)
         function renderStocksNews() {
@@ -26042,7 +26099,9 @@ ${stocksUniverseContext}
             const rawList = (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) ? NEWS_DATA : [];
             const fundTickers = ['CMS', 'BWA', 'NMF', 'AZG', 'THNDR_GOLD', 'USD_EGP', 'MARKET_ALERT', 'CBE_ALERT', 'CLEARING_ALERT', 'FRA_ALERT', 'CALENDAR_ALERT'];
 
+            const dismissedIds = getDismissedNewsIds();
             let filtered = rawList.filter(n => {
+                if (dismissedIds.includes(n.id)) return false;
                 if (n.category === 'alerts' || n.category === 'funds' || fundTickers.includes(n.ticker)) return false;
                 if (sourceFilter !== 'all' && n.source !== sourceFilter) return false;
                 if (tickerFilter !== 'all' && n.ticker !== tickerFilter) return false;
@@ -26075,8 +26134,8 @@ ${stocksUniverseContext}
             filtered.forEach(n => {
                 const stock = (typeof STOCKS_DATA !== 'undefined') ? STOCKS_DATA.find(s => s.ticker === n.ticker) : null;
                 const isOwned = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings.some(h => h.ticker === n.ticker) : false;
-                const curPrice = (stock && stock.close > 0) ? stock.close : ((n.ticker === 'ETEL') ? 148.00 : ((n.ticker === 'TMGH') ? 89.15 : ((n.ticker === 'EFIH') ? 25.10 : 0)));
-                const chg = (stock && stock.chg !== undefined) ? stock.chg : -1.25;
+                const curPrice = (stock && stock.close > 0) ? stock.close : 0;
+                const chg = (stock && stock.chg !== undefined) ? stock.chg : 0;
                 const isPos = n.impact === 'positive' || n.impact === 'bullish';
                 const isNeg = n.impact === 'negative' || n.impact === 'bearish';
 
@@ -26095,8 +26154,9 @@ ${stocksUniverseContext}
                                 <span>${timeDisplay}</span>
                             </span>
                         </div>
-                        <!-- Left Side in Image 2 (Moved Price & Change Box) -->
+                        <!-- Left Side: Price, Impact Badge, and Dismiss Button -->
                         <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="dismissNewsItem('${n.id}', event)" title="إخفاء من الأرشيف" class="text-slate-500 hover:text-rose-400 p-1 transition rounded-lg hover:bg-slate-800 text-xs">✕</button>
                             ${curPrice > 0 ? `
                             <div class="flex items-center gap-1 font-mono text-[10px] bg-slate-900/90 border border-slate-800 px-2 py-0.5 rounded-lg shadow-inner">
                                 <span class="text-slate-400">السعر:</span>
@@ -26204,7 +26264,8 @@ ${stocksUniverseContext}
             const rawList = (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) ? NEWS_DATA : [];
             const fundTickers = ['CMS', 'BWA', 'NMF', 'AZG', 'THNDR_GOLD'];
 
-            let filtered = rawList.filter(n => n.category === 'funds' || fundTickers.includes(n.ticker));
+            const dismissedIds = getDismissedNewsIds();
+            let filtered = rawList.filter(n => !dismissedIds.includes(n.id) && (n.category === 'funds' || fundTickers.includes(n.ticker)));
             filtered.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
             const countBadge = document.getElementById('newsFundsCountBadge');
@@ -26290,7 +26351,8 @@ ${stocksUniverseContext}
             }
 
             const rawList = (typeof NEWS_DATA !== 'undefined' && Array.isArray(NEWS_DATA)) ? NEWS_DATA : [];
-            let filtered = rawList.filter(n => n.category === 'alerts');
+            const dismissedIds = getDismissedNewsIds();
+            let filtered = rawList.filter(n => !dismissedIds.includes(n.id) && n.category === 'alerts');
             filtered.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
             const countBadge = document.getElementById('newsAlertsCountBadge');

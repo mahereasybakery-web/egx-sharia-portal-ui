@@ -5675,7 +5675,7 @@
                 <div id="newsLiveSyncStatusBanner" class="p-2.5 rounded-xl bg-slate-900/90 border border-emerald-900/60 flex items-center justify-between text-xs flex-wrap gap-2 shadow-sm" dir="rtl">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span id="newsSyncStatusText" class="text-emerald-300 font-bold text-[11px]">🟢 سحب لحظي نشط • تم تحديث الإفصاحات رسمياً: 04:15 م (الأحد 11 أكتوبر 2026)</span>
+                        <span id="newsSyncStatusText" class="text-emerald-300 font-bold text-[11px]">🟢 سحب لحظي نشط • إفصاحات البورصة الرسمية محدثة لحظياً</span>
                     </div>
                     <div class="flex items-center gap-2 text-[10px] text-slate-400">
                         <span>المصادر: إفصاحات EGX • مباشر • سندوك • الرقابة المالية FRA</span>
@@ -8526,13 +8526,13 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js?v=20261012_v18_1"></script>
-    <script src="js/data-news.js?v=20261012_v18_1"></script>
-    <script src="js/data-valuation.js?v=20261012_v18_1"></script>
-    <script src="js/data-ai-prompts.js?v=20261012_v18_1"></script>
-    <script src="js/app.js?v=20261012_v18_1"></script>
-    <script src="js/gemini-ai.js?v=20261012_v18_1"></script>
-    <script src="js/universal-export.js?v=20261012_v18_1"></script>
+    <script src="js/data-reports.js?v=20261013_v18_2"></script>
+    <script src="js/data-news.js?v=20261013_v18_2"></script>
+    <script src="js/data-valuation.js?v=20261013_v18_2"></script>
+    <script src="js/data-ai-prompts.js?v=20261013_v18_2"></script>
+    <script src="js/app.js?v=20261013_v18_2"></script>
+    <script src="js/gemini-ai.js?v=20261013_v18_2"></script>
+    <script src="js/universal-export.js?v=20261013_v18_2"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار الذكاء الاصطناعي المزدوج)
@@ -8558,7 +8558,7 @@
                 سيتم إفراغ الأرشيف الحالي، ويمكنك استعادة الأخبار الرسمية المحدثة في أي وقت بالضغط على زر "تحديث".
             </p>
             <div class="flex items-center justify-end gap-2 pt-2">
-                <button onclick="document.getElementById('clearArchiveModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold active:scale-95">إلغاء</button>
+                <button onclick="closeClearArchiveModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold active:scale-95">إلغاء</button>
                 <button onclick="executeClearNewsArchive()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold">نعم، مسح الأرشيف</button>
             </div>
         </div>
