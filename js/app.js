@@ -7847,9 +7847,11 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const price = parseFloat(document.getElementById('modalHoldingBuyPrice').value) || 0;
 
+            const fee = parseFloat(document.getElementById('modalHoldingFee')?.value) || 0;
+
             if (qty <= 0 || price <= 0) {
 
-                alert('يرجى إدخال كمية وسعر تنفيذ صحيحين أكبر من الصفر');
+                showToast('يرجى إدخال كمية وسعر تنفيذ صحيحين أكبر من الصفر', 'error');
 
                 return;
 
@@ -9893,11 +9895,15 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                         userHoldings = data.userHoldings;
 
-                        if (typeof data.portfolioCash === 'number') portfolioCash = data.portfolioCash;
+                        if (typeof data.portfolioCash === 'number' && window.THNDR_CASH) {
+                            window.THNDR_CASH.cash = data.portfolioCash;
+                        }
 
-                        if (typeof data.clawdzBalance === 'number') clawdzBalance = data.clawdzBalance;
+                        if (typeof data.clawdzBalance === 'number' && window.THNDR_CASH) {
+                            window.THNDR_CASH.clawdz = data.clawdzBalance;
+                        }
 
-                        if (typeof data.goldOunces === 'number') goldOunces = data.goldOunces;
+                        if (typeof saveThndrCash === 'function') saveThndrCash();
 
                         saveUserPortfolio();
 
@@ -11641,133 +11647,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         }
 
-async function syncMubasherDirectAll() {
-
-            // فقط خلال جلسة التداول الرسمية (الأحد-الخميس 10:00-14:30 بتوقيت مصر)
-
-            const now = new Date();
-
-            const cairoH = (now.getUTCHours() + 3) % 24;
-
-            const cairoMin = now.getUTCMinutes();
-
-            const dayOfWeek = now.getUTCDay(); // 0=Sun..4=Thu
-
-            const totalMin = cairoH * 60 + cairoMin;
-
-            const isTradingSession = dayOfWeek >= 0 && dayOfWeek <= 4 && totalMin >= 600 && totalMin < 870;
-
-            if (!isTradingSession) {
-
-                console.log('[Mubasher-Direct] خارج جلسة التداول – تم التخطي');
-
-                return;
-
-            }
-
-            console.log('[Mubasher-Direct] بدء السحب المباشر لـ', MUBASHER_TICKERS.length, 'سهماً...');
-
-            let updated = 0;
-
-            await Promise.allSettled(MUBASHER_TICKERS.map(async (ticker) => {
-
-                const d = await fetchMubasherDirect(ticker);
-
-                if (!d) return;
-
-                // تحديث STOCKS_DATA
-
-                const local = STOCKS_DATA.find(s => s.ticker === ticker);
-
-                if (local) {
-
-                    if (d.close > 0) { local.close = d.close; updated++; }
-
-                    if (d.chg  !== undefined) local.chg    = d.chg;
-
-                    if (d.open > 0) local.open    = d.open;
-
-                    if (d.high > 0) local.high    = d.high;
-
-                    if (d.low  > 0) local.low     = d.low;
-
-                    if (d.volume)   local.volume  = d.volume;
-
-                }
-
-                // تحديث أسعار المحفظة فوراً
-
-                userHoldings.forEach(h => {
-
-                    if (h.ticker === ticker && d.close > 0) {
-
-                        h.marketPrice = d.close;
-
-                        if (h.valuation_mode === 'manual' && h.manual_valuation_price && h.manual_valuation_price > 0) {
-
-                            h.cur = h.manual_valuation_price;
-
-                        } else {
-
-                            h.cur = d.close;
-
-                        }
-
-                    }
-
-                });
-
-            }));
-
-            if (updated > 0) {
-
-                console.log(`[Mubasher-Direct] ✓ تم تحديث ${updated} سهماً مباشرةً`);
-
-                renderStocks();
-
-                renderHoldingsTable();
-
-                if (typeof renderValuationCard === 'function') renderValuationCard();
-
-                // تحديث شاشة الشارت إذا كانت مفتوحة
-
-                const cm = document.getElementById('stockChartModal');
-
-                if (cm && !cm.classList.contains('hidden') && activeChartTicker) {
-
-                    if (activeChartEngine === 'canvas') drawAdvancedChart();
-
-                }
-
-                // تحديث شريط الأسعار اللحظي في التيكر
-
-                MUBASHER_TICKERS.forEach(ticker => {
-
-                    const local = STOCKS_DATA.find(s => s.ticker === ticker);
-
-                    if (!local) return;
-
-                    // تحديث أي عناصر ديناميكية في التيكر
-
-                    document.querySelectorAll(`[data-live-ticker="${ticker}"]`).forEach(el => {
-
-                        el.textContent = local.close.toFixed(2) + ' ج';
-
-                        el.className = el.className.replace(/text-(emerald|rose)-\d+/g,'');
-
-                        el.classList.add(local.chg >= 0 ? 'text-emerald-400' : 'text-rose-400');
-
-                    });
-
-                });
-
-                const badge = document.getElementById('syncStatusText');
-
-                if (badge) badge.innerText = `مباشر لحظي ✓ (${updated} سهماً — ${new Date().toLocaleTimeString('ar-EG')})`;
-
-            }
-
-        }
+        // (Legacy syncMubasherDirectAll removed - superseded by official TradingView & multi-source polling engine)
 
                 // ── Ultra-fast Second-by-Second Real-Time Polling Engine (v13.9) ─────
 
@@ -14025,23 +13905,29 @@ async function syncMubasherDirectAll() {
 
         function populateCustomAlertStockSelect(selectedTicker = null) {
 
-            const select = document.getElementById('customAlertStockSelect');
+            const selectIds = ['customAlertStockSelect', 'alert_stock_select'];
 
-            if (!select) return;
+            selectIds.forEach(id => {
 
-            select.innerHTML = '';
+                const select = document.getElementById(id);
 
-            STOCKS_DATA.forEach(s => {
+                if (!select) return;
 
-                const opt = document.createElement('option');
+                select.innerHTML = '';
 
-                opt.value = s.ticker;
+                STOCKS_DATA.forEach(s => {
 
-                opt.textContent = `${s.name} (${s.ticker}) - ${s.close ? s.close.toFixed(2) + ' ج' : ''}`;
+                    const opt = document.createElement('option');
 
-                if (selectedTicker && s.ticker === selectedTicker) opt.selected = true;
+                    opt.value = s.ticker;
 
-                select.appendChild(opt);
+                    opt.textContent = `${s.name} (${s.ticker}) - ${s.close ? s.close.toFixed(2) + ' ج' : ''}`;
+
+                    if (selectedTicker && s.ticker === selectedTicker) opt.selected = true;
+
+                    select.appendChild(opt);
+
+                });
 
             });
 
@@ -17486,7 +17372,7 @@ ${stocksUniverseContext}
 
             { ticker: 'ALCN', names: ['الإسكندرية لتداول الحاويات', 'الحاويات', 'اسكندرية للحاويات', 'alcn'] },
 
-            { ticker: 'ORIH', names: ['النساجون الشرقيون', 'النساجون', 'السجاد', 'oriental weavers', 'orih'] },
+            { ticker: 'ORWE', names: ['النساجون الشرقيون', 'النساجون', 'السجاد', 'oriental weavers', 'orwe', 'orih'] },
 
             { ticker: 'JUFO', names: ['جهينة', 'جهينه', 'jufo', 'juhayna'] },
 
@@ -25389,10 +25275,10 @@ ${stocksUniverseContext}
 
                 // Load Fees & Realized Ledger (Strictly synchronized with First Page Thndr Fees Card)
                 const ledger = getUserFeesLedger();
-                const firstPageFee = (typeof getFirstPageFeesValue === 'function') ? getFirstPageFeesValue() : 594.23;
+                const firstPageFee = (typeof getFirstPageFeesValue === 'function') ? getFirstPageFeesValue() : 593.82;
                 const totalPaidFees = (firstPageFee > 0) 
                     ? firstPageFee 
-                    : ((ledger && typeof ledger.totalPaidFees === 'number' && ledger.totalPaidFees > 0) ? ledger.totalPaidFees : 594.23);
+                    : ((ledger && typeof ledger.totalPaidFees === 'number' && ledger.totalPaidFees > 0) ? ledger.totalPaidFees : 593.82);
 
                 const realizedPnl = (ledger && typeof ledger.realizedPnl === 'number') ? ledger.realizedPnl : 0;
                 const unrealizedPnl = totalVal - baseTotalCost;
@@ -25418,11 +25304,10 @@ ${stocksUniverseContext}
                         const prevPrice = (st && st.prevClose > 0) ? st.prevClose : (st && st.open > 0 ? st.open : curPrice);
                         dPnl += (qty * (curPrice - prevPrice));
                     });
-                    if (Math.abs(dPnl) < 0.01) dPnl = 485.60; // 11-Oct session benchmark
                     displayPnl = Math.round(dPnl * 100) / 100;
                     displayCost = totalVal - displayPnl;
-                    displayReturn = displayCost > 0 ? (displayPnl / displayCost) * 100 : 0.56;
-                    benchReturn = 0.51; // EGX33 on 11 Oct session
+                    displayReturn = displayCost > 0 ? (displayPnl / displayCost) * 100 : 0;
+                    benchReturn = 0.51; // EGX33 benchmark
                     cbeRateText = '0.05% يومياً';
                 } else if (currentPerfPeriod === '1W') {
                     // Dynamic 1-Week Change
@@ -25434,10 +25319,9 @@ ${stocksUniverseContext}
                         const wChg = (st && typeof st.weeklyChgPts === 'number') ? st.weeklyChgPts : (curPrice * 0.0163);
                         wPnl += (qty * wChg);
                     });
-                    if (Math.abs(wPnl) < 0.01) wPnl = 1420.50; // Weekly benchmark
                     displayPnl = Math.round(wPnl * 100) / 100;
                     displayCost = totalVal - displayPnl;
-                    displayReturn = displayCost > 0 ? (displayPnl / displayCost) * 100 : 1.63;
+                    displayReturn = displayCost > 0 ? (displayPnl / displayCost) * 100 : 0;
                     benchReturn = 1.92;
                     cbeRateText = '0.36% أسبوعياً';
                 } else if (currentPerfPeriod === '1M') {
@@ -27188,11 +27072,11 @@ ${stocksUniverseContext}
 
                         <p>بناء على فحص معطيات البورصة المصرية ومؤشر الشريعة EGX33:</p>
 
-                        <p>• <b>وضع السيولة والمؤسسات:</b> صافي شراء مؤسسي محلي قوي (+315.4 مليون جنيه) يقود الصعود على الأسهم القيادية.</p>
+                        <p>• <b>تعاملات فئات المستثمرين والسيولة:</b> لمطالعة صافي تعاملات المؤسسات والعرب والأجانب المعتمدة رسمياً، يرجى مراجعة <a href="https://www.egx.com.eg/ar/MarketSummary.aspx" target="_blank" class="underline text-emerald-400">تقرير ملخص جلسة البورصة المصرية</a>.</p>
 
-                        <p>• <b>محفظتك الاستثمارية:</b> تحقق اليوم أداءً إيجابياً مميزاً (+3.42%) بقيادة المصرية للاتصالات (+8.24%) وطلعت مصطفى (+3.08%).</p>
+                        <p>• <b>محفظتك الاستثمارية:</b> تتبع المحفظة أوزان الأصول الشرعية المعتمدة وتخضع للمراجعة اللحظية وفق أسعار الإغلاق الفعلية بدون افتراضات تقديرية.</p>
 
-                        <p>• <b>التوصية الفنية:</b> يُوصى بالاحتفاظ بالأسهم الرابحة مع رفع مستويات وقف الخسارة لحماية الأرباح، والالتزام باستراتيجية التبريد (DCA) على دفعتين فقط في حال اختبار خطوط الدعم.</p>
+                        <p>• <b>التوجيه المالي والشرعي:</b> يُوصى بالالتزام بمستويات الدعم الفنية وتفعيل خطة التبريد المنضبط (DCA) عند اختبار نقاط الدعم مع مراعاة نسب التطهير المعتمدة.</p>
 
                     </div>
 

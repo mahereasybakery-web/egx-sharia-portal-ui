@@ -276,7 +276,7 @@
                 if (typeof closeFloatingAiCopilot === 'function') closeFloatingAiCopilot();
             }
         } catch (e) {
-            console.warn('[GeminiAI] Error executing action:', e);
+            /* action execution suppressed */
         }
     };
 

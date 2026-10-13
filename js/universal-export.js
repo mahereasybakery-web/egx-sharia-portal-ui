@@ -150,9 +150,11 @@
 
                 csv += `\n"الإجمالي","ثروة المحفظة الكاملة","—","—","—","—","—","—",${totalCost.toFixed(2)},${totalVal.toFixed(2)},${totalPnl.toFixed(2)},${totalPnlPct.toFixed(2)}%,100.00%\n`;
 
-                csv += `"السيولة النقدية والمحفظة","كاش ثندر","—","نقد",1,${THNDR_CASH.cash || 0},${THNDR_CASH.cash || 0},"تلقائي",${THNDR_CASH.cash || 0},${THNDR_CASH.cash || 0},0.00,0.00%,—\n`;
+                const cashObj = (typeof THNDR_CASH !== 'undefined' && THNDR_CASH) ? THNDR_CASH : (window.THNDR_CASH || { cash: 0, clawdz: 0 });
+                csv += `"السيولة النقدية والمحفظة","كاش ثندر","—","نقد",1,${cashObj.cash || 0},${cashObj.cash || 0},"تلقائي",${cashObj.cash || 0},${cashObj.cash || 0},0.00,0.00%,—\n`;
 
-                csv += `"صندوق كلودز","Clawdz","—","صندوق نقد",1,${THNDR_CASH.clawdz || 0},${THNDR_CASH.clawdz || 0},"تلقائي",${THNDR_CASH.clawdz || 0},${THNDR_CASH.clawdz || 0},0.00,0.00%,—\n`;
+                csv += `"صندوق كلودز","Clawdz","—","صندوق نقد",1,${cashObj.clawdz || 0},${cashObj.clawdz || 0},"تلقائي",${cashObj.clawdz || 0},${cashObj.clawdz || 0},0.00,0.00%,—\n`;
+
 
 
 
