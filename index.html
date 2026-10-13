@@ -237,7 +237,7 @@
     </script>
 </head>
 
-<body class="bg-[#080c14] text-slate-100 min-h-screen selection:bg-emerald-500 font-sans selection:text-white pb-24">
+<body class="bg-[#080c14] text-slate-100 min-h-screen selection:bg-emerald-500 font-sans selection:text-white pb-24 overflow-x-hidden">
 
     <!-- ================= TOP OFFLINE / FAILED UPDATE NOTIFICATION BANNER ================= -->
     <div id="offlineNoticeBanner" style="display: none; background: linear-gradient(135deg, #7f1d1d, #991b1b); color: #fef2f2; padding: 12px 18px; font-weight: 600; text-align: right; border-bottom: 2px solid #ef4444; z-index: 99998; position: sticky; top: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.45); font-size: 0.92rem;" dir="rtl">
@@ -571,31 +571,27 @@
 
         <!-- ===== Visible Action Bar: Sync + Theme Toggle ===== -->
 
-        <div class="flex items-center justify-between gap-2 mb-2" dir="rtl">
-
-
+        <div class="flex items-center justify-between gap-1.5 sm:gap-2 mb-2" dir="rtl">
 
             <!-- Right side: Sync Button + SNDUK Login + Live indicator -->
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
 
                 <button onclick="refreshData()" id="visibleSyncBtn" title="مزامنة الأسعار اللحظية"
 
-                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl
+                    class="flex items-center gap-1 px-2 py-1.5 sm:px-3 rounded-xl
 
                            bg-emerald-950/80 border border-emerald-700/60 text-emerald-300
 
-                           hover:bg-emerald-900/90 active:scale-95 transition-all text-[11.5px] font-bold select-none">
+                           hover:bg-emerald-900/90 active:scale-95 transition-all text-[11px] sm:text-[11.5px] font-bold select-none">
 
-                    <span id="visibleRefreshIcon" class="text-[15px] inline-block transition-transform duration-500">🔄</span>
+                    <span id="visibleRefreshIcon" class="text-[14px] sm:text-[15px] inline-block transition-transform duration-500">🔄</span>
 
-                    <span>مزامنة</span>
+                    <span class="hidden sm:inline">مزامنة</span>
 
                 </button>
 
-                
-
-                <span class="flex items-center gap-1 text-[10px] text-emerald-400 font-medium whitespace-nowrap">
+                <span class="flex items-center gap-1 text-[9.5px] sm:text-[10px] text-emerald-400 font-medium whitespace-nowrap">
 
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-live inline-block"></span>
 
@@ -609,13 +605,13 @@
 
             <!-- Center: App branding -->
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center">
 
-                <span class="text-[12px] font-extrabold text-slate-200 tracking-wide whitespace-nowrap flex items-center gap-1.5 cursor-pointer" onclick="switchTab('portfolio', null)">
+                <span class="text-[11.5px] sm:text-[12px] font-extrabold text-slate-200 tracking-wide whitespace-nowrap flex items-center gap-1 cursor-pointer" onclick="switchTab('portfolio', null)">
 
-                    <span class="text-emerald-400 text-sm">⚡</span>
+                    <span class="text-emerald-400 text-xs sm:text-sm">⚡</span>
 
-                    <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent font-bold">الأسهم الشرعية EGX</span>
+                    <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent font-bold"><span class="hidden xs:inline">الأسهم الشرعية </span>EGX</span>
 
                 </span>
 
@@ -623,41 +619,43 @@
 
 
 
-            <!-- Left side: Dark / Light Mode Toggle -->
+            <!-- Left side: Lock + Dark / Light Mode Toggle -->
 
-            <!-- Lock Application Button -->
+            <div class="flex items-center gap-1 sm:gap-1.5">
 
-            <button id="visibleLockBtn" onclick="lockApplicationNow()" title="قفل المنصة الآن برمز الأمان"
+                <button id="visibleLockBtn" onclick="lockApplicationNow()" title="قفل المنصة الآن برمز الأمان"
 
-                class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-rose-900/60
+                    class="flex items-center gap-1 px-2 py-1.5 sm:px-2.5 rounded-xl border border-rose-900/60
 
-                       bg-rose-950/40 text-rose-300 hover:text-white hover:bg-rose-900/60
+                           bg-rose-950/40 text-rose-300 hover:text-white hover:bg-rose-900/60
 
-                       transition-all active:scale-95 select-none text-[11px] font-bold shadow-sm">
+                           transition-all active:scale-95 select-none text-[11px] font-bold shadow-sm">
 
-                <span>🔒</span>
+                    <span>🔒</span>
 
-                <span>قفل</span>
+                    <span class="hidden sm:inline">قفل</span>
 
-            </button>
+                </button>
 
 
 
-            <button id="visibleThemeToggleBtn" onclick="toggleThemeMode()" title="تبديل الوضع الليلي / النهاري"
+                <button id="visibleThemeToggleBtn" onclick="toggleThemeMode()" title="تبديل الوضع الليلي / النهاري"
 
-                class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border
+                    class="flex items-center gap-1 px-2 py-1.5 sm:px-3 rounded-xl border
 
-                       transition-all active:scale-95 select-none text-[11.5px] font-bold
+                           transition-all active:scale-95 select-none text-[11px] sm:text-[11.5px] font-bold
 
-                       dark:bg-slate-800/80 dark:border-slate-600/50 dark:text-amber-300 dark:hover:bg-slate-700/80
+                           dark:bg-slate-800/80 dark:border-slate-600/50 dark:text-amber-300 dark:hover:bg-slate-700/80
 
-                       bg-amber-50/90 border-amber-300/60 text-amber-700 hover:bg-amber-100">
+                           bg-amber-50/90 border-amber-300/60 text-amber-700 hover:bg-amber-100">
 
-                <span id="visibleThemeIcon" class="text-[15px] leading-none">🌙</span>
+                    <span id="visibleThemeIcon" class="text-[14px] sm:text-[15px] leading-none">🌙</span>
 
-                <span id="visibleThemeLabel">ليلي</span>
+                    <span id="visibleThemeLabel" class="hidden sm:inline">ليلي</span>
 
-            </button>
+                </button>
+
+            </div>
 
         </div>
 
@@ -3697,7 +3695,7 @@
 
         <!-- ================= TAB: PORTFOLIO & WEALTH ================= -->
 
-        <section id="view-portfolio" class="tab-content space-y-3">
+        <section id="view-portfolio" class="tab-content space-y-3 pb-32">
 
             <!-- Portfolio Top Segment Switcher: 1. الأصول والحيازات | 2. تقرير الأداء والمردود -->
 
@@ -3723,19 +3721,37 @@
 
 
 
-            <!-- Thndr Grand Wealth Header (تصميم مدمج فائق الأناقة وسريع التصفح) -->
+            <!-- Thndr Grand Wealth Header (تصميم متجاوب متكامل للجوال وسطح المكتب) -->
 
-            <div class="glass-card rounded-2xl p-2.5 sm:p-3 space-y-2 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-950/95 border border-slate-700/80 shadow-lg">
+            <div class="glass-card rounded-2xl p-2.5 sm:p-3 space-y-2.5 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-950/95 border border-slate-700/80 shadow-lg">
 
-                <!-- Unified Compact Balance & Immediate PnL Row -->
+                <!-- Header Actions Row (Live Badge + Fund Sync Button) -->
 
-                <div class="flex items-center justify-between px-1">
+                <div class="flex items-center justify-between px-1 text-xs gap-2">
 
-                    <div class="flex items-baseline gap-2">
+                    <div class="flex items-center gap-1.5 flex-wrap">
 
-                        <span id="liveUpdateBadge" class="text-[9px] text-slate-400 font-mono flex items-center gap-1 cursor-pointer" onclick="syncAllLiveSections()" title="انقر للتحديث الفوري">⚡ أسعار حية</span><button onclick="syncLiveFundsEngine()" class="text-[9px] text-emerald-300 hover:text-white bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/80 px-2 py-0.5 rounded-full font-mono font-bold flex items-center gap-1 transition active:scale-95 shadow-sm" title="مزامنة أسعار الصناديق الرسمية"><span>🏛️</span><span>تحديث الصناديق</span></button>
+                        <span id="liveUpdateBadge" class="text-[9.5px] text-slate-400 font-mono flex items-center gap-1 cursor-pointer" onclick="syncAllLiveSections()" title="انقر للتحديث الفوري">⚡ أسعار حية</span>
 
-                        <span id="p_thndr_grand_wealth" class="text-2xl sm:text-3xl font-extrabold text-white font-mono tracking-tight">87,823</span>
+                        <button onclick="syncLiveFundsEngine()" class="text-[9.5px] text-emerald-300 hover:text-white bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/80 px-2 py-0.5 rounded-full font-mono font-bold flex items-center gap-1 transition active:scale-95 shadow-sm" title="مزامنة أسعار الصناديق الرسمية"><span>🏛️</span><span>تحديث الصناديق</span></button>
+
+                    </div>
+
+                    <div class="text-[9.5px] text-slate-400 font-mono hidden sm:inline">
+
+                        <span>محفظة ثندر المعتمدة</span>
+
+                    </div>
+
+                </div>
+
+                <!-- Unified Wealth Balance & Immediate PnL Row -->
+
+                <div class="flex items-center justify-between px-1 flex-wrap gap-2">
+
+                    <div class="flex items-baseline gap-1.5">
+
+                        <span id="p_thndr_grand_wealth" class="text-xl sm:text-3xl font-extrabold text-white font-mono tracking-tight">82,638</span>
 
                         <span class="text-xs font-bold text-slate-400 font-mono">ج.م</span>
 
@@ -3743,11 +3759,11 @@
 
                     <!-- Profit/Loss Badge placed inline (compact) -->
 
-                    <div id="p_thndr_grand_badge" class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 font-mono bg-slate-800/40 border border-slate-700/50 px-2.5 py-0.5 rounded-full transition-colors">
+                    <div id="p_thndr_grand_badge" class="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-rose-400 font-mono bg-rose-500/10 border border-rose-500/20 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-colors">
 
-                        <span id="p_thndr_grand_pnl">--</span>
+                        <span id="p_thndr_grand_pnl"><span dir="ltr">▼ -3,059 ج</span></span>
 
-                        <span id="p_thndr_grand_return">(--%)</span>
+                        <span id="p_thndr_grand_return"><span dir="ltr">(-3.57%)</span></span>
 
                         <span id="p_thndr_grand_label" class="text-[9px] text-slate-400 font-sans font-medium hidden sm:inline">أرباح/خسائر</span>
 
@@ -3757,15 +3773,15 @@
 
 
 
-                <!-- Thndr 4 Mini Wealth Status Cards (صف واحد فقط: أسهم + صناديق + ذهب + كاش، النسبة مجاورة للمبلغ) -->
+                <!-- Thndr 4 Mini Wealth Status Cards (2 أعمدة للجوال، 4 أعمدة للشاشات الكبيرة لمنع الازدحام والتداخل) -->
 
-                <div class="grid grid-cols-4 gap-1 sm:gap-2 pt-1.5 border-t border-slate-800/80 text-center text-xs">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-center text-xs">
 
                     <!-- 1. الأسهم -->
 
-                    <div class="bg-slate-950/80 py-1.5 px-1 sm:px-1.5 rounded-xl border border-slate-800/80 flex flex-col justify-center items-center shadow-sm min-w-0">
+                    <div class="bg-slate-950/80 py-2 px-2 rounded-xl border border-slate-800/80 flex flex-col justify-center items-center shadow-sm min-w-0">
 
-                        <div class="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[10px] text-slate-400 font-medium truncate">
+                        <div class="flex items-center gap-1 text-[10px] text-slate-400 font-medium truncate">
 
                             <span>📈</span>
 
@@ -3775,17 +3791,15 @@
 
                         <div class="flex items-baseline gap-0.5 my-0.5">
 
-                            <span id="p_thndr_stocks_card" class="font-bold text-emerald-400 font-mono text-[11px] sm:text-sm">37.21k ج</span>
+                            <span id="p_thndr_stocks_card" class="font-bold text-rose-400 font-mono text-xs sm:text-sm">34.20k ج</span>
 
                         </div>
 
-                        <!-- القيمة والنسبة المئوية في سطر واحد متجاورين -->
+                        <div class="flex items-center justify-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold leading-none flex-wrap">
 
-                        <div class="flex items-center justify-center gap-0.5 sm:gap-1 text-[8px] sm:text-[9.5px] font-mono font-bold leading-none flex-wrap">
+                            <span id="p_thndr_stocks_card_egp" class="text-rose-300">-788 ج</span>
 
-                            <span id="p_thndr_stocks_card_egp" class="text-emerald-300">+2,224 ج</span>
-
-                            <span id="p_thndr_stocks_card_pnl" class="text-emerald-400">(+6.36%)</span>
+                            <span id="p_thndr_stocks_card_pnl" class="text-rose-400"><span dir="ltr">(-2.25%)</span></span>
 
                         </div>
 
@@ -3795,9 +3809,9 @@
 
                     <!-- 2. الصناديق -->
 
-                    <div class="bg-slate-950/80 py-1.5 px-1 sm:px-1.5 rounded-xl border border-slate-800/80 flex flex-col justify-center items-center shadow-sm min-w-0">
+                    <div class="bg-slate-950/80 py-2 px-2 rounded-xl border border-slate-800/80 flex flex-col justify-center items-center shadow-sm min-w-0">
 
-                        <div class="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[10px] text-slate-400 font-medium truncate">
+                        <div class="flex items-center gap-1 text-[10px] text-slate-400 font-medium truncate">
 
                             <span>🏦</span>
 
@@ -3807,17 +3821,15 @@
 
                         <div class="flex items-baseline gap-0.5 my-0.5">
 
-                            <span id="p_thndr_funds_card" class="font-bold text-emerald-400 font-mono text-[11px] sm:text-sm">50.55k ج</span>
+                            <span id="p_thndr_funds_card" class="font-bold text-rose-400 font-mono text-xs sm:text-sm">48.38k ج</span>
 
                         </div>
 
-                        <!-- القيمة والنسبة المئوية في سطر واحد متجاورين -->
+                        <div class="flex items-center justify-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold leading-none flex-wrap">
 
-                        <div class="flex items-center justify-center gap-0.5 sm:gap-1 text-[8px] sm:text-[9.5px] font-mono font-bold leading-none flex-wrap">
+                            <span id="p_thndr_funds_card_egp" class="text-rose-300">-2,272 ج</span>
 
-                            <span id="p_thndr_funds_card_egp" class="text-emerald-300">-99 ج</span>
-
-                            <span id="p_thndr_funds_card_pnl" class="text-emerald-400">(-0.20%)</span>
+                            <span id="p_thndr_funds_card_pnl" class="text-rose-400"><span dir="ltr">(-4.48%)</span></span>
 
                         </div>
 
@@ -3827,9 +3839,9 @@
 
                     <!-- 3. الذهب الخالص -->
 
-                    <div class="bg-slate-950/80 py-1.5 px-1 sm:px-1.5 rounded-xl border border-amber-500/30 flex flex-col justify-center items-center shadow-sm min-w-0">
+                    <div class="bg-slate-950/80 py-2 px-2 rounded-xl border border-amber-500/30 flex flex-col justify-center items-center shadow-sm min-w-0">
 
-                        <div class="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[10px] text-amber-400 font-medium truncate">
+                        <div class="flex items-center gap-1 text-[10px] text-amber-400 font-medium truncate">
 
                             <span>🥇</span>
 
@@ -3839,21 +3851,19 @@
 
                         <div class="flex items-baseline gap-0.5 my-0.5">
 
-                            <span id="p_thndr_gold_card" class="font-bold text-amber-300 font-mono text-[11px] sm:text-sm">56.82 ج</span>
+                            <span id="p_thndr_gold_card" class="font-bold text-amber-300 font-mono text-xs sm:text-sm">56.82 ج</span>
 
                         </div>
 
-                        <!-- القيمة والنسبة المئوية في سطر واحد متجاورين -->
-
-                        <div class="flex items-center justify-center gap-0.5 sm:gap-1 text-[8px] sm:text-[9.5px] font-mono font-bold leading-none flex-wrap">
+                        <div class="flex items-center justify-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold leading-none flex-wrap">
 
                             <span id="p_thndr_gold_card_egp" class="text-emerald-300">+0.34 ج</span>
 
-                            <span id="p_thndr_gold_card_pnl" class="text-emerald-400">(+0.60%)</span>
+                            <span id="p_thndr_gold_card_pnl" class="text-emerald-400"><span dir="ltr">(+0.60%)</span></span>
 
                         </div>
 
-                        <div id="p_thndr_invested" class="hidden">86.43k ج</div>
+                        <div id="p_thndr_invested" class="hidden">82.64k ج</div>
 
                     </div>
 
@@ -3861,9 +3871,9 @@
 
                     <!-- 4. السيولة والنقد المتاح -->
 
-                    <div class="bg-slate-950/80 py-1.5 px-1 sm:px-1.5 rounded-xl border border-slate-700/60 flex flex-col justify-center items-center shadow-sm min-w-0">
+                    <div class="bg-slate-950/80 py-2 px-2 rounded-xl border border-slate-700/60 flex flex-col justify-center items-center shadow-sm min-w-0">
 
-                        <div class="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[10px] text-slate-300 font-medium truncate">
+                        <div class="flex items-center gap-1 text-[10px] text-slate-300 font-medium truncate">
 
                             <span>💵</span>
 
@@ -3873,11 +3883,11 @@
 
                         <div class="flex items-baseline gap-0.5 my-0.5">
 
-                            <span id="p_thndr_cash_top_card" class="font-bold text-white font-mono text-[11px] sm:text-sm">0.00 ج</span>
+                            <span id="p_thndr_cash_top_card" class="font-bold text-white font-mono text-xs sm:text-sm">0.00 ج</span>
 
                         </div>
 
-                        <div class="flex items-center justify-center gap-1 text-[8px] sm:text-[9px] font-mono text-emerald-400 leading-none">
+                        <div class="flex items-center justify-center gap-1 text-[9px] sm:text-[10px] font-mono text-emerald-400 leading-none">
 
                             <span>جاهز للاقتناص</span>
 
@@ -4037,7 +4047,7 @@
 
                     <div class="flex items-center gap-1.5">
 
-                        <span id="stocksSubtotalBadge" class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded font-mono font-medium">36,388 ج.م (+4.0%)</span>
+                        <span id="stocksSubtotalBadge" class="text-[10px] bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded font-mono font-medium">34,199 ج.م (-2.3%)</span>
 
                     </div>
 
@@ -4059,7 +4069,7 @@
 
                         </span>
 
-                        <span id="stocksTopWeightLabel" class="text-emerald-400 font-bold">TMGH 28.6% • ETEL 27.1%</span>
+                        <span id="stocksTopWeightLabel" class="text-emerald-400 font-bold">ETEL 31.8% • TMGH 28.2%</span>
 
                     </div>
 
@@ -4129,7 +4139,7 @@
 
                 <!-- 2. Stocks Compact List View (النمط المدمج الثانوي - 6 أعمدة مفصلة) -->
 
-                <div id="stocksHoldingsSmartContainer" class="w-full border border-slate-200 dark:border-slate-800/90 rounded-2xl overflow-hidden bg-white dark:bg-slate-950/40 hidden">
+                <div id="stocksHoldingsSmartContainer" class="w-full border border-slate-200 dark:border-slate-800/90 rounded-2xl overflow-x-auto bg-white dark:bg-slate-950/40 hidden">
 
                     <table class="w-full text-right text-xs table-fixed">
 
@@ -4237,7 +4247,7 @@
 
                     </div>
 
-                    <span id="fundsSubtotalBadge" class="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-mono font-medium">48,860 ج.م (-3.5%)</span>
+                    <span id="fundsSubtotalBadge" class="text-[10px] bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded font-mono font-medium">48,381 ج.م (-4.5%)</span>
 
                 </div>
 
@@ -4257,7 +4267,7 @@
 
                         </span>
 
-                        <span id="fundsTopWeightLabel" class="text-amber-400 font-bold">CMS 98.9% • AZG 0.5%</span>
+                        <span id="fundsTopWeightLabel" class="text-amber-400 font-bold">CMS 99.0% • AZG 0.5%</span>
 
                     </div>
 
@@ -4327,7 +4337,7 @@
 
                 <!-- 2. Funds Compact List View (النمط المدمج الثانوي - 6 أعمدة مفصلة) -->
 
-                <div id="fundsHoldingsSmartContainer" class="w-full border border-slate-200 dark:border-slate-800/90 rounded-2xl overflow-hidden bg-white dark:bg-slate-950/40 hidden">
+                <div id="fundsHoldingsSmartContainer" class="w-full border border-slate-200 dark:border-slate-800/90 rounded-2xl overflow-x-auto bg-white dark:bg-slate-950/40 hidden">
 
                     <table class="w-full text-right text-xs table-fixed">
 
@@ -8528,21 +8538,21 @@
 
     
     <!-- Modular Application Scripts -->
-    <script src="js/data-reports.js?v=20261013_v18_6"></script>
-    <script src="js/data-news.js?v=20261013_v18_6"></script>
-    <script src="js/data-valuation.js?v=20261013_v18_6"></script>
-    <script src="js/data-ai-prompts.js?v=20261013_v18_6"></script>
-    <script src="js/app.js?v=20261013_v18_6"></script>
-    <script src="js/gemini-ai.js?v=20261013_v18_6"></script>
-    <script src="js/universal-export.js?v=20261013_v18_6"></script>
+    <script src="js/data-reports.js?v=20261013_v18_9"></script>
+    <script src="js/data-news.js?v=20261013_v18_9"></script>
+    <script src="js/data-valuation.js?v=20261013_v18_9"></script>
+    <script src="js/data-ai-prompts.js?v=20261013_v18_9"></script>
+    <script src="js/app.js?v=20261013_v18_9"></script>
+    <script src="js/gemini-ai.js?v=20261013_v18_9"></script>
+    <script src="js/universal-export.js?v=20261013_v18_9"></script>
 
     <!-- =========================================================================
          FLOATING PERSISTENT AI COPILOT BUTTON (مستشار الذكاء الاصطناعي المزدوج)
          ========================================================================= -->
     <button id="floatingAiCopilotBtn" onclick="openFloatingAiCopilot()" title="مستشار Gemini & Groq المباشر"
-            class="fixed bottom-20 left-4 md:bottom-6 md:left-6 z-40 bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-500 text-white font-extrabold shadow-2xl hover:shadow-indigo-500/50 rounded-full px-4 py-2.5 flex items-center gap-2 border border-white/20 active:scale-95 transition-all select-none cursor-pointer group">
-        <span class="text-lg">🤖</span>
-        <span class="text-xs font-bold font-sans">مستشار Gemini & Groq</span>
+            class="fixed bottom-20 left-4 md:bottom-6 md:left-6 z-40 bg-gradient-to-r from-purple-600 via-indigo-600 to-emerald-500 text-white font-extrabold shadow-2xl hover:shadow-indigo-500/50 rounded-full px-3 py-2 md:px-4 md:py-2.5 flex items-center gap-1.5 md:gap-2 border border-white/20 active:scale-95 transition-all select-none cursor-pointer group text-xs">
+        <span class="text-base md:text-lg">🤖</span>
+        <span class="text-[11px] md:text-xs font-bold font-sans hidden sm:inline">مستشار Gemini & Groq</span>
         <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
     </button>
 

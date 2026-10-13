@@ -294,7 +294,11 @@ window.donutChartInstance = null;
 
     function getMasterPin() {
 
-        return localStorage.getItem('egx_security_pin') || DEFAULT_MASTER_PIN;
+        try {
+            return localStorage.getItem('egx_security_pin') || DEFAULT_MASTER_PIN;
+        } catch(e) {
+            return DEFAULT_MASTER_PIN;
+        }
 
     }
 
@@ -4664,7 +4668,7 @@ window.donutChartInstance = null;
 
 window.addEventListener('load', () => {
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js?v=20261013_v18_6')
+                navigator.serviceWorker.register('sw.js?v=20261013_v18_9')
                     .then(reg => {
                         console.log('[PWA] SW registered:', reg.scope);
                         try { reg.update(); } catch(e) {}
@@ -5464,18 +5468,24 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                     const parsed = JSON.parse(saved);
 
-                    if (Array.isArray(parsed)) loaded = parsed;
+                    if (Array.isArray(parsed) && parsed.length > 0) loaded = parsed;
 
                 }
 
             } catch(e) {}
 
-            if (loaded === null || !Array.isArray(loaded)) {
+            if (loaded === null || !Array.isArray(loaded) || loaded.length === 0) {
 
-                // First time ever visiting (null), load demo holdings
+                // First time ever visiting or empty/stale array: load verified authentic holdings
 
                 loaded = JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS));
 
+            }
+
+            // Sanitize loaded array: ensure every element is an object with valid ticker
+            loaded = loaded.filter(h => h && typeof h === 'object' && h.ticker);
+            if (loaded.length === 0) {
+                loaded = JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS));
             }
 
             // Standardize and normalize all fields with strict separation
@@ -5714,16 +5724,17 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         // =========================================================================
 
-        let portfolioViewMode = localStorage.getItem('egx_portfolio_view_mode');
-
-        // Always default to 'cards' (FinTech Executive Cards) as the premier, clearest view
-
-        if (portfolioViewMode !== 'cards' && portfolioViewMode !== 'compact') {
-
+        let portfolioViewMode = 'cards';
+        try {
+            const savedMode = localStorage.getItem('egx_portfolio_view_mode');
+            if (savedMode === 'cards' || savedMode === 'compact') {
+                portfolioViewMode = savedMode;
+            } else {
+                portfolioViewMode = 'cards';
+                localStorage.setItem('egx_portfolio_view_mode', 'cards');
+            }
+        } catch(e) {
             portfolioViewMode = 'cards';
-
-            localStorage.setItem('egx_portfolio_view_mode', 'cards');
-
         }
 
         try {
@@ -5742,7 +5753,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             portfolioViewMode = (mode === 'compact') ? 'compact' : 'cards';
 
-            localStorage.setItem('egx_portfolio_view_mode', portfolioViewMode);
+            try {
+                localStorage.setItem('egx_portfolio_view_mode', portfolioViewMode);
+            } catch(e) {}
 
             updatePortfolioViewModeUI();
 
@@ -6263,9 +6276,9 @@ const THNDR_ACTUAL_HOLDINGS = [
 
         function renderHoldingsTable() {
 
-            if (!userHoldings || !Array.isArray(userHoldings)) {
+            if (!userHoldings || !Array.isArray(userHoldings) || userHoldings.length === 0) {
 
-                userHoldings = [];
+                userHoldings = JSON.parse(JSON.stringify(THNDR_ACTUAL_HOLDINGS));
 
                 window.userHoldings = userHoldings;
 
