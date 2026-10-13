@@ -567,17 +567,22 @@
                     }
                     if (wRpt && wRpt.portfolioSection && Array.isArray(wRpt.portfolioSection.items) && typeof STOCKS_DATA !== 'undefined') {
                         let totalWeeklyPnl = 0;
+                        const holdings = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings : [];
                         wRpt.portfolioSection.items.forEach(it => {
                             const live = STOCKS_DATA.find(s => s.ticker === it.ticker);
                             if (live && live.close > 0) {
                                 it.close = live.close;
                                 if (typeof live.chg === 'number') {
-                                    it.weeklyChg = Math.round((live.chg + 1.25) * 100) / 100;
+                                    it.weeklyChg = live.chg;
                                 }
                             }
-                            if (typeof it.pnl === 'number') totalWeeklyPnl += it.pnl;
+                            const uH = holdings.find(u => u.ticker === it.ticker);
+                            if (uH) {
+                                it.pnl = Math.round(((it.close - uH.buy) * uH.qty) * 100) / 100;
+                                totalWeeklyPnl += it.pnl;
+                            }
                         });
-                        wRpt.portfolioSection.pnlText = `+${Math.round(totalWeeklyPnl).toLocaleString()} ج.م`;
+                        wRpt.portfolioSection.pnlText = `${totalWeeklyPnl >= 0 ? '+' : ''}${Math.round(totalWeeklyPnl).toLocaleString()} ج.م`;
                     }
                 }
 
@@ -2117,7 +2122,7 @@
 
                             </h4>
 
-                            <span class="text-[10px] text-emerald-400 font-bold font-mono">متوسط الأداء: +3.42%</span>
+                            <span class="text-[10px] text-emerald-400 font-bold font-mono">الأسهم النشطة بالمحفظة (8)</span>
 
                         </div>
 
@@ -2127,7 +2132,7 @@
 
                                 const userStock = (typeof userHoldings !== 'undefined' && Array.isArray(userHoldings)) ? userHoldings.find(u => u.ticker === h.code) : null;
 
-                                const bPrice = userStock ? userStock.buyPrice : (h.open || h.close);
+                                const bPrice = userStock ? (userStock.buy || userStock.buyPrice || h.open) : (h.open || h.close);
 
                                 const pnl = (bPrice > 0 && typeof h.close === 'number') ? ((h.close - bPrice) / bPrice) * 100 : 0;
 
@@ -21142,7 +21147,7 @@ ${stocksUniverseContext}
 
             const target = parseFloat(document.getElementById('goal_target')?.value) || 1000000;
 
-            const current = parseFloat(document.getElementById('goal_current')?.value) || 87736;
+            const current = parseFloat(document.getElementById('goal_current')?.value) || Math.round(window.grandWealth || 82592);
 
             const monthly = parseFloat(document.getElementById('goal_monthly')?.value) || 5000;
 
