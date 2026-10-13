@@ -1869,7 +1869,7 @@
 
                             <div class="text-slate-300 text-[11px] leading-relaxed">
 
-                                ${rpt.tomorrowScenario && rpt.tomorrowScenario.egx33 ? `يختبر المؤشر مقاومة ${rpt.tomorrowScenario.egx33.resistance}. الدعم الرئيسي عند ${rpt.tomorrowScenario.egx33.support}. ${rpt.tomorrowScenario.egx33.note}` : 'استمرار الزخم الشرعي المؤسسي يدعم اختراق القمم التاريخية.'}
+                                ${rpt.tomorrowScenario && rpt.tomorrowScenario.egx33 ? `يختبر المؤشر مقاومة ${(rpt.tomorrowScenario.egx33.resist1 || rpt.tomorrowScenario.egx33.resistance || '6,680').toLocaleString()} نقطة، والدعم الرئيسي عند ${(rpt.tomorrowScenario.egx33.support1 || rpt.tomorrowScenario.egx33.support || '6,580').toLocaleString()} نقطة. ${rpt.tomorrowScenario.egx33.view || rpt.tomorrowScenario.egx33.note || ''}` : 'استمرار الزخم الشرعي المؤسسي يدعم اختراق القمم التاريخية.'}
 
                             </div>
 
@@ -6796,7 +6796,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const inhInput = document.getElementById('inh_wealth_val');
 
-            if (inhInput && (!inhInput.value || inhInput.value === '87736')) {
+            if (inhInput && (!inhInput.value || false)) {
 
                 inhInput.value = Math.round(grandWealth);
 
@@ -6804,7 +6804,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
             const goalInput = document.getElementById('goal_current');
 
-            if (goalInput && (!goalInput.value || goalInput.value === '87736')) {
+            if (goalInput && (!goalInput.value || false)) {
 
                 goalInput.value = Math.round(grandWealth);
 
@@ -13199,7 +13199,7 @@ const THNDR_ACTUAL_HOLDINGS = [
 
                                 <span class="px-1.5 py-0.2 rounded border font-mono ${impactClass}">${n.impact_label || 'إفصاح'}</span>
 
-                                <span class="text-slate-500 font-sans">${n.time}</span>
+                                <span class="text-slate-500 font-sans">${n.time_str || n.time || n.date_str || ''}</span>
 
                             </div>
 
@@ -20866,7 +20866,7 @@ ${stocksUniverseContext}
 
                             <div class="flex items-center gap-2">
 
-                                <span class="text-slate-400 font-mono">${n.time}</span>
+                                <span class="text-slate-400 font-mono">${n.time_str || n.time || n.date_str || ''}</span>
 
                                 <span class="px-1.5 py-0.5 rounded border bg-emerald-950/80 border-emerald-800 text-emerald-300 font-medium">${n.impact_label}</span>
 
@@ -21038,7 +21038,7 @@ ${stocksUniverseContext}
 
                         <div class="flex items-center gap-2">
 
-                            <span class="text-slate-400">${n.time}</span>
+                            <span class="text-slate-400">${n.time_str || n.time || n.date_str || ''}</span>
 
                             <span class="text-emerald-300 font-bold">${n.impact_label}</span>
 
@@ -21074,6 +21074,7 @@ ${stocksUniverseContext}
             renderStocks();
 
             if (typeof loadCustomAlerts === 'function') loadCustomAlerts();
+            if (typeof populateCustomAlertStockSelect === 'function') populateCustomAlertStockSelect();
 
             // Initialize custom/fixed fees card
             const feesCard = document.getElementById('p_thndr_fees_card');
